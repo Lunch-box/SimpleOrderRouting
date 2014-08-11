@@ -10,7 +10,7 @@ Order routing is the process by which an order goes from the end user to an exch
 
 "Smart" order routing attempts to achieve best execution of trades while minimizing market impact. It is designed to help firms in an increasingly fragmented market to search for hidden liquidity, find opportunities in dark pools and use algorithms to maximize results without moving the market. (source: [MarketsWiki](http://marketswiki.com/mwiki/Order_routing))
 
-A Smart Order Routing is a process used in trading application to execute incoming liquidity into liquidity providers following routing rules. The routing rules usually follow business needs like best execution or internalization.
+From an IT point of view, a Smart Order Routing is a process used in trading application to execute incoming liquidity into liquidity providers following routing rules. The routing rules usually follow business needs like best execution or internalization.
 
 
 What's the point with this spike project?

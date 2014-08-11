@@ -20,7 +20,7 @@ Our goal is __NOT__ to implement SOR (business) algorithms. Our goal is to spike
 Our approach
 ------------
 Even if this is a spike, we will try to implement it following some principles:
-+ __Test Driven__: Every new feature is added following the TDD principles (Red, Green, Refactor, and testing behaviours, not classes or methods) __and targeting 100% Test coverage__
++ __Test Driven__: Every new feature is added following the TDD principles (testing behaviours) __and targeting 100% Test coverage__
 + __[YAGNI](http://en.wikipedia.org/wiki/You_aren't_gonna_need_it)__: following this XP practice, we don't add any functionality until deemed necessary
 + __[Clean Architecture](http://blog.8thlight.com/uncle-bob/2011/11/22/Clean-Architecture.html)__: every architecture choice is motivated, and allows us to defer critical decisions for the project
 + __Low ceremony__: we focus on efficiency (to deliver software) in our spike iterations

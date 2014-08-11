@@ -6,9 +6,9 @@ Prototype of a Financial (Smart) Order Routing. The opportunity to explore vario
 
 What is a SOR?
 --------------
-Order routing is the process by which an order goes from the end user to an exchange. An order may go directly to the exchange from the customer, or it may go first to a broker who then routes the order to the exchange.
+__Order routing__ is the process by which an order goes from the end user to an exchange. An order may go directly to the exchange from the customer, or it may go first to a broker who then routes the order to the exchange.
 
-"Smart" order routing attempts to achieve best execution of trades while minimizing market impact. It is designed to help firms in an increasingly fragmented market to search for hidden liquidity, find opportunities in dark pools and use algorithms to maximize results without moving the market. (source: [MarketsWiki](http://marketswiki.com/mwiki/Order_routing))
+__"Smart" order routing__ attempts to achieve best execution of trades while minimizing market impact. It is designed to help firms in an increasingly fragmented market to search for hidden liquidity, find opportunities in dark pools and use algorithms to maximize results without moving the market. (source: [MarketsWiki](http://marketswiki.com/mwiki/Order_routing))
 
 From an IT point of view, a Smart Order Routing is a process used in trading application to execute incoming liquidity into liquidity providers following routing rules. The routing rules usually follow business needs like best execution or internalization.
 

@@ -15,19 +15,22 @@ A Smart Order Routing is a process used in trading application to execute incomi
 
 What's the point with this spike project?
 -----------------------------------------
-Our goal is __NOT__ to implement SOR (business) algorithms. Our goal is to spike and compare various ways of implementing reactive applications. In that case, we just pick the "meta" concept of Smart Order Routing.
+Our goal is __NOT__ to implement SOR (business) algorithms. Our goal is to spike and compare various ways of implementing reactive applications. In that case, we just pick the "meta" concept of Smart Order Routing to illustrate our explorations.
 
 Our approach
 ------------
 Even if this is a spike, we will try to implement it following some principles:
++ __Test Driven__: Every new feature is added following the TDD principles (Red, Green, Refactor, and testing behaviours, not classes or methods)
++ __Test coverage__: 100%
++ __[YAGNI](http://en.wikipedia.org/wiki/You_aren't_gonna_need_it)__: following this XP practice, we don't add any functionality until deemed necessary
++ __[Clean Architecture](http://blog.8thlight.com/uncle-bob/2011/11/22/Clean-Architecture.html)__: every architecture choice is motivated, and allows us to defer critical decisions for the project
++ __Low ceremony__: we focus on efficiency (to deliver software) in our spike iterations
++ __"Don't guess; measure"__: we stick to this rule in order to avoid any kind of confirmation bias and *Premature optimization* (cause remember: "it's the root of all evil" ;-) 
++__Lunch time__: as any other Lunch-box project, we pair at noon to to build stuff.
 
-- __Test Driven__: Every new feature is added following the TDD principles (Red, Green, Refactor, and testing behaviours, not classes or methods)
-- __Test coverage__: 100%
-- __[YAGNI](http://en.wikipedia.org/wiki/You_aren't_gonna_need_it)__: following this XP practice, we don't add any functionality until deemed necessary
-- __[Clean Architecture](http://blog.8thlight.com/uncle-bob/2011/11/22/Clean-Architecture.html)__: every architecture choice is motivated, and allows us to defer critical decisions for the project
-- __Low ceremony__: we focus on efficiency (to deliver software) in our spike iterations
-- __"Don't guess; measure"__: we stick to this rule in order to avoid any kind of confirmation bias and *Premature optimization* (cause remember: "it's the root of all evil" ;-) 
-- __Lunch time__: as any other Lunch-box project, we pair at noon to to build stuff.
+- - -
+
+__Thomas & Tomasz__ (Lunch-boxers)
 
 
 

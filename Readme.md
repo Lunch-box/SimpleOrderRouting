@@ -15,7 +15,7 @@ From an IT point of view, a Smart Order Routing is a process used in trading app
 
 What's the point with this spike project?
 -----------------------------------------
-Our goal is __NOT__ to implement SOR (business) algorithms. Our goal is to spike and compare various ways of implementing reactive applications. In that case, we just pick the "meta" concept of Smart Order Routing to illustrate our explorations.
+Our goal is __NOT__ to implement SOR (business) algorithms. Our goal is to spike and compare various ways of implementing reactive applications with differents input and output types. In that case, we just pick the "meta" concept of Smart Order Routing to illustrate our explorations (with market data, order operations, execution reports, etc).
 
 Our approach
 ------------

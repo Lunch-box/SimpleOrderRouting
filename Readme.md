@@ -25,8 +25,8 @@ Even if this is a spike, we will try to implement it following some principles:
 + __[YAGNI](http://en.wikipedia.org/wiki/You_aren't_gonna_need_it)__: following this XP practice, we don't add any functionality until deemed necessary
 + __[Clean Architecture](http://blog.8thlight.com/uncle-bob/2011/11/22/Clean-Architecture.html)__: every architecture choice is motivated, and allows us to defer critical decisions for the project
 + __Low ceremony__: we focus on efficiency (to deliver software) in our spike iterations
-+ __"Don't guess; measure"__: we stick to this rule in order to avoid any kind of confirmation bias and *Premature optimization* (cause remember: "it's the root of all evil" ;-) 
-+__Lunch time__: as any other Lunch-box project, we pair at noon to to build stuff.
++ __"Don't guess; measure"__: we stick to this rule in order to avoid any kind of confirmation bias and *Premature optimization* (cause remember: "it's the root of all evil" ;-)
++ __Lunch time__: as any other Lunch-box project, we pair at noon to to build stuff.
 
 - - -
 

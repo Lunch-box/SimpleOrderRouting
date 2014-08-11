@@ -7,8 +7,8 @@
     <ProjectGuid>{7F099472-E44E-4252-BBB8-633BF48EECBB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SimpleOrderRouter.Tests</RootNamespace>
-    <AssemblyName>SimpleOrderRouter.Tests</AssemblyName>
+    <RootNamespace>SimpleOrderRouting.Tests</RootNamespace>
+    <AssemblyName>SimpleOrderRouting.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

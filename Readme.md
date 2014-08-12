@@ -25,9 +25,8 @@ Even if this is a spike, we will try to implement it following some principles:
 + __Test Driven__: Every new feature is added following the TDD principles (testing behaviours) __and targeting 100% Test coverage__
 + __[YAGNI](http://en.wikipedia.org/wiki/You_aren't_gonna_need_it)__: following this XP practice, we don't add any functionality until deemed necessary
 + __[Clean Architecture](http://blog.8thlight.com/uncle-bob/2011/11/22/Clean-Architecture.html)__: every architecture choice is motivated, and allows us to defer critical decisions for the project
-+ __Low ceremony__: we focus on efficiency (to deliver software) in our spike iterations
 + __"Don't guess; measure"__: we stick to this rule in order to avoid any kind of confirmation bias and *Premature optimization* (cause remember: "it's the root of all evil" ;-)
-+ __Lunch time__: as any other Lunch-box project, we pair at noon to to build stuff.
++ + __Low ceremony__: we focus on efficiency (to deliver software) in our spike iterations. Normal, if we consider the fact that we work on that project mostly at __Lunch time__ (indeed, __we pair at noon__ to to build stuff).
 
 - - -
 

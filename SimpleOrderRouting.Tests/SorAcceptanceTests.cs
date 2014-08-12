@@ -1,9 +1,6 @@
 ﻿namespace SimpleOrderRouting.Tests
 {
-    using System;
-
     using NSubstitute;
-
     using Xunit;
 
     public class SorAcceptanceTests
@@ -21,36 +18,27 @@
             market.ReceivedWithAnyArgs(1).Send(null);
         }
 
-        //[Fact]
+        [Fact]
         public void ShouldReceiveDealExecutionWhenOrderIsSent()
         {
             var market = Substitute.For<IMarket>();
 
             var sut = new SimpleOrderRoutingSystem(market);
             
+            var subscriber = Substitute.For<IOrderExecutedSubscriber>();
+
+            // Question: OrderExecuted, DealExecuted or DealDone?
+            sut.OrderExecuted += subscriber.OrderExecuted;
+
             sut.Post(new OrderRequest());
-
-            market.ReceivedWithAnyArgs(1).Send(null);
+            
+            // Checks the event has been raised
+            subscriber.ReceivedWithAnyArgs(1).OrderExecuted(null, null);
         }
 
-        #endregion
-    }
-
-    public class SimpleOrderRoutingSystem
-    {
-        private IMarket market;
-
-        public SimpleOrderRoutingSystem(IMarket market)
+        public interface IOrderExecutedSubscriber
         {
-            this.market = market;
-        }
-
-        #region Public Methods and Operators
-
-        public void Post(OrderRequest orderRequest)
-        {
-            var order = new Order();
-            this.market.Send(order);
+            void OrderExecuted(object sender, OrderExecutedEventArgs e);
         }
 
         #endregion

@@ -12,12 +12,12 @@ __"Smart" order routing__ attempts to achieve best execution of trades while min
 
 From an IT point of view, a Smart Order Routing is a process used in trading application to execute incoming liquidity into liquidity providers following routing rules. The routing rules usually follow business needs like best execution or internalization.
 
-![SORBigPicture](https://raw.githubusercontent.com/Lunch-box/SimpleOrderRouting/master/images/SOR-bigPicture.jpg)
-
-
 What's the point with this spike project?
 -----------------------------------------
 Our goal is __NOT__ to implement SOR (business) algorithms. Our goal is to spike and compare various ways of implementing reactive applications with differents input and output types. In that case, we just pick the "meta" concept of Smart Order Routing to illustrate our explorations (with market data, order operations, execution reports, etc).
+
+![SORBigPicture](https://raw.githubusercontent.com/Lunch-box/SimpleOrderRouting/master/images/SOR-bigPicture.jpg)
+
 
 Our approach
 ------------

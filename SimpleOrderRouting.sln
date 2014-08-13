@@ -6,6 +6,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AE7BEF9F-3190-4A0C-AF57-F9B3E844FC01}"
 	ProjectSection(SolutionItems) = preProject
 		Backlog.md = Backlog.md
+		DoD.md = DoD.md
 		LICENSE.txt = LICENSE.txt
 		Readme.md = Readme.md
 		Settings.StyleCop = Settings.StyleCop

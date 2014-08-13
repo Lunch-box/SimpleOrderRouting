@@ -1,5 +1,5 @@
-// // --------------------------------------------------------------------------------------------------------------------
-// // <copyright file="Order.cs" company="">
+﻿// // --------------------------------------------------------------------------------------------------------------------
+// // <copyright file="IOrderExecutedSubscriber.cs" company="">
 // //   Copyright 2014 Thomas PIERRAIN, Tomasz JASKULA
 // //   Licensed under the Apache License, Version 2.0 (the "License");
 // //   you may not use this file except in compliance with the License.
@@ -12,12 +12,18 @@
 // //   limitations under the License.
 // // </copyright>
 // // --------------------------------------------------------------------------------------------------------------------
-namespace SimpleOrderRouting
+namespace SimpleOrderRouting.Tests
 {
     /// <summary>
-    /// Simple Order for. 
+    /// Helper interface for mocking subscribers to the OrderExecuted event (NSubstitute thing).
     /// </summary>
-    public class Order
+    public interface IOrderExecutedSubscriber
     {
+        /// <summary>
+        /// Delegate for OrderExecuted callback.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="OrderExecutedEventArgs"/> instance containing the event data.</param>
+        void OrderExecuted(object sender, OrderExecutedEventArgs e);
     }
 }

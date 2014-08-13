@@ -8,6 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Backlog.md = Backlog.md
 		LICENSE.txt = LICENSE.txt
 		Readme.md = Readme.md
+		Settings.StyleCop = Settings.StyleCop
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleOrderRouting.Tests", "SimpleOrderRouting.Tests\SimpleOrderRouting.Tests.csproj", "{7F099472-E44E-4252-BBB8-633BF48EECBB}"

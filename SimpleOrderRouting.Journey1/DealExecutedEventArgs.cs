@@ -1,5 +1,5 @@
-﻿// // --------------------------------------------------------------------------------------------------------------------
-// // <copyright file="IOrderExecutedSubscriber.cs" company="">
+// // --------------------------------------------------------------------------------------------------------------------
+// // <copyright file="DealExecutedEventArgs.cs" company="">
 // //   Copyright 2014 Thomas PIERRAIN, Tomasz JASKULA
 // //   Licensed under the Apache License, Version 2.0 (the "License");
 // //   you may not use this file except in compliance with the License.
@@ -12,20 +12,14 @@
 // //   limitations under the License.
 // // </copyright>
 // // --------------------------------------------------------------------------------------------------------------------
-namespace SimpleOrderRouting.Tests
+namespace SimpleOrderRouting.Journey1
 {
-    using SimpleOrderRouting.Journey1;
+    using System;
 
     /// <summary>
-    /// Helper interface for mocking subscribers to the OrderExecuted event (NSubstitute thing).
+    /// Event data for DealExecuted event.
     /// </summary>
-    public interface IOrderExecutedSubscriber
+    public class DealExecutedEventArgs : EventArgs
     {
-        /// <summary>
-        /// Delegate for OrderExecuted event callbacks.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="OrderExecutedEventArgs"/> instance containing the event data.</param>
-        void OrderExecuted(object sender, OrderExecutedEventArgs e);
     }
 }

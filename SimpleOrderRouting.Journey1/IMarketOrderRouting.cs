@@ -1,5 +1,5 @@
 // // --------------------------------------------------------------------------------------------------------------------
-// // <copyright file="IMarket.cs" company="">
+// // <copyright file="IMarketOrderRouting.cs" company="">
 // //   Copyright 2014 Thomas PIERRAIN, Tomasz JASKULA
 // //   Licensed under the Apache License, Version 2.0 (the "License");
 // //   you may not use this file except in compliance with the License.
@@ -19,12 +19,12 @@ namespace SimpleOrderRouting.Journey1
     /// <summary>
     /// Order routing API.
     /// </summary>
-    public interface IMarket
+    public interface IMarketOrderRouting
     {
         /// <summary>
-        /// Occurs when an order is executed.
+        /// Occurs when a deal is executed.
         /// </summary>
-        event EventHandler<OrderExecutedEventArgs> OrderExecuted;
+        event EventHandler<DealExecutedEventArgs> DealExecuted;
 
         /// <summary>
         /// Sends an order to a market for its execution.

@@ -21,24 +21,27 @@ namespace SimpleOrderRouting.Journey1
     /// </summary>
     public class SimpleOrderRoutingSystem
     {
-        private readonly IMarket market;
+        private readonly IMarketOrderRouting marketOrderRouting;
+        private IMarketDataProvider marketDataProvider;
 
-        public SimpleOrderRoutingSystem(IMarket market)
+        public SimpleOrderRoutingSystem(IMarketOrderRouting marketOrderRouting, IMarketDataProvider marketDataProvider = null)
         {
-            this.market = market;
-            this.market.OrderExecuted += this.Market_OrderExecuted;
+            this.marketOrderRouting = marketOrderRouting;
+            this.marketDataProvider = marketDataProvider;
+            this.marketOrderRouting.DealExecuted += this.MarketDealExecuted;
         }
 
         public event EventHandler<OrderExecutedEventArgs> OrderExecuted;
 
         #region Public Methods and Operators
 
-        private void Market_OrderExecuted(object sender, OrderExecutedEventArgs e)
+        private void MarketDealExecuted(object sender, DealExecutedEventArgs e)
         {
-            this.OnOrderRequested(e);
+            var orderExecutedArgs = new OrderExecutedEventArgs();
+            this.OnOrderExecuted(orderExecutedArgs);
         }
 
-        protected virtual void OnOrderRequested(OrderExecutedEventArgs e)
+        protected virtual void OnOrderExecuted(OrderExecutedEventArgs e)
         {
             if (this.OrderExecuted != null)
             {
@@ -49,7 +52,7 @@ namespace SimpleOrderRouting.Journey1
         public void Post(OrderRequest orderRequest)
         {
             var order = new Order();
-            this.market.Send(order);
+            this.marketOrderRouting.Send(order);
         }
 
         #endregion

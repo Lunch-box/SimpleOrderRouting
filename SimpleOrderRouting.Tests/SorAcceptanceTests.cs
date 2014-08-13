@@ -27,7 +27,7 @@ namespace SimpleOrderRouting.Tests
         [Fact]
         public void ShouldSendOrderWhenExecutionStrategyIsRequested()
         {
-            var market = Substitute.For<IMarket>();
+            var market = Substitute.For<IMarketOrderRouting>();
 
             var sut = new SimpleOrderRoutingSystem(market);
             sut.Post(new OrderRequest());
@@ -38,14 +38,12 @@ namespace SimpleOrderRouting.Tests
         [Fact]
         public void ShouldRaiseDealExecutionEventWhenOrderIsExecuted()
         {
-            var market = Substitute.For<IMarket>();
-            SetupToRaiseOrderExecutedEventEverytimeSendIsCalled(market);
+            var market = Substitute.For<IMarketOrderRouting>();
+            GetReadyToRaiseOrderExecutedEventEverytimeSendIsCalled(market);
 
             var sut = new SimpleOrderRoutingSystem(market);
-            
-            var subscriber = Substitute.For<IOrderExecutedSubscriber>();
 
-            // Question: OrderExecuted, DealExecuted or DealDone?
+            var subscriber = Substitute.For<IOrderExecutedSubscriber>();
             sut.OrderExecuted += subscriber.OrderExecuted;
 
             sut.Post(new OrderRequest());
@@ -54,9 +52,25 @@ namespace SimpleOrderRouting.Tests
             subscriber.ReceivedWithAnyArgs(1).OrderExecuted(null, null);
         }
 
-        private static void SetupToRaiseOrderExecutedEventEverytimeSendIsCalled(IMarket market)
+        private static void GetReadyToRaiseOrderExecutedEventEverytimeSendIsCalled(IMarketOrderRouting marketOrderRouting)
         {
-            market.WhenForAnyArgs(m => m.Send(null)).Do(_ => market.OrderExecuted += Raise.EventWith<OrderExecutedEventArgs>(market, new OrderExecutedEventArgs("Bloomb", "orderId")));
+            marketOrderRouting.WhenForAnyArgs(m => m.Send(null)).Do(_ => marketOrderRouting.DealExecuted += Raise.EventWith<DealExecutedEventArgs>(marketOrderRouting, new DealExecutedEventArgs()));
+        }
+
+        [Fact]
+        public void ShouldCancelOrderIfNoMarketDataIsAvailableForRelatedSpotInstrument()
+        {
+            var market = Substitute.For<IMarketOrderRouting>();
+            var marketDataProvider = Substitute.For<IMarketDataProvider>();
+
+            var sut = new SimpleOrderRoutingSystem(market, marketDataProvider);
+
+            sut.Post(new OrderRequest() { InstrumentName = "EUR/USD" });
+
+            // Send order not called
+            market.DidNotReceiveWithAnyArgs().Send(null);
+
+            // OrderRequestCanceled event raised
         }
 
         #endregion

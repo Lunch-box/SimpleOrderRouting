@@ -14,38 +14,10 @@
 // // --------------------------------------------------------------------------------------------------------------------
 namespace SimpleOrderRouting.Journey1
 {
-    using System;
-
     /// <summary>
     /// Event data for OrderExecuted event.
     /// </summary>
-    public class OrderExecutedEventArgs : EventArgs
+    public class OrderExecutedEventArgs
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="OrderExecutedEventArgs"/> class.
-        /// </summary>
-        /// <param name="marketIdentifier">The identifier of the market where the order has been executed.</param>
-        /// <param name="orderIdentifier">The identifier of the executed order.</param>
-        public OrderExecutedEventArgs(string marketIdentifier, string orderIdentifier)
-        {
-            this.MarketIdentifier = marketIdentifier;
-            this.OrderIdentifier = orderIdentifier;
-        }
-
-        /// <summary>
-        /// Gets the identifier of the market where the order has been executed.
-        /// </summary>
-        /// <value>
-        /// The identifier of the market where the order has been executed.
-        /// </value>
-        public string MarketIdentifier { get; private set; }
-
-        /// <summary>
-        /// Gets the identifier of the executed order.
-        /// </summary>
-        /// <value>
-        /// The identifier of the executed order.
-        /// </value>
-        public string OrderIdentifier { get; private set; }
     }
 }

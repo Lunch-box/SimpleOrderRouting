@@ -19,5 +19,6 @@ namespace SimpleOrderRouting.Journey1
     /// </summary>
     public class OrderRequest
     {
+        public string InstrumentName { get; set; }
     }
 }

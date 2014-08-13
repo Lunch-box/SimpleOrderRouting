@@ -14,6 +14,8 @@
 // // --------------------------------------------------------------------------------------------------------------------
 namespace SimpleOrderRouting.Tests
 {
+    using SimpleOrderRouting.Journey1;
+
     /// <summary>
     /// Helper interface for mocking subscribers to the OrderExecuted event (NSubstitute thing).
     /// </summary>

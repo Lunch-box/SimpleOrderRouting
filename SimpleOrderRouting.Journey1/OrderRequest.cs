@@ -1,6 +1,6 @@
 // // --------------------------------------------------------------------------------------------------------------------
-// // <copyright file="Order.cs" company="">
-// //   Copyright 2014 Thomas PIERRAIN, Tomasz JASKULA
+// // <copyright file="OrderRequest.cs" company="">
+// //   Copyright 2014 Thomas PIERRAIN,, Tomasz JASKULA
 // //   Licensed under the Apache License, Version 2.0 (the "License");
 // //   you may not use this file except in compliance with the License.
 // //   You may obtain a copy of the License at
@@ -12,12 +12,12 @@
 // //   limitations under the License.
 // // </copyright>
 // // --------------------------------------------------------------------------------------------------------------------
-namespace SimpleOrderRouting
+namespace SimpleOrderRouting.Journey1
 {
     /// <summary>
-    /// Simple Order for. 
+    /// Data transfer object used to request an order execution on a market.
     /// </summary>
-    public class Order
+    public class OrderRequest
     {
     }
 }

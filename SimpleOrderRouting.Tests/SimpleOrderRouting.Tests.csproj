@@ -59,9 +59,9 @@
     <None Include="Settings.StyleCop" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SimpleOrderRouting\SimpleOrderRouting.csproj">
+    <ProjectReference Include="..\SimpleOrderRouting.Journey1\SimpleOrderRouting.Journey1.csproj">
       <Project>{00dd3731-e815-4770-be17-4f17bfec4171}</Project>
-      <Name>SimpleOrderRouting</Name>
+      <Name>SimpleOrderRouting.Journey1</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

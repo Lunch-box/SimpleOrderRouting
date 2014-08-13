@@ -28,6 +28,12 @@ Even if this is a spike, we will try to implement it following some principles:
 + __"Don't guess; measure"__: we stick to this rule in order to avoid any kind of confirmation bias and *Premature optimization* (cause remember: "it's the root of all evil" ;-)
 + __Low ceremony__: we focus on efficiency (to deliver software) in our spike iterations. Normal, if we consider the fact that we work on that project mostly at __Lunch time__ (indeed, __we pair at noon__ to to build stuff).
 
+Our journeys
+------------
++__Journey1__: our goal for this first journey is to familiarize with the main concepts of SOR, and to implement a first and very simple SOR (mono-threaded, capable to cope with one execution strategy simultaneously, etc.)
++__Journey2__: (TBD; but probably to make the SOR vertically scalable, allowing it to cope with multiple execution strategies simultaneously and with a proper performance test harness)
+
+
 - - -
 
 __Thomas & Tomasz__ (Lunch-boxers)

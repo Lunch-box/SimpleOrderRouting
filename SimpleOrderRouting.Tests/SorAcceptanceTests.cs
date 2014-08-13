@@ -16,6 +16,8 @@ namespace SimpleOrderRouting.Tests
 {
     using NSubstitute;
 
+    using SimpleOrderRouting.Journey1;
+
     using Xunit;
 
     public class SorAcceptanceTests

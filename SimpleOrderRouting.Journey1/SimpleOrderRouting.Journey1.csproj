@@ -7,8 +7,8 @@
     <ProjectGuid>{00DD3731-E815-4770-BE17-4F17BFEC4171}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SimpleOrderRouting</RootNamespace>
-    <AssemblyName>SimpleOrderRouting</AssemblyName>
+    <RootNamespace>SimpleOrderRouting.Journey1</RootNamespace>
+    <AssemblyName>SimpleOrderRouting.Journey1</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

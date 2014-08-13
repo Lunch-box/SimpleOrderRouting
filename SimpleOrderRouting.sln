@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleOrderRouting", "SimpleOrderRouting\SimpleOrderRouting.csproj", "{00DD3731-E815-4770-BE17-4F17BFEC4171}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleOrderRouting.Journey1", "SimpleOrderRouting.Journey1\SimpleOrderRouting.Journey1.csproj", "{00DD3731-E815-4770-BE17-4F17BFEC4171}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AE7BEF9F-3190-4A0C-AF57-F9B3E844FC01}"
 	ProjectSection(SolutionItems) = preProject

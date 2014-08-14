@@ -1,16 +1,18 @@
 Simple Order Routing (SOR)
 =========================
 
-Prototype of a Financial (Smart) Order Routing. The opportunity to explore various technical approaches (Reactive Programming, Sequencer, LMAX Disruptor, Event sourcing, ...).
+Prototype of a Financial (Smart) Order Routing system. The opportunity to explore various technical approaches (Reactive Programming, Sequencer, LMAX Disruptor, Event sourcing, ...).
 
 
 What is a SOR?
 --------------
-__Order routing__ is the process by which an order goes from the end user to an exchange. An order may go directly to the exchange from the customer, or it may go first to a broker who then routes the order to the exchange.
 
-__"Smart" order routing__ attempts to achieve best execution of trades while minimizing market impact. It is designed to help firms in an increasingly fragmented market to search for hidden liquidity, find opportunities in dark pools and use algorithms to maximize results without moving the market. (source: [MarketsWiki](http://marketswiki.com/mwiki/Order_routing))
+A Smart Order Routing is a process used in trading application to execute orders for financial instruments (*) into various venues/markets/exchanges by following algorithms and execution strategies that will ensure best execution, minimal market impact and reduced execution costs.
 
-From an IT point of view, a Smart Order Routing is a process used in trading application to execute incoming liquidity into liquidity providers following routing rules. The routing rules usually follow business needs like best execution or internalization.
+(*): example of financial instruments: currencies, securities, commodities, derivatives, futures, options,...
+
+[Click here](./UbiquitousLanguage.md) to learn more on SOR concepts and the ubiquitous language of our project.
+
 
 What's the point with this spike project?
 -----------------------------------------

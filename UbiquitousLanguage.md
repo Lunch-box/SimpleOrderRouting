@@ -1,14 +1,25 @@
 Ubiquitous language
 ===================
+ 
+- __Order routing:__ is the process by which an order for financial instruments (currencies, securities, commodities, derivatives, futures, options,...) goes from the end user (e.g. trader) to an exchange. An order may go directly to the exchange from the end user, or it may go first to a broker who then routes the order to the exchange.
 
+- __Routing Destination / Execution Venue__: means a broker, a dealer (e.g. bank) or a venue/exchange/market where we can route orders to.
+
+__"Smart" Order Routing (SOR)__ attempts to achieve best execution of trades while minimizing market impact. SOR automates the selection of execution venues and methodology in order to assure best execution, systematizes the selection process, and reduce execution costs.
+
+*"It is designed to help firms in an increasingly fragmented market to search for hidden liquidity, find opportunities in dark pools and use algorithms to maximize results without moving the market"* (source: [MarketsWiki](http://marketswiki.com/mwiki/Order_routing))
+
+- - -
+
+SOR interfaces
+--------------
 Traders ask the Smart Order Router (SOR for short) to execute orders of 2 types:
 
 - __Market order:__ simple order (1 leg only?) associated to a given venue/market/exchange
 
 - __Trading order:__ more complex order that is usually transformed by the SOR into a set of Market Orders executed in one or various venues/markets/exchanges. The number of market orders and the choice of their venue depends on the market conditions, affinities that we may have with venues, and the algorithms we enable within the SOR.
 
-
-
+- - -
 
 Trading Order types
 -------------------

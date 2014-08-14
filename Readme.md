@@ -11,7 +11,7 @@ A Smart Order Routing is a process used in trading application to execute orders
 
 (*): example of financial instruments: currencies, securities, commodities, derivatives, futures, options,...
 
-[Click here](./UbiquitousLanguage.md) to learn more on SOR concepts and the ubiquitous language of our project.
+__[Click here](./UbiquitousLanguage.md)__ to learn more on SOR concepts and the ubiquitous language of our project.
 
 
 What's the point with this spike project?

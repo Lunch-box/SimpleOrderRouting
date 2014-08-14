@@ -5,9 +5,10 @@ Traders ask the Smart Order Router (SOR for short) to execute orders of 2 types:
 
 - __Market order:__ simple order (1 leg only?) associated to a given venue/market/exchange
 
-- __Trading order:__ more complex order that is usually transformed into a set of Market Orders executed in one or various venues/markets/exchanges. The number of market orders and the choice of their venue depends on the market conditions, affinities that we may have with venues, and the algorithms we enable within the SOR.
+- __Trading order:__ more complex order that is usually transformed by the SOR into a set of Market Orders executed in one or various venues/markets/exchanges. The number of market orders and the choice of their venue depends on the market conditions, affinities that we may have with venues, and the algorithms we enable within the SOR.
 
-- - -
+
+
 
 Trading Order types
 -------------------

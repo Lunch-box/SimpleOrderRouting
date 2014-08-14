@@ -34,6 +34,9 @@ Our journeys
 
 + __Journey2__: (TBD; but probably to make the SOR vertically scalable, allowing it to cope with multiple execution strategies simultaneously and with a proper performance test harness)
 
+Disclaimer
+----------
+Since we pair most of the time, the identity of the commiter is not very relevant here.
 
 - - -
 

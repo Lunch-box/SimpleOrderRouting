@@ -5,7 +5,7 @@ Ubiquitous language
 
 - __Routing Destination / Execution Venue__: means a broker, a dealer (e.g. bank) or a venue/exchange/market where we can route orders to.
 
-__"Smart" Order Routing (SOR)__ attempts to achieve best execution of trades while minimizing market impact. SOR automates the selection of execution venues and methodology in order to assure best execution, systematizes the selection process, and reduce execution costs.
+- __"Smart" Order Routing (SOR)__ attempts to achieve best execution of trades while minimizing market impact. SOR automates the selection of execution venues and methodology in order to assure best execution, systematizes the selection process, and reduce execution costs.
 
 *"It is designed to help firms in an increasingly fragmented market to search for hidden liquidity, find opportunities in dark pools and use algorithms to maximize results without moving the market"* (source: [MarketsWiki](http://marketswiki.com/mwiki/Order_routing))
 

@@ -7,11 +7,11 @@ Prototype of a Financial (Smart) Order Routing system. The opportunity to explor
 What is a SOR?
 --------------
 
-A Smart Order Routing is a process used in trading application to execute orders for financial instruments (*) into various venues/markets/exchanges by following algorithms and execution strategies that will ensure best execution, minimal market impact and reduced execution costs.
+A Smart Order Routing is a process used in trading application to execute orders for financial instruments (*) into various venues/markets/exchanges by following algorithms and execution strategies ensuring best execution, minimal market impact and reduced execution costs.
 
 (*): example of financial instruments: currencies, securities, commodities, derivatives, futures, options,...
 
-__[Click here](./UbiquitousLanguage.md)__ to learn more on SOR concepts and the ubiquitous language of our project.
+__[Click here](./UbiquitousLanguage.md)__ to learn more about SOR concepts and the ubiquitous language of our project.
 
 
 What's the point with this spike project?
@@ -32,13 +32,13 @@ Even if this is a spike, we will try to implement it following some principles:
 
 Our journeys
 ------------
-+ __Journey1__: our goal for this first journey is to familiarize with the main concepts of SOR, and to implement a first and very simple SOR (mono-threaded, capable to cope with one execution strategy simultaneously, with everything located within the same .dll, etc.)
++ __Journey1__: our goal for this first journey is to familiarize ourselves with the main concepts of SOR, and to implement a first and very simple SOR (mono-threaded, capable to cope with one execution strategy simultaneously, with everything located within the same .dll, etc.)
 
 + __Journey2__: (TBD; but probably to make the SOR vertically scalable, allowing it to cope with multiple execution strategies simultaneously and with a proper performance test harness)
 
 Disclaimer
 ----------
-Since we pair most of the time, the identity of the commiter is not very relevant here.
+Since we pair most of the (lunch) time, the identity of the commiter is not very relevant.
 
 - - -
 

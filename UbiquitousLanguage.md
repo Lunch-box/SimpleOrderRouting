@@ -42,3 +42,79 @@ Execution strategies of a SOR
 - GTC (Good 'till Cancel)
 - IOC (Immediate or Cancel)
 - Simple Order
+
+- - - 
+
+Différents concepts:
+--------------------
+Objectif/intention (du client)
+Contrainte d'execution
+Algo
+Conditions de déclenchement
+
+SOR <=> un broker (intentions  du client en entrée, et les executer)
+- - -
+
+On donne un prix souhaité, et l'algorithme d'execution
+WAP: Waited Average Price
+T-WAP: one million every 5 minutes (parce je veux executer 100 et j'ai 2 heures)
+V-WAP: volume waited
+
+OCO: stratégie d'investisseur (client)
+
+Immediate Or Cancel (modalité)
+FOK: Fill or Kill (full exec <=> Full Or Nothing) / ?
+Un ordre aux limites = 
+
+le SOR actuel exploite (passe sur les marchés)
+Ordre Limite (limité au prix) avec une stratégie Immediate Or Cancel or Running
+
+Vis à vis du marché, on n'utilise que des Market Orders et des Limit Orders
+Très concrètement, on créé qqchose avec l'API de passage d'ordre
+Quantity
+Price
+Instrument
+Running: = LimitORder or immediate
+- - - 
+
+Attention: tout n'est pas order dans la liste ci-dessous
+Coté investisseur (e.g. OMS):
+T/P: Take Profit
+Stop Loss
+OCO : TP + SL (mais un sur les deux)
+Entry: Ordre d'entrée + 1 OCO (ssi l'ordre d'entrée est executé)
+Entry Loop: Entry et je repose un entry à la fin (ad lib?)
+
+SOR exec strategy
+---
++ Simple Strategy : cible un seul marché uniquement
++ Sweep Strategy: cible plusieurs marchés.
+
+Important: Un enjeu de risque qui ne peut pas être abstrait (décision informée de l'investisseur)
+
+Notre SOR, va recevoir des intentions en provenance des investisseurs, et les 
+
+Différents types de liquidity providers (cumulatif ou indépendant)
+EBS/Reuters: marchés d'ordres
+sinon aggregators
+Pleins de contraintes en fonction des marchés (ex: Reuters: minimum 1 Million)
+
+- - - 
+
+Cycle de vie côté client doit être différent de celui coté marché (retry and Co)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

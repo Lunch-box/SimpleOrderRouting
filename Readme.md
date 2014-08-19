@@ -7,7 +7,7 @@ Is a prototype of a Smart Order Routing (financial system). The opportunity for 
 
 - - -
 
-[Every information is now available on the project's wiki](./wiki)
+__[Every information is now available on the project's wiki](https://github.com/Lunch-box/SimpleOrderRouting/wiki)__
 
 
 

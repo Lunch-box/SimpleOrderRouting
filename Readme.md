@@ -32,6 +32,8 @@ Even if this is a spike, we will try to implement it following some principles:
 
 Our journeys
 ------------
++ __Journey0__: Definition of the various contexts related to the SOR (e.g. investors, markets, etc) + APIs related (market-side, investor-side), listing of the SOR responsibilities
+
 + __Journey1__: our goal for this first journey is to familiarize ourselves with the main concepts of SOR, and to implement a first and very simple SOR (mono-threaded, capable to cope with one execution strategy simultaneously, with everything located within the same .dll, etc.)
 
 + __Journey2__: (TBD; but probably to make the SOR vertically scalable, allowing it to cope with multiple execution strategies simultaneously and with a proper performance test harness)

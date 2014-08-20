@@ -1,6 +1,7 @@
 ﻿// // --------------------------------------------------------------------------------------------------------------------
-// // <copyright file="IMarketDataProvider.cs" company="">
-// //   Copyright 2014 Thomas PIERRAIN
+// // <copyright file="Market.cs" company="">
+// //   Copyright 2014 The Lunch-Box mob: Ozgur DEVELIOGLU (@Zgurrr), Cyrille  DUPUYDAUBY 
+// //   (@Cyrdup), Tomasz JASKULA (@tjaskula), Thomas PIERRAIN (@tpierrain)
 // //   Licensed under the Apache License, Version 2.0 (the "License");
 // //   you may not use this file except in compliance with the License.
 // //   You may obtain a copy of the License at
@@ -14,7 +15,10 @@
 // // --------------------------------------------------------------------------------------------------------------------
 namespace SimpleOrderRouting.Journey1
 {
-    public interface IMarketDataProvider
+    public class Market
     {
+        public int SellQuantity { get; set; }
+
+        public int SellPrice { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 // // --------------------------------------------------------------------------------------------------------------------
-// // <copyright file="IMarketOrderRouting.cs" company="">
-// //   Copyright 2014 Thomas PIERRAIN, Tomasz JASKULA
+// // <copyright file="SmartOrderRoutingSystem.cs" company="">
+// //   Copyright 2014 The Lunch-Box mob: Ozgur DEVELIOGLU (@Zgurrr), Cyrille  DUPUYDAUBY 
+// //   (@Cyrdup), Tomasz JASKULA (@tjaskula), Thomas PIERRAIN (@tpierrain)
 // //   Licensed under the Apache License, Version 2.0 (the "License");
 // //   you may not use this file except in compliance with the License.
 // //   You may obtain a copy of the License at
@@ -14,22 +15,21 @@
 // // --------------------------------------------------------------------------------------------------------------------
 namespace SimpleOrderRouting.Journey1
 {
-    using System;
-
-    /// <summary>
-    /// Order routing API.
-    /// </summary>
-    public interface IMarketOrderRouting
+    public class SmartOrderRoutingSystem
     {
-        /// <summary>
-        /// Occurs when a deal is executed.
-        /// </summary>
-        event EventHandler<DealExecutedEventArgs> DealExecuted;
+        public SmartOrderRoutingSystem(Market[] markets)
+        {
+            throw new System.NotImplementedException();
+        }
 
-        /// <summary>
-        /// Sends an order to a market for its execution.
-        /// </summary>
-        /// <param name="order">The order to be executed.</param>
-        void Send(Order order);
+        public void Route(OrderRequest orderRequest)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public OrderRequest CreateRoutingRequest(Way buy, int quantity, decimal price)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

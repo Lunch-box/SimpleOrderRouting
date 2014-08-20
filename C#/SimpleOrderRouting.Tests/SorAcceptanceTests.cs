@@ -1,6 +1,7 @@
 ﻿// // --------------------------------------------------------------------------------------------------------------------
 // // <copyright file="SorAcceptanceTests.cs" company="">
-// //   Copyright 2014 Thomas PIERRAIN, Tomasz JASKULA
+// //   Copyright 2014 The Lunch-Box mob: Ozgur DEVELIOGLU (@Zgurrr), Cyrille  DUPUYDAUBY 
+// //   (@Cyrdup), Tomasz JASKULA (@tjaskula), Thomas PIERRAIN (@tpierrain)
 // //   Licensed under the Apache License, Version 2.0 (the "License");
 // //   you may not use this file except in compliance with the License.
 // //   You may obtain a copy of the License at
@@ -14,7 +15,9 @@
 // // --------------------------------------------------------------------------------------------------------------------
 namespace SimpleOrderRouting.Tests
 {
-    using NSubstitute;
+    using System.Threading;
+
+    using NFluent;
 
     using SimpleOrderRouting.Journey1;
 
@@ -25,54 +28,38 @@ namespace SimpleOrderRouting.Tests
         #region Public Methods and Operators
 
         [Fact]
-        public void ShouldSendOrderWhenExecutionStrategyIsRequested()
+        public void ShouldExecuteOrderWhenThereIsEnoughLiquidityOnTheMarkets()
         {
-            var market = Substitute.For<IMarketOrderRouting>();
-
-            var sut = new SimpleOrderRoutingSystem(market);
-            sut.Post(new OrderRequest());
-
-            market.ReceivedWithAnyArgs(1).Send(null);
-        }
-
-        [Fact]
-        public void ShouldRaiseDealExecutionEventWhenOrderIsExecuted()
-        {
-            var market = Substitute.For<IMarketOrderRouting>();
-            GetReadyToRaiseOrderExecutedEventEverytimeSendIsCalled(market);
-
-            var sut = new SimpleOrderRoutingSystem(market);
-
-            var subscriber = Substitute.For<IOrderExecutedSubscriber>();
-            sut.OrderExecuted += subscriber.OrderExecuted;
-
-            sut.Post(new OrderRequest());
+            // Given market A: 150 @ $100, market B: 55 @ $100 
+            // When Investor wants to buy 125 stocks @ $100 Then SOR can execute at the requested price
+            var marketA = new Market()
+                              {
+                                  SellQuantity = 150,
+                                  SellPrice = 100
+                              };
             
-            // Checks the event has been raised
-            subscriber.ReceivedWithAnyArgs(1).OrderExecuted(null, null);
+            var marketB = new Market()
+                              {
+                                  SellQuantity = 55,
+                                  SellPrice = 100
+                              };
+
+            var sor = new SmartOrderRoutingSystem(new[] { marketA, marketB });
+
+            var orderRequest = sor.CreateRoutingRequest(Way.Buy, quantity: 125, price: 100);
+            OrderExecutedEventArgs orderExecutedEventArgs = null;
+            orderRequest.Executed += (sender, args) =>{ orderExecutedEventArgs = args; };
+            
+            sor.Route(orderRequest);
+
+            // TODO :introduce autoreset event instead
+            Thread.Sleep(10);
+
+            Check.That(orderExecutedEventArgs.Price).IsEqualTo(100);
+            Check.That(orderExecutedEventArgs.Quantity).IsEqualTo(125);
+            Check.ThatEnum(orderExecutedEventArgs.Way).IsEqualTo(Way.Buy);
         }
-
-        private static void GetReadyToRaiseOrderExecutedEventEverytimeSendIsCalled(IMarketOrderRouting marketOrderRouting)
-        {
-            marketOrderRouting.WhenForAnyArgs(m => m.Send(null)).Do(_ => marketOrderRouting.DealExecuted += Raise.EventWith<DealExecutedEventArgs>(marketOrderRouting, new DealExecutedEventArgs()));
-        }
-
-        [Fact]
-        public void ShouldCancelOrderIfNoMarketDataIsAvailableForRelatedSpotInstrument()
-        {
-            var market = Substitute.For<IMarketOrderRouting>();
-            var marketDataProvider = Substitute.For<IMarketDataProvider>();
-
-            var sut = new SimpleOrderRoutingSystem(market, marketDataProvider);
-
-            sut.Post(new OrderRequest() { InstrumentName = "EUR/USD" });
-
-            // Send order not called
-            market.DidNotReceiveWithAnyArgs().Send(null);
-
-            // OrderRequestCanceled event raised
-        }
-
+        
         #endregion
     }
 }

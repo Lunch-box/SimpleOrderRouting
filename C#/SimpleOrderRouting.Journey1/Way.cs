@@ -1,6 +1,7 @@
-// // --------------------------------------------------------------------------------------------------------------------
-// // <copyright file="Order.cs" company="">
-// //   Copyright 2014 Thomas PIERRAIN, Tomasz JASKULA
+﻿// // --------------------------------------------------------------------------------------------------------------------
+// // <copyright file="Way.cs" company="">
+// //   Copyright 2014 The Lunch-Box mob: Ozgur DEVELIOGLU (@Zgurrr), Cyrille  DUPUYDAUBY 
+// //   (@Cyrdup), Tomasz JASKULA (@tjaskula), Thomas PIERRAIN (@tpierrain)
 // //   Licensed under the Apache License, Version 2.0 (the "License");
 // //   you may not use this file except in compliance with the License.
 // //   You may obtain a copy of the License at
@@ -14,10 +15,9 @@
 // // --------------------------------------------------------------------------------------------------------------------
 namespace SimpleOrderRouting.Journey1
 {
-    /// <summary>
-    /// Simple Order for. 
-    /// </summary>
-    public class Order
+    public enum Way
     {
+        Buy,
+        Sell
     }
 }

@@ -1,6 +1,7 @@
 // // --------------------------------------------------------------------------------------------------------------------
 // // <copyright file="OrderExecutedEventArgs.cs" company="">
-// //   Copyright 2014 Thomas PIERRAIN, Tomasz JASKULA
+// //   Copyright 2014 The Lunch-Box mob: Ozgur DEVELIOGLU (@Zgurrr), Cyrille  DUPUYDAUBY 
+// //   (@Cyrdup), Tomasz JASKULA (@tjaskula), Thomas PIERRAIN (@tpierrain)
 // //   Licensed under the Apache License, Version 2.0 (the "License");
 // //   you may not use this file except in compliance with the License.
 // //   You may obtain a copy of the License at
@@ -19,5 +20,15 @@ namespace SimpleOrderRouting.Journey1
     /// </summary>
     public class OrderExecutedEventArgs
     {
+        public int Quantity { get; private set; }
+        public decimal Price { get; private set; }
+        public Way Way{ get; private set; }
+
+        public OrderExecutedEventArgs(Way way, int quantity, decimal price)
+        {
+            this.Quantity = quantity;
+            this.Price = price;
+            this.Way = way;
+        }
     }
 }

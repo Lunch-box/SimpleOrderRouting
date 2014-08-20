@@ -19,8 +19,6 @@ namespace SimpleOrderRouting.Tests
 
     using NFluent;
 
-    using NSubstitute.Core;
-
     using SimpleOrderRouting.Journey1;
 
     using Xunit;
@@ -57,7 +55,7 @@ namespace SimpleOrderRouting.Tests
             // TODO :introduce autoreset event instead
             Thread.Sleep(10);
 
-            Check.That(orderExecutedEventArgs).HasFieldsWithSameValues(new { Price = 100, Quantity = 125, Way = Way.Buy});
+            Check.That(orderExecutedEventArgs).HasFieldsWithSameValues(new { Way = Way.Buy, Quantity = 125, Price = 100 });
         }
         
         #endregion

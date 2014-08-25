@@ -17,23 +17,6 @@ namespace SimpleOrderRouting.Journey1
 {
     public class SmartOrderRoutingSystem
     {
-        private readonly Market[] markets;
-        private OrderRequest smartOrder;
-
-        public SmartOrderRoutingSystem(Market[] markets)
-        {
-            this.markets = markets;
-        }
-
-        public void Route(OrderRequest orderRequest)
-        {
-            smartOrder.Invoke();
-        }
-
-        public OrderRequest CreateSmartOrder(Way way, int quantity, decimal price)
-        {
-            smartOrder = new OrderRequest(way, quantity, price);
-            return smartOrder;
-        }
+        
     }
 }

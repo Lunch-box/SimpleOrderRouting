@@ -39,14 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DealExecutedEventArgs.cs" />
-    <Compile Include="Market.cs" />
-    <Compile Include="OrderExecutedEventArgs.cs" />
-    <Compile Include="OrderStatus.cs" />
-    <Compile Include="OrderRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SmartOrderRoutingSystem.cs" />
-    <Compile Include="Way.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Settings.StyleCop" />

@@ -39,9 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Message.cs" />
-    <Compile Include="OrderMessageHandler.cs" />
-    <Compile Include="OrderMessageHub.cs" />
+    <Compile Include="ExternalMessageContext\Message.cs" />
+    <Compile Include="OrderMessageAdapter.cs" />
+    <Compile Include="ExternalMessageContext\OrderMessageHub.cs" />
     <Compile Include="OrderRequest.cs" />
     <Compile Include="OrderRequestEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -51,6 +51,7 @@
   <ItemGroup>
     <None Include="Settings.StyleCop" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

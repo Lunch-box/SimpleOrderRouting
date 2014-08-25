@@ -16,7 +16,7 @@
 
 using System.Collections.Generic;
 
-namespace SimpleOrderRouting.Journey1
+namespace SimpleOrderRouting.Journey1.ExternalMessageContext
 {
     /// <summary>
     /// This is the external component that publishes messages to the SOR system.

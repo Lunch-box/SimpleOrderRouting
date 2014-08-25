@@ -15,6 +15,7 @@
 // // --------------------------------------------------------------------------------------------------------------------
 
 using System;
+using SimpleOrderRouting.Journey1.ExternalMessageContext;
 
 namespace SimpleOrderRouting.Tests
 {
@@ -34,19 +35,19 @@ namespace SimpleOrderRouting.Tests
         public void ShouldListenToOrderRequestWhenIsStarted()
         {
             var orderMessageHub = new OrderMessageHub();
-            var orderMessageHandler = new OrderMessageHandler(m => new OrderRequest(m.Id));
-            OrderRequest orderRequest = null;
-            orderMessageHandler.MessageHandled += (sender, args) => orderRequest = args.OrderRequest;
-            orderMessageHub.Subscribe(orderMessageHandler);
-
-            var sorConfig = new SmartOrderRoutingConfiguration(orderMessageHandler);
-            var sor = new SmartOrderRoutingSystem(sorConfig);
+            int orderRequestId = 0;
+            var sorConfig = new SmartOrderRoutingConfiguration(m =>
+                                                                {
+                                                                    orderRequestId = m.Id;
+                                                                    return new OrderRequest(m.Id);
+                                                                });
+            var sor = new SmartOrderRoutingSystem(orderMessageHub, sorConfig);
 
             using (sor.Start())
             {
                 var message = new Message(1);
                 orderMessageHub.Publish(message);
-                Check.That(orderRequest.Id).IsEqualTo(message.Id);
+                Check.That(orderRequestId).IsEqualTo(message.Id);
             }
         }
 

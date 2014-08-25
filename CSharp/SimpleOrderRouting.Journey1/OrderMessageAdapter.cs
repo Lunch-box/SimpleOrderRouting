@@ -1,4 +1,4 @@
-﻿// // --------------------------------------------------------------------------------------------------------------------
+// // --------------------------------------------------------------------------------------------------------------------
 // // <copyright file="SmartOrderRoutingSystem.cs" company="">
 // //   Copyright 2014 The Lunch-Box mob: Ozgur DEVELIOGLU (@Zgurrr), Cyrille  DUPUYDAUBY 
 // //   (@Cyrdup), Tomasz JASKULA (@tjaskula), Thomas PIERRAIN (@tpierrain)
@@ -14,15 +14,35 @@
 // // </copyright>
 // // --------------------------------------------------------------------------------------------------------------------
 
+using System;
+using SimpleOrderRouting.Journey1.ExternalMessageContext;
+
 namespace SimpleOrderRouting.Journey1
 {
-    public class Message
+    /// <summary>
+    /// It's an adapter between external world and the sor handling logic.
+    /// </summary>
+    public class OrderMessageAdapter : IMessageHandler
     {
-        public Message(int id)
+        private readonly Func<Message, OrderRequest> _orderRequestFactory;
+
+        public OrderMessageAdapter(Func<Message, OrderRequest> orderRequestFactory)
         {
-            Id = id;
+            _orderRequestFactory = orderRequestFactory;
         }
 
-        public int Id { get; private set; }
+        internal event EventHandler<OrderRequestEventArgs> MessageHandled;
+
+        protected virtual void OnMessageHandled(OrderRequest e)
+        {
+            var handler = MessageHandled;
+            if (handler != null) handler(this, new OrderRequestEventArgs(e));
+        }
+
+        public void HandleMessage(Message message)
+        {
+            var orderRequest = _orderRequestFactory(message);
+            OnMessageHandled(orderRequest);
+        }
     }
 }

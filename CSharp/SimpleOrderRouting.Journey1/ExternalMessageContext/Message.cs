@@ -14,18 +14,15 @@
 // // </copyright>
 // // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using SimpleOrderRouting.Journey1.ExternalMessageContext;
-
-namespace SimpleOrderRouting.Journey1
+namespace SimpleOrderRouting.Journey1.ExternalMessageContext
 {
-    public class SmartOrderRoutingConfiguration
+    public class Message
     {
-        public SmartOrderRoutingConfiguration(Func<Message, OrderRequest> orderMessageFactory)
+        public Message(int id)
         {
-            OrderMessageFactory = orderMessageFactory;
+            Id = id;
         }
 
-        public Func<Message, OrderRequest> OrderMessageFactory { get; private set; }
+        public int Id { get; private set; }
     }
 }

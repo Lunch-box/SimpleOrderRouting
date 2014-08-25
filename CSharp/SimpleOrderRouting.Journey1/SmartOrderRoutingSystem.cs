@@ -15,33 +15,36 @@
 // // --------------------------------------------------------------------------------------------------------------------
 
 using System;
+using SimpleOrderRouting.Journey1.ExternalMessageContext;
 
 namespace SimpleOrderRouting.Journey1
 {
     public class SmartOrderRoutingSystem : IDisposable
     {
+        private readonly OrderMessageHub _orderMessageHub;
         private readonly SmartOrderRoutingConfiguration _sorConfig;
-        private OrderMessageHandler _orderMessageHandler;
 
-        public SmartOrderRoutingSystem(SmartOrderRoutingConfiguration sorConfig)
+        public SmartOrderRoutingSystem(OrderMessageHub orderMessageHub, SmartOrderRoutingConfiguration sorConfig)
         {
+            _orderMessageHub = orderMessageHub;
             _sorConfig = sorConfig;
         }
 
         public IDisposable Start()
         {
-            _orderMessageHandler = _sorConfig.OrderMessageHandler;
-            _orderMessageHandler.MessageHandled += OrderMessageHandlerOnMessageHandled;
+            var orderMessageAdapter = new OrderMessageAdapter(_sorConfig.OrderMessageFactory);
+            _orderMessageHub.Subscribe(orderMessageAdapter);
             return this;
         }
 
         public void Dispose()
         {
-            _orderMessageHandler.MessageHandled -= OrderMessageHandlerOnMessageHandled;
+            
         }
 
-        private void OrderMessageHandlerOnMessageHandled(object sender, OrderRequestEventArgs orderRequestEventArgs)
+        private void OrderMessageAdapterOnMessageHandled(object sender, OrderRequestEventArgs orderRequestEventArgs)
         {
+
         }
     }
 }

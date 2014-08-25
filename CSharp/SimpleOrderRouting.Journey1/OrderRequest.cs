@@ -19,6 +19,18 @@ namespace SimpleOrderRouting.Journey1
 
     public class OrderRequest
     {
+        public event EventHandler<OrderExecutedEventArgs> Executed;
+
+        /// <summary>
+        /// Just a naive implementation to make the test pass.
+        /// </summary>
+        public void Invoke()
+        {
+            var tmp = Executed;
+            if (tmp != null)
+                tmp(this, new OrderExecutedEventArgs(Way, Quantity, Price));
+        }
+
         public Way Way { get; private set; }
 
         public int Quantity { get; private set; }

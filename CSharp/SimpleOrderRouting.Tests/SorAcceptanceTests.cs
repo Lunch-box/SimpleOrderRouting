@@ -35,27 +35,27 @@ namespace SimpleOrderRouting.Tests
             var marketA = new Market()
                               {
                                   SellQuantity = 150,
-                                  SellPrice = 100
+                                  SellPrice = 100M
                               };
             
             var marketB = new Market()
                               {
                                   SellQuantity = 55,
-                                  SellPrice = 100
+                                  SellPrice = 100M
                               };
 
             var sor = new SmartOrderRoutingSystem(new[] { marketA, marketB });
 
-            var orderRequest = sor.CreateRoutingRequest(Way.Buy, quantity: 125, price: 100);
+            var smartOrder = sor.CreateSmartOrder(Way.Buy, quantity: 125, price: 100M);
+
             OrderExecutedEventArgs orderExecutedEventArgs = null;
-            orderRequest.Executed += (sender, args) =>{ orderExecutedEventArgs = args; };
-            
-            sor.Route(orderRequest);
+            smartOrder.Executed += (sender, args) =>{ orderExecutedEventArgs = args; };
+
+            // orderRequest.Route(); ?
+            sor.Route(smartOrder);
 
             // TODO :introduce autoreset event instead
-            Thread.Sleep(10);
-
-            Check.That(orderExecutedEventArgs).HasFieldsWithSameValues(new { Way = Way.Buy, Quantity = 125, Price = 100 });
+            Check.That(orderExecutedEventArgs).HasFieldsWithSameValues(new { Way = Way.Buy, Quantity = 125, Price = 100M });
         }
         
         #endregion

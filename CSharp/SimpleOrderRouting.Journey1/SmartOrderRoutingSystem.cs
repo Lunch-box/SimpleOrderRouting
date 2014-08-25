@@ -17,9 +17,11 @@ namespace SimpleOrderRouting.Journey1
 {
     public class SmartOrderRoutingSystem
     {
+        private readonly Market[] markets;
+
         public SmartOrderRoutingSystem(Market[] markets)
         {
-            throw new System.NotImplementedException();
+            this.markets = markets;
         }
 
         public void Route(OrderRequest orderRequest)
@@ -27,9 +29,9 @@ namespace SimpleOrderRouting.Journey1
             throw new System.NotImplementedException();
         }
 
-        public OrderRequest CreateRoutingRequest(Way buy, int quantity, decimal price)
+        public OrderRequest CreateSmartOrder(Way way, int quantity, decimal price)
         {
-            throw new System.NotImplementedException();
+            return new OrderRequest(way, quantity, price);
         }
     }
 }

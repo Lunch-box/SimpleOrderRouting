@@ -31,7 +31,5 @@ namespace SimpleOrderRouting.Journey1
             this.Quantity = quantity;
             this.Price = price;
         }
-
-        public event Action<object, OrderExecutedEventArgs> Executed;
     }
 }

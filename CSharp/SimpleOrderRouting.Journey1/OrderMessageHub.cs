@@ -1,4 +1,4 @@
-// // --------------------------------------------------------------------------------------------------------------------
+﻿// // --------------------------------------------------------------------------------------------------------------------
 // // <copyright file="SmartOrderRoutingSystem.cs" company="">
 // //   Copyright 2014 The Lunch-Box mob: Ozgur DEVELIOGLU (@Zgurrr), Cyrille  DUPUYDAUBY 
 // //   (@Cyrdup), Tomasz JASKULA (@tjaskula), Thomas PIERRAIN (@tpierrain)
@@ -14,34 +14,34 @@
 // // </copyright>
 // // --------------------------------------------------------------------------------------------------------------------
 
-using System;
+using System.Collections.Generic;
 
 namespace SimpleOrderRouting.Journey1
 {
-    public class SmartOrderRoutingSystem : IDisposable
+    /// <summary>
+    /// This is the external component that publishes messages to the SOR system.
+    /// In a real life it could be a MOM component like RabbitMq, Tibco EMS or whatever.
+    /// </summary>
+    public class OrderMessageHub
     {
-        private readonly SmartOrderRoutingConfiguration _sorConfig;
-        private OrderMessageHandler _orderMessageHandler;
+        private readonly List<IMessageHandler> _handlers = new List<IMessageHandler>();
 
-        public SmartOrderRoutingSystem(SmartOrderRoutingConfiguration sorConfig)
+        public void Publish(Message message)
         {
-            _sorConfig = sorConfig;
+            foreach (var messageHandler in _handlers)
+            {
+                messageHandler.HandleMessage(message);
+            }
         }
 
-        public IDisposable Start()
+        public void Subscribe(IMessageHandler messageHandler)
         {
-            _orderMessageHandler = _sorConfig.OrderMessageHandler;
-            _orderMessageHandler.MessageHandled += OrderMessageHandlerOnMessageHandled;
-            return this;
+            _handlers.Add(messageHandler);
         }
+    }
 
-        public void Dispose()
-        {
-            _orderMessageHandler.MessageHandled -= OrderMessageHandlerOnMessageHandled;
-        }
-
-        private void OrderMessageHandlerOnMessageHandled(object sender, OrderRequestEventArgs orderRequestEventArgs)
-        {
-        }
+    public interface IMessageHandler
+    {
+        void HandleMessage(Message message);
     }
 }

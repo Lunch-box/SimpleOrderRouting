@@ -1,4 +1,4 @@
-// // --------------------------------------------------------------------------------------------------------------------
+﻿// // --------------------------------------------------------------------------------------------------------------------
 // // <copyright file="SmartOrderRoutingSystem.cs" company="">
 // //   Copyright 2014 The Lunch-Box mob: Ozgur DEVELIOGLU (@Zgurrr), Cyrille  DUPUYDAUBY 
 // //   (@Cyrdup), Tomasz JASKULA (@tjaskula), Thomas PIERRAIN (@tpierrain)
@@ -14,34 +14,15 @@
 // // </copyright>
 // // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-
 namespace SimpleOrderRouting.Journey1
 {
-    public class SmartOrderRoutingSystem : IDisposable
+    public class SmartOrderRoutingConfiguration
     {
-        private readonly SmartOrderRoutingConfiguration _sorConfig;
-        private OrderMessageHandler _orderMessageHandler;
-
-        public SmartOrderRoutingSystem(SmartOrderRoutingConfiguration sorConfig)
+        public SmartOrderRoutingConfiguration(OrderMessageHandler orderMessageHandler)
         {
-            _sorConfig = sorConfig;
+            OrderMessageHandler = orderMessageHandler;
         }
 
-        public IDisposable Start()
-        {
-            _orderMessageHandler = _sorConfig.OrderMessageHandler;
-            _orderMessageHandler.MessageHandled += OrderMessageHandlerOnMessageHandled;
-            return this;
-        }
-
-        public void Dispose()
-        {
-            _orderMessageHandler.MessageHandled -= OrderMessageHandlerOnMessageHandled;
-        }
-
-        private void OrderMessageHandlerOnMessageHandled(object sender, OrderRequestEventArgs orderRequestEventArgs)
-        {
-        }
+        public OrderMessageHandler OrderMessageHandler { get; private set; }
     }
 }

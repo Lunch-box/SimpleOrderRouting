@@ -13,6 +13,9 @@
 // //   limitations under the License.
 // // </copyright>
 // // --------------------------------------------------------------------------------------------------------------------
+
+using System;
+
 namespace SimpleOrderRouting.Tests
 {
     using System.Threading;
@@ -26,6 +29,26 @@ namespace SimpleOrderRouting.Tests
     public class SorAcceptanceTests
     {
         #region Public Methods and Operators
+
+        [Fact]
+        public void ShouldListenToOrderRequestWhenIsStarted()
+        {
+            var orderMessageHub = new OrderMessageHub();
+            var orderMessageHandler = new OrderMessageHandler(m => new OrderRequest(m.Id));
+            OrderRequest orderRequest = null;
+            orderMessageHandler.MessageHandled += (sender, args) => orderRequest = args.OrderRequest;
+            orderMessageHub.Subscribe(orderMessageHandler);
+
+            var sorConfig = new SmartOrderRoutingConfiguration(orderMessageHandler);
+            var sor = new SmartOrderRoutingSystem(sorConfig);
+
+            using (sor.Start())
+            {
+                var message = new Message(1);
+                orderMessageHub.Publish(message);
+                Check.That(orderRequest.Id).IsEqualTo(message.Id);
+            }
+        }
 
         [Fact]
         public void ShouldExecuteOrderWhenThereIsEnoughLiquidityOnTheMarkets()

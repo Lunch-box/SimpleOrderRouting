@@ -44,7 +44,7 @@ namespace SimpleOrderRouting.Tests
                                   SellPrice = 100M
                               };
 
-            var sor = new SmartOrderRoutingSystem(new[] { marketA, marketB });
+            var sor = new SmartOrderRoutingEngine(new[] { marketA, marketB });
 
             var smartOrder = sor.CreateSmartOrder(Way.Buy, quantity: 125, price: 100M);
 

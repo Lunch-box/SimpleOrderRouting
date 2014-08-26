@@ -1,5 +1,5 @@
 // // --------------------------------------------------------------------------------------------------------------------
-// // <copyright file="SmartOrderRoutingSystem.cs" company="">
+// // <copyright file="SmartOrderRoutingEngine.cs" company="">
 // //   Copyright 2014 The Lunch-Box mob: Ozgur DEVELIOGLU (@Zgurrr), Cyrille  DUPUYDAUBY 
 // //   (@Cyrdup), Tomasz JASKULA (@tjaskula), Thomas PIERRAIN (@tpierrain)
 // //   Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,12 +15,12 @@
 // // --------------------------------------------------------------------------------------------------------------------
 namespace SimpleOrderRouting.Journey1
 {
-    public class SmartOrderRoutingSystem
+    public class SmartOrderRoutingEngine
     {
         private readonly Market[] markets;
         private OrderRequest smartOrder;
 
-        public SmartOrderRoutingSystem(Market[] markets)
+        public SmartOrderRoutingEngine(Market[] markets)
         {
             this.markets = markets;
         }

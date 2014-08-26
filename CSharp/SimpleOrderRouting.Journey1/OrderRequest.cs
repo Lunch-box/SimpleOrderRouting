@@ -24,7 +24,7 @@ namespace SimpleOrderRouting.Journey1
         /// <summary>
         /// Just a naive implementation to make the test pass.
         /// </summary>
-        protected virtual void OnExecuted()
+        public virtual void OnExecuted()
         {
             var tmp = Executed;
             if (tmp != null)

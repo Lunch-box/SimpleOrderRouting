@@ -27,7 +27,7 @@ namespace SimpleOrderRouting.Journey1
 
         public void Route(OrderRequest orderRequest)
         {
-            smartOrder.Invoke();
+            smartOrder.OnExecuted();
         }
 
         public OrderRequest CreateSmartOrder(Way way, int quantity, decimal price)

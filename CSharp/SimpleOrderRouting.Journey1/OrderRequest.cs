@@ -24,11 +24,13 @@ namespace SimpleOrderRouting.Journey1
         /// <summary>
         /// Just a naive implementation to make the test pass.
         /// </summary>
-        public void Invoke()
+        protected virtual void OnExecuted()
         {
             var tmp = Executed;
             if (tmp != null)
+            {
                 tmp(this, new OrderExecutedEventArgs(Way, Quantity, Price));
+            }
         }
 
         public Way Way { get; private set; }

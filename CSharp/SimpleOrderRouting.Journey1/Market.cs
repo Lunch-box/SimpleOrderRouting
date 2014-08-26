@@ -46,16 +46,16 @@ namespace SimpleOrderRouting.Journey1
                     }
 
                     SellQuantity -= order.Quantity;
-                    if (Executed != null)
+                    if (this.OrderExecuted != null)
                     {
-                        Executed(order, EventArgs.Empty);
+                        this.OrderExecuted(order, EventArgs.Empty);
                     }
 
                     break;
             }
         }
 
-        public event EventHandler<EventArgs> Executed;
+        public event EventHandler<EventArgs> OrderExecuted;
 
         public IOrder CreateLimitOrder(Way way, decimal price, int quantity)
         {

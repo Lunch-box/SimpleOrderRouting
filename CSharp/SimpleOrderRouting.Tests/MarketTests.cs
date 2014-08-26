@@ -37,7 +37,7 @@
             var executed = false;
             var order = market.CreateMarketOrder(Way.Buy, quantity: 10);
 
-            market.Executed += (s, a) => executed = true;
+            market.OrderExecuted += (s, a) => executed = true;
             market.Send(order);
 
             Check.That(executed).IsTrue();
@@ -51,7 +51,7 @@
             var executed = false;
             var order = market.CreateLimitOrder(Way.Buy, price : 100M, quantity: 10);
 
-            market.Executed += (s, a) => executed = true;
+            market.OrderExecuted += (s, a) => executed = true;
             market.Send(order);
 
             Check.That(executed).IsTrue();
@@ -65,7 +65,7 @@
             var executed = false;
             var order = market.CreateLimitOrder(Way.Buy, price : 101M, quantity: 10);
 
-            market.Executed += (s, a) => executed = true;
+            market.OrderExecuted += (s, a) => executed = true;
             market.Send(order);
 
             Check.That(executed).IsFalse();

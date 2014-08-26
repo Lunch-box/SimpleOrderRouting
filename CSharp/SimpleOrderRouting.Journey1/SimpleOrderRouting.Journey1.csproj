@@ -43,7 +43,7 @@
     <Compile Include="Market.cs" />
     <Compile Include="OrderExecutedEventArgs.cs" />
     <Compile Include="OrderStatus.cs" />
-    <Compile Include="OrderRequest.cs" />
+    <Compile Include="InvestorInstruction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SmartOrderRoutingEngine.cs" />
     <Compile Include="Way.cs" />

@@ -46,13 +46,13 @@ namespace SimpleOrderRouting.Tests
 
             var sor = new SmartOrderRoutingEngine(new[] { marketA, marketB });
 
-            var smartOrder = sor.CreateSmartOrder(Way.Buy, quantity: 125, price: 100M);
+            var investorInstruction = sor.CreateInvestorInstruction(Way.Buy, quantity: 125, price: 100M);
 
             OrderExecutedEventArgs orderExecutedEventArgs = null;
-            smartOrder.Executed += (sender, args) =>{ orderExecutedEventArgs = args; };
+            investorInstruction.Executed += (sender, args) =>{ orderExecutedEventArgs = args; };
 
             // orderRequest.Route(); ?
-            sor.Route(smartOrder);
+            sor.Route(investorInstruction);
 
             // TODO :introduce autoreset event instead
             Check.That(orderExecutedEventArgs).HasFieldsWithSameValues(new { Way = Way.Buy, Quantity = 125, Price = 100M });

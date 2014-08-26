@@ -1,5 +1,5 @@
 // // --------------------------------------------------------------------------------------------------------------------
-// // <copyright file="OrderRequest.cs" company="">
+// // <copyright file="InvestorInstruction.cs" company="">
 // //   Copyright 2014 The Lunch-Box mob: Ozgur DEVELIOGLU (@Zgurrr), Cyrille  DUPUYDAUBY 
 // //   (@Cyrdup), Tomasz JASKULA (@tjaskula), Thomas PIERRAIN (@tpierrain)
 // //   Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,21 +17,24 @@ namespace SimpleOrderRouting.Journey1
 {
     using System;
 
-    public class OrderRequest
+    public class InvestorInstruction
     {
         public event EventHandler<OrderExecutedEventArgs> Executed;
 
         /// <summary>
         /// Just a naive implementation to make the test pass.
         /// </summary>
-        public virtual void OnExecuted()
+        /// <param name="executedQuantity"></param>
+        /// <param name="executedPrice"></param>
+        public virtual void OnExecuted(int executedQuantity, decimal executedPrice)
         {
             var tmp = Executed;
             if (tmp != null)
             {
-                tmp(this, new OrderExecutedEventArgs(Way, Quantity, Price));
+                tmp(this, new OrderExecutedEventArgs(Way, executedQuantity, executedPrice));
             }
         }
+
 
         public Way Way { get; private set; }
 
@@ -39,7 +42,7 @@ namespace SimpleOrderRouting.Journey1
 
         public decimal Price { get; private set; }
 
-        public OrderRequest(Way way, int quantity, decimal price)
+        public InvestorInstruction(Way way, int quantity, decimal price)
         {
             this.Way = way;
             this.Quantity = quantity;

@@ -15,25 +15,43 @@
 // // --------------------------------------------------------------------------------------------------------------------
 namespace SimpleOrderRouting.Journey1
 {
+    using System;
+
     public class SmartOrderRoutingEngine
     {
         private readonly Market[] markets;
-        private OrderRequest smartOrder;
 
         public SmartOrderRoutingEngine(Market[] markets)
         {
             this.markets = markets;
         }
 
-        public void Route(OrderRequest orderRequest)
+        public void Route(InvestorInstruction investorInstruction)
         {
-            smartOrder.OnExecuted();
+            foreach (var market in markets)
+            {
+                var order=market.CreateLimitOrder(investorInstruction.Way, investorInstruction.Price, investorInstruction.Quantity);
+                market.OrderExecuted += (executedOrder, args) =>
+                {
+                    if (order == executedOrder)
+                    {
+                        // we have been executed
+                        investorInstruction.OnExecuted(investorInstruction.Quantity, investorInstruction.Price);
+                    }
+                };
+                try
+                {
+                    market.Send(order);
+                }
+                catch(ApplicationException)
+                {}
+            }
         }
 
-        public OrderRequest CreateSmartOrder(Way way, int quantity, decimal price)
+
+        public InvestorInstruction CreateInvestorInstruction(Way way, int quantity, decimal price)
         {
-            smartOrder = new OrderRequest(way, quantity, price);
-            return smartOrder;
+            return new InvestorInstruction(way, quantity, price);
         }
     }
 }

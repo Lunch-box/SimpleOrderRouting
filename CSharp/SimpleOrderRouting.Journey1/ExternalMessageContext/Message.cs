@@ -1,5 +1,5 @@
-// // --------------------------------------------------------------------------------------------------------------------
-// // <copyright file="OrderStatus.cs" company="">
+﻿// // --------------------------------------------------------------------------------------------------------------------
+// // <copyright file="SmartOrderRoutingSystem.cs" company="">
 // //   Copyright 2014 The Lunch-Box mob: Ozgur DEVELIOGLU (@Zgurrr), Cyrille  DUPUYDAUBY 
 // //   (@Cyrdup), Tomasz JASKULA (@tjaskula), Thomas PIERRAIN (@tpierrain)
 // //   Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,21 +13,16 @@
 // //   limitations under the License.
 // // </copyright>
 // // --------------------------------------------------------------------------------------------------------------------
-namespace SimpleOrderRouting.Journey1
-{
-    /// <summary>
-    /// Possible status for an order.
-    /// </summary>
-    public enum OrderStatus
-    {
-        /// <summary>
-        /// Order is executed.
-        /// </summary>
-        Executed,
 
-        /// <summary>
-        /// Order is Canceled.
-        /// </summary>
-        Canceled
+namespace SimpleOrderRouting.Journey1.ExternalMessageContext
+{
+    public class Message
+    {
+        public Message(int id)
+        {
+            Id = id;
+        }
+
+        public int Id { get; private set; }
     }
 }

@@ -13,27 +13,38 @@
 // //   limitations under the License.
 // // </copyright>
 // // --------------------------------------------------------------------------------------------------------------------
+
+using System;
+using SimpleOrderRouting.Journey1.ExternalMessageContext;
+
 namespace SimpleOrderRouting.Journey1
 {
-    public class SmartOrderRoutingSystem
+    public class SmartOrderRoutingSystem : IDisposable
     {
-        private readonly Market[] markets;
-        private OrderRequest smartOrder;
+        private readonly OrderMessageHub _orderMessageHub;
+        private readonly SmartOrderRoutingConfiguration _sorConfig;
 
-        public SmartOrderRoutingSystem(Market[] markets)
+        public SmartOrderRoutingSystem(OrderMessageHub orderMessageHub, SmartOrderRoutingConfiguration sorConfig)
         {
-            this.markets = markets;
+            _orderMessageHub = orderMessageHub;
+            _sorConfig = sorConfig;
         }
 
-        public void Route(OrderRequest orderRequest)
+        public IDisposable Start()
         {
-            smartOrder.Invoke();
+            var orderMessageAdapter = new OrderMessageAdapter(_sorConfig.OrderMessageFactory);
+            _orderMessageHub.Subscribe(orderMessageAdapter);
+            return this;
         }
 
-        public OrderRequest CreateSmartOrder(Way way, int quantity, decimal price)
+        public void Dispose()
         {
-            smartOrder = new OrderRequest(way, quantity, price);
-            return smartOrder;
+            
+        }
+
+        private void OrderMessageAdapterOnMessageHandled(object sender, OrderRequestEventArgs orderRequestEventArgs)
+        {
+
         }
     }
 }

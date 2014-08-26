@@ -1,5 +1,5 @@
-// // --------------------------------------------------------------------------------------------------------------------
-// // <copyright file="OrderRequest.cs" company="">
+﻿// // --------------------------------------------------------------------------------------------------------------------
+// // <copyright file="SmartOrderRoutingSystem.cs" company="">
 // //   Copyright 2014 The Lunch-Box mob: Ozgur DEVELIOGLU (@Zgurrr), Cyrille  DUPUYDAUBY 
 // //   (@Cyrdup), Tomasz JASKULA (@tjaskula), Thomas PIERRAIN (@tpierrain)
 // //   Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,35 +13,16 @@
 // //   limitations under the License.
 // // </copyright>
 // // --------------------------------------------------------------------------------------------------------------------
+
 namespace SimpleOrderRouting.Journey1
 {
-    using System;
-
     public class OrderRequest
     {
-        public event EventHandler<OrderExecutedEventArgs> Executed;
-
-        /// <summary>
-        /// Just a naive implementation to make the test pass.
-        /// </summary>
-        public void Invoke()
+        public OrderRequest(int id)
         {
-            var tmp = Executed;
-            if (tmp != null)
-                tmp(this, new OrderExecutedEventArgs(Way, Quantity, Price));
+            Id = id;
         }
 
-        public Way Way { get; private set; }
-
-        public int Quantity { get; private set; }
-
-        public decimal Price { get; private set; }
-
-        public OrderRequest(Way way, int quantity, decimal price)
-        {
-            this.Way = way;
-            this.Quantity = quantity;
-            this.Price = price;
-        }
+        public int Id { get; private set; }
     }
 }

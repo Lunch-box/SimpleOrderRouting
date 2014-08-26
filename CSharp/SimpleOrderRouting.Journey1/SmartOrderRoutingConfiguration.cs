@@ -1,5 +1,5 @@
-// // --------------------------------------------------------------------------------------------------------------------
-// // <copyright file="OrderExecutedEventArgs.cs" company="">
+﻿// // --------------------------------------------------------------------------------------------------------------------
+// // <copyright file="SmartOrderRoutingSystem.cs" company="">
 // //   Copyright 2014 The Lunch-Box mob: Ozgur DEVELIOGLU (@Zgurrr), Cyrille  DUPUYDAUBY 
 // //   (@Cyrdup), Tomasz JASKULA (@tjaskula), Thomas PIERRAIN (@tpierrain)
 // //   Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,22 +13,19 @@
 // //   limitations under the License.
 // // </copyright>
 // // --------------------------------------------------------------------------------------------------------------------
+
+using System;
+using SimpleOrderRouting.Journey1.ExternalMessageContext;
+
 namespace SimpleOrderRouting.Journey1
 {
-    /// <summary>
-    /// Event data for OrderExecuted event.
-    /// </summary>
-    public class OrderExecutedEventArgs
+    public class SmartOrderRoutingConfiguration
     {
-        public int Quantity { get; private set; }
-        public decimal Price { get; private set; }
-        public Way Way{ get; private set; }
-
-        public OrderExecutedEventArgs(Way way, int quantity, decimal price)
+        public SmartOrderRoutingConfiguration(Func<Message, OrderRequest> orderMessageFactory)
         {
-            this.Quantity = quantity;
-            this.Price = price;
-            this.Way = way;
+            OrderMessageFactory = orderMessageFactory;
         }
+
+        public Func<Message, OrderRequest> OrderMessageFactory { get; private set; }
     }
 }

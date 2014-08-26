@@ -1,5 +1,5 @@
 // // --------------------------------------------------------------------------------------------------------------------
-// // <copyright file="DealExecutedEventArgs.cs" company="">
+// // <copyright file="SmartOrderRoutingSystem.cs" company="">
 // //   Copyright 2014 The Lunch-Box mob: Ozgur DEVELIOGLU (@Zgurrr), Cyrille  DUPUYDAUBY 
 // //   (@Cyrdup), Tomasz JASKULA (@tjaskula), Thomas PIERRAIN (@tpierrain)
 // //   Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,14 +13,36 @@
 // //   limitations under the License.
 // // </copyright>
 // // --------------------------------------------------------------------------------------------------------------------
+
+using System;
+using SimpleOrderRouting.Journey1.ExternalMessageContext;
+
 namespace SimpleOrderRouting.Journey1
 {
-    using System;
-
     /// <summary>
-    /// Event data for DealExecuted event.
+    /// It's an adapter between external world and the sor handling logic.
     /// </summary>
-    public class DealExecutedEventArgs : EventArgs
+    public class OrderMessageAdapter : IMessageHandler
     {
+        private readonly Func<Message, OrderRequest> _orderRequestFactory;
+
+        public OrderMessageAdapter(Func<Message, OrderRequest> orderRequestFactory)
+        {
+            _orderRequestFactory = orderRequestFactory;
+        }
+
+        internal event EventHandler<OrderRequestEventArgs> MessageHandled;
+
+        protected virtual void OnMessageHandled(OrderRequest e)
+        {
+            var handler = MessageHandled;
+            if (handler != null) handler(this, new OrderRequestEventArgs(e));
+        }
+
+        public void HandleMessage(Message message)
+        {
+            var orderRequest = _orderRequestFactory(message);
+            OnMessageHandled(orderRequest);
+        }
     }
 }

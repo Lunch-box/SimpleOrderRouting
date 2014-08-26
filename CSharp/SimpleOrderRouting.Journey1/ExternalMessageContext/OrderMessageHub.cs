@@ -1,5 +1,5 @@
 ﻿// // --------------------------------------------------------------------------------------------------------------------
-// // <copyright file="Way.cs" company="">
+// // <copyright file="SmartOrderRoutingSystem.cs" company="">
 // //   Copyright 2014 The Lunch-Box mob: Ozgur DEVELIOGLU (@Zgurrr), Cyrille  DUPUYDAUBY 
 // //   (@Cyrdup), Tomasz JASKULA (@tjaskula), Thomas PIERRAIN (@tpierrain)
 // //   Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,11 +13,35 @@
 // //   limitations under the License.
 // // </copyright>
 // // --------------------------------------------------------------------------------------------------------------------
-namespace SimpleOrderRouting.Journey1
+
+using System.Collections.Generic;
+
+namespace SimpleOrderRouting.Journey1.ExternalMessageContext
 {
-    public enum Way
+    /// <summary>
+    /// This is the external component that publishes messages to the SOR system.
+    /// In a real life it could be a MOM component like RabbitMq, Tibco EMS or whatever.
+    /// </summary>
+    public class OrderMessageHub
     {
-        Buy,
-        Sell
+        private readonly List<IMessageHandler> _handlers = new List<IMessageHandler>();
+
+        public void Publish(Message message)
+        {
+            foreach (var messageHandler in _handlers)
+            {
+                messageHandler.HandleMessage(message);
+            }
+        }
+
+        public void Subscribe(IMessageHandler messageHandler)
+        {
+            _handlers.Add(messageHandler);
+        }
+    }
+
+    public interface IMessageHandler
+    {
+        void HandleMessage(Message message);
     }
 }

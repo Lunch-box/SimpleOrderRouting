@@ -28,13 +28,44 @@ namespace SimpleOrderRouting.Tests
         #region Public Methods and Operators
 
         [Fact]
-        public void ShouldExecuteOrderWhenThereIsEnoughLiquidityOnTheMarkets()
+        public void ShouldExecuteInstructionWhenThereIsEnoughLiquidityOnOneMarket()
         {
-            // Given market A: 150 @ $100, market B: 55 @ $100 
+            // Given market A: 150 @ $100, market B: 55 @ $101 
             // When Investor wants to buy 125 stocks @ $100 Then SOR can execute at the requested price
             var marketA = new Market()
                               {
                                   SellQuantity = 150,
+                                  SellPrice = 100M
+                              };
+            
+            var marketB = new Market()
+                              {
+                                  SellQuantity = 55,
+                                  SellPrice = 101M
+                              };
+
+            var sor = new SmartOrderRoutingEngine(new[] { marketA, marketB });
+
+            var investorInstruction = sor.CreateInvestorInstruction(Way.Buy, quantity: 125, price: 100M);
+
+            OrderExecutedEventArgs orderExecutedEventArgs = null;
+            investorInstruction.Executed += (sender, args) =>{ orderExecutedEventArgs = args; };
+
+            // orderRequest.Route(); ?
+            sor.Route(investorInstruction);
+
+            // TODO :introduce autoreset event instead
+            Check.That(orderExecutedEventArgs).HasFieldsWithSameValues(new { Way = Way.Buy, Quantity = 125, Price = 100M });
+        }
+
+        [Fact]
+        public void ShouldExecuteInstructionWhenThereIsEnoughLiquidityOnTheMarkets()
+        {
+            // Given market A: 100 @ $100, market B: 55 @ $100 
+            // When Investor wants to buy 125 stocks @ $100 Then SOR can execute at the requested price
+            var marketA = new Market()
+                              {
+                                  SellQuantity = 100,
                                   SellPrice = 100M
                               };
             

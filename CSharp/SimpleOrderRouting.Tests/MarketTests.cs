@@ -49,7 +49,7 @@
         {
             var market = new Market() { SellPrice = 100M, SellQuantity = 50 };
             var executed = false;
-            var order = market.CreateLimitOrder(Way.Buy, price : 100M, quantity: 10);
+            var order = market.CreateLimitOrder(Way.Buy, price: 100M, quantity: 10, allowPartialExecution: false);
 
             market.OrderExecuted += (s, a) => executed = true;
             market.Send(order);
@@ -63,7 +63,7 @@
         {
             var market = new Market() { SellPrice = 100M, SellQuantity = 50 };
             var executed = false;
-            var order = market.CreateLimitOrder(Way.Buy, price : 101M, quantity: 10);
+            var order = market.CreateLimitOrder(Way.Buy, price: 101M, quantity: 10, allowPartialExecution: false);
 
             market.OrderExecuted += (s, a) => executed = true;
             market.Send(order);

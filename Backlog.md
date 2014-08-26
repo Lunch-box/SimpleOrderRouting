@@ -1,5 +1,5 @@
 SOR Backlog
 ===========
 
-+ Write first acceptance test(s)
++ Test partial execution on markets
 + 

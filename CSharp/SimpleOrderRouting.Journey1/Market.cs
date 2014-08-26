@@ -34,39 +34,50 @@ namespace SimpleOrderRouting.Journey1
             switch (order.Way)
             {
                 case Way.Buy:
-                    if (order.Quantity > SellQuantity)
-                    {
-                        throw new ApplicationException("Excessive quantity");
-                    }
-
                     if (order is LimitOrder)
                     {
                         var limitOrder = order as LimitOrder;
                         if (limitOrder.Price > SellPrice) return;
                     }
 
-                    SellQuantity -= order.Quantity;
+                    if (order.Quantity > SellQuantity)
+                    {
+                        if (!order.AllowPartialExecution)
+                        {
+                            throw new ApplicationException("Excessive quantity!");
+                        }
+
+
+                    }
+
+                    var executedQuantity = Math.Min(order.Quantity, this.SellQuantity);
+
+                    SellQuantity -=  executedQuantity;
+
                     if (this.OrderExecuted != null)
                     {
-                        this.OrderExecuted(order, EventArgs.Empty);
+                        this.OrderExecuted(order, new DealExecutedEventArgs(this.SellPrice, executedQuantity));
                     }
 
                     break;
             }
         }
 
-        public event EventHandler<EventArgs> OrderExecuted;
+        public event EventHandler<DealExecutedEventArgs> OrderExecuted;
 
-        public IOrder CreateLimitOrder(Way way, decimal price, int quantity)
+        public IOrder CreateLimitOrder(Way way, decimal price, int quantity, bool allowPartialExecution)
         {
-            return new LimitOrder(way, price, quantity);
+            return new LimitOrder(way, price, quantity, allowPartialExecution);
         }
     }
 
     public class LimitOrder : IOrder
     {
-        public LimitOrder(Way way, decimal price, int quantity)
+        public bool AllowPartialExecution { get; private set; }
+
+        public LimitOrder(Way way, decimal price, int quantity, bool allowPartialExecution)
         {
+            this.AllowPartialExecution = allowPartialExecution;
             this.Way = way;
             this.Price = price;
             this.Quantity = quantity;
@@ -85,6 +96,7 @@ namespace SimpleOrderRouting.Journey1
 
         int Quantity { get; }
 
+        bool AllowPartialExecution { get; }
     }
 
     public class MarketOrder : IOrder
@@ -115,5 +127,12 @@ namespace SimpleOrderRouting.Journey1
             }
         }
 
+        public bool AllowPartialExecution
+        {
+            get
+            {
+                return false;
+            }
+        }
     }
 }

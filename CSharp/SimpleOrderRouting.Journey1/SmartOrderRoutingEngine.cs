@@ -30,13 +30,14 @@ namespace SimpleOrderRouting.Journey1
         {
             foreach (var market in markets)
             {
-                var order=market.CreateLimitOrder(investorInstruction.Way, investorInstruction.Price, investorInstruction.Quantity);
-                EventHandler<EventArgs> handler = (executedOrder, args) =>
+                var order=market.CreateLimitOrder(investorInstruction.Way, investorInstruction.Price, investorInstruction.Quantity,true);
+                
+                EventHandler<DealExecutedEventArgs> handler = (executedOrder, args) =>
                 {
                     if (order == executedOrder)
                     {
                         // we have been executed
-                        investorInstruction.NotifyOrderExecution(investorInstruction.Quantity, investorInstruction.Price);
+                        investorInstruction.NotifyOrderExecution(args.Quantity, args.Price);
                     }
                 };
                 market.OrderExecuted += handler;

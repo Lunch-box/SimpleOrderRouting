@@ -26,12 +26,15 @@ namespace SimpleOrderRouting.Journey1
         /// </summary>
         /// <param name="executedQuantity"></param>
         /// <param name="executedPrice"></param>
-        public virtual void OnExecuted(int executedQuantity, decimal executedPrice)
+        public virtual void NotifyOrderExecution(int executedQuantity, decimal executedPrice)
         {
-            var tmp = Executed;
-            if (tmp != null)
+            if (executedPrice == Price && executedQuantity == this.Quantity)
             {
-                tmp(this, new OrderExecutedEventArgs(Way, executedQuantity, executedPrice));
+                // instruction fully executed, I notify
+                if (this.Executed != null)
+                {
+                    this.Executed(this, new OrderExecutedEventArgs(this.Way, this.Quantity, this.Price));
+                }
             }
         }
 

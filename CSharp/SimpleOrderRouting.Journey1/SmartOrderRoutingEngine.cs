@@ -31,20 +31,22 @@ namespace SimpleOrderRouting.Journey1
             foreach (var market in markets)
             {
                 var order=market.CreateLimitOrder(investorInstruction.Way, investorInstruction.Price, investorInstruction.Quantity);
-                market.OrderExecuted += (executedOrder, args) =>
+                EventHandler<EventArgs> handler = (executedOrder, args) =>
                 {
                     if (order == executedOrder)
                     {
                         // we have been executed
-                        investorInstruction.OnExecuted(investorInstruction.Quantity, investorInstruction.Price);
+                        investorInstruction.NotifyOrderExecution(investorInstruction.Quantity, investorInstruction.Price);
                     }
                 };
+                market.OrderExecuted += handler;
                 try
                 {
                     market.Send(order);
                 }
                 catch(ApplicationException)
                 {}
+                market.OrderExecuted -= handler;
             }
         }
 

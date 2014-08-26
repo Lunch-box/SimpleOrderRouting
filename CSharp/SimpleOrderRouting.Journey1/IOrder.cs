@@ -1,5 +1,5 @@
-﻿// // --------------------------------------------------------------------------------------------------------------------
-// // <copyright file="Way.cs" company="">
+// // --------------------------------------------------------------------------------------------------------------------
+// // <copyright file="IOrder.cs" company="">
 // //   Copyright 2014 The Lunch-Box mob: Ozgur DEVELIOGLU (@Zgurrr), Cyrille  DUPUYDAUBY 
 // //   (@Cyrdup), Tomasz JASKULA (@tjaskula), Thomas PIERRAIN (@tpierrain)
 // //   Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,19 +15,12 @@
 // // --------------------------------------------------------------------------------------------------------------------
 namespace SimpleOrderRouting.Journey1
 {
-    /// <summary>
-    /// Sell or Buy way for Orders.
-    /// </summary>
-    public enum Way
+    public interface IOrder
     {
-        /// <summary>
-        /// The Buy way.
-        /// </summary>
-        Buy,
+        Way Way { get; }
 
-        /// <summary>
-        /// The Sell way.
-        /// </summary>
-        Sell
+        int Quantity { get; }
+
+        bool AllowPartialExecution { get; }
     }
 }

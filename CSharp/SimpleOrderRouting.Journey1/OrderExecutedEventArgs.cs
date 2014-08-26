@@ -20,15 +20,17 @@ namespace SimpleOrderRouting.Journey1
     /// </summary>
     public class OrderExecutedEventArgs
     {
-        public int Quantity { get; private set; }
-        public decimal Price { get; private set; }
-        public Way Way{ get; private set; }
-
         public OrderExecutedEventArgs(Way way, int quantity, decimal price)
         {
             this.Quantity = quantity;
             this.Price = price;
             this.Way = way;
         }
+
+        public int Quantity { get; private set; }
+
+        public decimal Price { get; private set; }
+
+        public Way Way { get; private set; }
     }
 }

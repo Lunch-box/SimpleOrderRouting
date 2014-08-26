@@ -1,5 +1,5 @@
 ﻿// // --------------------------------------------------------------------------------------------------------------------
-// // <copyright file="Way.cs" company="">
+// // <copyright file="MarketOrder.cs" company="">
 // //   Copyright 2014 The Lunch-Box mob: Ozgur DEVELIOGLU (@Zgurrr), Cyrille  DUPUYDAUBY 
 // //   (@Cyrdup), Tomasz JASKULA (@tjaskula), Thomas PIERRAIN (@tpierrain)
 // //   Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,19 +15,40 @@
 // // --------------------------------------------------------------------------------------------------------------------
 namespace SimpleOrderRouting.Journey1
 {
-    /// <summary>
-    /// Sell or Buy way for Orders.
-    /// </summary>
-    public enum Way
+    public class MarketOrder : IOrder
     {
-        /// <summary>
-        /// The Buy way.
-        /// </summary>
-        Buy,
+        private readonly Way buy;
 
-        /// <summary>
-        /// The Sell way.
-        /// </summary>
-        Sell
+        private readonly int quantity;
+
+        public MarketOrder(Way buy, int quantity)
+        {
+            this.buy = buy;
+            this.quantity = quantity;
+        }
+
+        public Way Way
+        {
+            get
+            {
+                return this.buy;
+            }
+        }
+
+        public int Quantity
+        {
+            get
+            {
+                return this.quantity;
+            }
+        }
+
+        public bool AllowPartialExecution
+        {
+            get
+            {
+                return false;
+            }
+        }
     }
 }

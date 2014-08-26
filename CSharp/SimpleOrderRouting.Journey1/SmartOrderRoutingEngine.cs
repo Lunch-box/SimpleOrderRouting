@@ -28,9 +28,9 @@ namespace SimpleOrderRouting.Journey1
 
         public void Route(InvestorInstruction investorInstruction)
         {
-            foreach (var market in markets)
+            foreach (var market in this.markets)
             {
-                var order=market.CreateLimitOrder(investorInstruction.Way, investorInstruction.Price, investorInstruction.Quantity,true);
+                var order = market.CreateLimitOrder(investorInstruction.Way, investorInstruction.Price, investorInstruction.Quantity, true);
                 
                 EventHandler<DealExecutedEventArgs> handler = (executedOrder, args) =>
                 {
@@ -45,12 +45,13 @@ namespace SimpleOrderRouting.Journey1
                 {
                     market.Send(order);
                 }
-                catch(ApplicationException)
-                {}
+                catch (ApplicationException)
+                {
+                }
+
                 market.OrderExecuted -= handler;
             }
         }
-
 
         public InvestorInstruction CreateInvestorInstruction(Way way, int quantity, decimal price)
         {

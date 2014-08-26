@@ -19,11 +19,12 @@ namespace SimpleOrderRouting.Journey1
 
     public class Market
     {
+        public event EventHandler<DealExecutedEventArgs> OrderExecuted;
+
         public int SellQuantity { get; set; }
 
         public decimal SellPrice { get; set; }
 
-        
         public IOrder CreateMarketOrder(Way buy, int quantity)
         {
             return new MarketOrder(buy, quantity);
@@ -37,22 +38,22 @@ namespace SimpleOrderRouting.Journey1
                     if (order is LimitOrder)
                     {
                         var limitOrder = order as LimitOrder;
-                        if (limitOrder.Price > SellPrice) return;
+                        if (limitOrder.Price > this.SellPrice)
+                        {
+                            return;
+                        }
                     }
 
-                    if (order.Quantity > SellQuantity)
+                    if (order.Quantity > this.SellQuantity)
                     {
                         if (!order.AllowPartialExecution)
                         {
                             throw new ApplicationException("Excessive quantity!");
                         }
-
-
                     }
 
                     var executedQuantity = Math.Min(order.Quantity, this.SellQuantity);
-
-                    SellQuantity -=  executedQuantity;
+                    this.SellQuantity -= executedQuantity;
 
                     if (this.OrderExecuted != null)
                     {
@@ -63,76 +64,9 @@ namespace SimpleOrderRouting.Journey1
             }
         }
 
-        public event EventHandler<DealExecutedEventArgs> OrderExecuted;
-
         public IOrder CreateLimitOrder(Way way, decimal price, int quantity, bool allowPartialExecution)
         {
             return new LimitOrder(way, price, quantity, allowPartialExecution);
-        }
-    }
-
-    public class LimitOrder : IOrder
-    {
-        public bool AllowPartialExecution { get; private set; }
-
-        public LimitOrder(Way way, decimal price, int quantity, bool allowPartialExecution)
-        {
-            this.AllowPartialExecution = allowPartialExecution;
-            this.Way = way;
-            this.Price = price;
-            this.Quantity = quantity;
-        }
-
-        public Way Way { get; private set; }
-
-        public decimal Price { get; set; }
-
-        public int Quantity { get; private set; }
-    }
-
-    public interface IOrder
-    {
-        Way Way { get; }
-
-        int Quantity { get; }
-
-        bool AllowPartialExecution { get; }
-    }
-
-    public class MarketOrder : IOrder
-    {
-        private readonly Way buy;
-
-        private readonly int quantity;
-
-        public MarketOrder(Way buy, int quantity)
-        {
-            this.buy = buy;
-            this.quantity = quantity;
-        }
-
-        public Way Way
-        {
-            get
-            {
-                return this.buy;
-            }
-        }
-
-        public int Quantity
-        {
-            get
-            {
-                return this.quantity;
-            }
-        }
-
-        public bool AllowPartialExecution
-        {
-            get
-            {
-                return false;
-            }
         }
     }
 }

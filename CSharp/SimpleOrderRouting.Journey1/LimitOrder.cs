@@ -1,5 +1,5 @@
-﻿// // --------------------------------------------------------------------------------------------------------------------
-// // <copyright file="Way.cs" company="">
+// // --------------------------------------------------------------------------------------------------------------------
+// // <copyright file="LimitOrder.cs" company="">
 // //   Copyright 2014 The Lunch-Box mob: Ozgur DEVELIOGLU (@Zgurrr), Cyrille  DUPUYDAUBY 
 // //   (@Cyrdup), Tomasz JASKULA (@tjaskula), Thomas PIERRAIN (@tpierrain)
 // //   Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,19 +15,22 @@
 // // --------------------------------------------------------------------------------------------------------------------
 namespace SimpleOrderRouting.Journey1
 {
-    /// <summary>
-    /// Sell or Buy way for Orders.
-    /// </summary>
-    public enum Way
+    public class LimitOrder : IOrder
     {
-        /// <summary>
-        /// The Buy way.
-        /// </summary>
-        Buy,
+        public LimitOrder(Way way, decimal price, int quantity, bool allowPartialExecution)
+        {
+            this.AllowPartialExecution = allowPartialExecution;
+            this.Way = way;
+            this.Price = price;
+            this.Quantity = quantity;
+        }
 
-        /// <summary>
-        /// The Sell way.
-        /// </summary>
-        Sell
+        public bool AllowPartialExecution { get; private set; }
+
+        public Way Way { get; private set; }
+
+        public decimal Price { get; set; }
+
+        public int Quantity { get; private set; }
     }
 }

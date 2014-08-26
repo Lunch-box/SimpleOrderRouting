@@ -17,18 +17,56 @@ namespace SimpleOrderRouting.Journey1
 {
     using System;
 
+    /// <summary>
+    /// Trading instruction given to the SOR on the investor-side.
+    /// </summary>
     public class InvestorInstruction
     {
+        public InvestorInstruction(Way way, int quantity, decimal price)
+        {
+            this.Way = way;
+            this.Quantity = quantity;
+            this.Price = price;
+        }
+
+        /// <summary>
+        /// Occurs when the <see cref="InvestorInstruction"/> is fully executed.
+        /// </summary>
         public event EventHandler<OrderExecutedEventArgs> Executed;
 
         /// <summary>
-        /// Just a naive implementation to make the test pass.
+        /// Gets the way to be used for the Instruction (Buy/Sell).
         /// </summary>
-        /// <param name="executedQuantity"></param>
-        /// <param name="executedPrice"></param>
-        public virtual void NotifyOrderExecution(int executedQuantity, decimal executedPrice)
+        /// <value>
+        /// The way to be used for the Instruction (Buy/Sell).
+        /// </value>
+        public Way Way { get; private set; }
+
+        /// <summary>
+        /// Gets the quantity to be bought or sell.
+        /// </summary>
+        /// <value>
+        /// The quantity to be bought or sell.
+        /// </value>
+        public int Quantity { get; private set; }
+
+        /// <summary>
+        /// Gets the price we are looking for the execution.
+        /// </summary>
+        /// <value>
+        /// The price we are looking for the execution.
+        /// </value>
+        public decimal Price { get; private set; }
+
+        /// <summary>
+        /// Just a naive implementation to make the test pass. 
+        /// Code smell here: with the Executed event raised from outside the InvestorInstruction.
+        /// </summary>
+        /// <param name="executedQuantity">The executed Quantity.</param>
+        /// <param name="executedPrice">The executed Price.</param>
+        internal virtual void NotifyOrderExecution(int executedQuantity, decimal executedPrice)
         {
-            if (executedPrice == Price && executedQuantity == this.Quantity)
+            if (executedPrice == this.Price && executedQuantity == this.Quantity)
             {
                 // instruction fully executed, I notify
                 if (this.Executed != null)
@@ -36,20 +74,6 @@ namespace SimpleOrderRouting.Journey1
                     this.Executed(this, new OrderExecutedEventArgs(this.Way, this.Quantity, this.Price));
                 }
             }
-        }
-
-
-        public Way Way { get; private set; }
-
-        public int Quantity { get; private set; }
-
-        public decimal Price { get; private set; }
-
-        public InvestorInstruction(Way way, int quantity, decimal price)
-        {
-            this.Way = way;
-            this.Quantity = quantity;
-            this.Price = price;
         }
     }
 }

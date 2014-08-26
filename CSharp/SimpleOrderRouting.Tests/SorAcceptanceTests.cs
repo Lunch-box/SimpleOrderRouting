@@ -49,7 +49,7 @@ namespace SimpleOrderRouting.Tests
             var investorInstruction = sor.CreateInvestorInstruction(Way.Buy, quantity: 125, price: 100M);
 
             OrderExecutedEventArgs orderExecutedEventArgs = null;
-            investorInstruction.Executed += (sender, args) =>{ orderExecutedEventArgs = args; };
+            investorInstruction.Executed += (sender, args) => { orderExecutedEventArgs = args; };
 
             // orderRequest.Route(); ?
             sor.Route(investorInstruction);
@@ -80,7 +80,7 @@ namespace SimpleOrderRouting.Tests
             var investorInstruction = sor.CreateInvestorInstruction(Way.Buy, quantity: 125, price: 100M);
 
             OrderExecutedEventArgs orderExecutedEventArgs = null;
-            investorInstruction.Executed += (sender, args) =>{ orderExecutedEventArgs = args; };
+            investorInstruction.Executed += (sender, args) => { orderExecutedEventArgs = args; };
 
             // orderRequest.Route(); ?
             sor.Route(investorInstruction);

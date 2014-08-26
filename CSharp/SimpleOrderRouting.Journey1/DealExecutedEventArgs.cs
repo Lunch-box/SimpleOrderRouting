@@ -22,14 +22,14 @@ namespace SimpleOrderRouting.Journey1
     /// </summary>
     public class DealExecutedEventArgs : EventArgs
     {
-        public decimal Price { get; private set; }
-
-        public int Quantity { get; private set; }
-
         public DealExecutedEventArgs(decimal price, int quantity)
         {
             this.Price = price;
             this.Quantity = quantity;
         }
+
+        public decimal Price { get; private set; }
+
+        public int Quantity { get; private set; }
     }
 }

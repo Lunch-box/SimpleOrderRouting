@@ -83,5 +83,25 @@ namespace SimpleOrderRouting.Tests
             Check.That(executed).IsFalse();
             Check.That(market.SellQuantity).IsEqualTo(50);
         }
+        [Fact]
+        public void LimitOrderShouldSupportPartialExecution()
+        {
+            var market = new Market() { SellPrice = 100M, SellQuantity = 50 };
+            var executed = false;
+            var order = market.CreateLimitOrder(Way.Buy, price: 100M, quantity: 110, allowPartialExecution: true);
+
+            var execQuantity = 0;
+            market.OrderExecuted += (s, a) =>
+            {
+                executed = true;
+                execQuantity = a.Quantity;
+            };
+            market.Send(order);
+
+            Check.That(execQuantity).IsEqualTo(50);
+            Check.That(executed).IsTrue();
+            Check.That(market.SellQuantity).IsEqualTo(0);
+        }
+
     }
 }

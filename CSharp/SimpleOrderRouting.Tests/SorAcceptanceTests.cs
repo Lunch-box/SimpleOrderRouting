@@ -15,8 +15,6 @@
 // // --------------------------------------------------------------------------------------------------------------------
 namespace SimpleOrderRouting.Tests
 {
-    using System.Threading;
-
     using NFluent;
 
     using SimpleOrderRouting.Journey1;
@@ -88,6 +86,42 @@ namespace SimpleOrderRouting.Tests
             // TODO :introduce autoreset event instead
             Check.That(orderExecutedEventArgs).HasFieldsWithSameValues(new { Way = Way.Buy, Quantity = 125, Price = 100M });
         }
+
+        [Fact]
+        public void ShouldExecuteOrdersOnWeightedAverageOfAvailableQuantities()
+        {
+            // 25 premier ; 75 % sur le second marché
+            // Given market A: 100 @ $100, market B: 50 @ $100 
+            // When Investor wants to buy 75 stocks @ $100 Then SOR can execute at the requested price
+            // And execution is: 50 stocks on MarketA and 25 stocks on MarketB
+            var marketA = new Market()
+            {
+                SellQuantity = 100,
+                SellPrice = 100M
+            };
+
+            var marketB = new Market()
+            {
+                SellQuantity = 50,
+                SellPrice = 100M
+            };
+
+            var sor = new SmartOrderRoutingEngine(new[] { marketA, marketB });
+
+            var investorInstruction = sor.CreateInvestorInstruction(Way.Buy, quantity: 75, price: 100M);
+
+            OrderExecutedEventArgs orderExecutedEventArgs = null;
+            investorInstruction.Executed += (sender, args) => { orderExecutedEventArgs = args; };
+
+            // orderRequest.Route(); ?
+            sor.Route(investorInstruction);
+
+            // TODO :introduce autoreset event instead
+            Check.That(orderExecutedEventArgs).HasFieldsWithSameValues(new { Way = Way.Buy, Quantity = 75, Price = 100M });
+            Check.That(marketA.SellQuantity).IsEqualTo(50);
+            Check.That(marketB.SellQuantity).IsEqualTo(25);
+        }
+
         
         #endregion
     }

@@ -28,10 +28,27 @@ namespace SimpleOrderRouting.Journey1
 
         public void Route(InvestorInstruction investorInstruction)
         {
-            int remainingQuantity = investorInstruction.Quantity;
+            int remainingQuantityToBeExecuted = investorInstruction.Quantity;
+            
+            // Checks liquidities availabe to weighted average for execution
+            var availableQuantityOnMarkets = 0;
             foreach (var market in this.markets)
             {
-                var order = market.CreateLimitOrder(investorInstruction.Way, investorInstruction.Price, remainingQuantity, true);
+                if (investorInstruction.Price >= market.SellPrice)
+                {
+                    availableQuantityOnMarkets += market.SellQuantity;
+                }
+            }
+
+            decimal ratio = ((decimal)remainingQuantityToBeExecuted / (decimal)availableQuantityOnMarkets);
+            decimal roundedRatio = Math.Round(ratio, 2, MidpointRounding.AwayFromZero);
+
+            foreach (var market in this.markets)
+            {
+                decimal convertedMarketQuantity = Math.Round((market.SellQuantity * ratio), 2, MidpointRounding.AwayFromZero);
+                int quantityToExecute = Convert.ToInt32(convertedMarketQuantity);
+
+                var order = market.CreateLimitOrder(investorInstruction.Way, investorInstruction.Price, quantityToExecute, true);
                 
                 EventHandler<DealExecutedEventArgs> handler = (executedOrder, args) =>
                 {
@@ -39,7 +56,7 @@ namespace SimpleOrderRouting.Journey1
                     {
                         // we have been executed
                         investorInstruction.NotifyOrderExecution(args.Quantity, args.Price);
-                        remainingQuantity -= args.Quantity;
+                        remainingQuantityToBeExecuted -= args.Quantity;
                     }
                 };
                 market.OrderExecuted += handler;

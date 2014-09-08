@@ -15,6 +15,8 @@
 // // --------------------------------------------------------------------------------------------------------------------
 namespace SimpleOrderRouting.Journey1
 {
+    using System;
+
     public interface IOrder
     {
         Way Way { get; }
@@ -26,5 +28,7 @@ namespace SimpleOrderRouting.Journey1
         Market Market { get; }
 
         void Send();
+
+        event EventHandler<DealExecutedEventArgs> OrderExecuted;
     }
 }

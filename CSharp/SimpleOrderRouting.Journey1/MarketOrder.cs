@@ -15,6 +15,8 @@
 // // --------------------------------------------------------------------------------------------------------------------
 namespace SimpleOrderRouting.Journey1
 {
+    using System;
+
     public class MarketOrder : IOrder
     {
         private readonly Way buy;
@@ -27,6 +29,8 @@ namespace SimpleOrderRouting.Journey1
             this.buy = buy;
             this.quantity = quantity;
         }
+
+        public event EventHandler<DealExecutedEventArgs> OrderExecuted;
 
         public Market Market { get; private set; }
 

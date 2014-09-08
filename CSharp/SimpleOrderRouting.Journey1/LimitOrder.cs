@@ -15,6 +15,8 @@
 // // --------------------------------------------------------------------------------------------------------------------
 namespace SimpleOrderRouting.Journey1
 {
+    using System;
+
     public class LimitOrder : IOrder
     {
         public LimitOrder(Market market, Way way, decimal price, int quantity, bool allowPartialExecution)
@@ -25,6 +27,8 @@ namespace SimpleOrderRouting.Journey1
             this.Price = price;
             this.Quantity = quantity;
         }
+
+        public event EventHandler<DealExecutedEventArgs> OrderExecuted;
 
         public Market Market { get; private set; }
 
@@ -38,7 +42,26 @@ namespace SimpleOrderRouting.Journey1
 
         public void Send()
         {
+            this.Market.OrderExecuted += this.Market_OrderExecuted;
             this.Market.Send(this);
+            this.Market.OrderExecuted -= this.Market_OrderExecuted;
+        }
+
+        void Market_OrderExecuted(object sender, DealExecutedEventArgs e)
+        {
+            if (this == sender)
+            {
+                // we have been executed
+                this.OnOrderExecuted(e);
+            }
+        }
+
+        protected void OnOrderExecuted(DealExecutedEventArgs args)
+        {
+            if (this.OrderExecuted != null)
+            {
+                this.OrderExecuted(this, args);
+            }
         }
     }
 }

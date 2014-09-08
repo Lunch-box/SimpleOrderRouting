@@ -50,20 +50,17 @@ namespace SimpleOrderRouting.Journey1
 
         private static void ExecuteOrderBasket(IEnumerable<OrderDescription> orderInstructions, InvestorInstruction investorInstruction)
         {
+            EventHandler<DealExecutedEventArgs> handler = (executedOrder, args) =>
+            {
+                investorInstruction.NotifyOrderExecution(args.Quantity, args.Price);
+            };
+
             foreach (var orderInstruction in orderInstructions)
             {
                 var market = orderInstruction.TargetMarket;
                 var limitOrder = market.CreateLimitOrder(orderInstruction.OrderWay, orderInstruction.OrderPrice, orderInstruction.Quantity, orderInstruction.AllowPartial);
-                EventHandler<DealExecutedEventArgs> handler = (executedOrder, args) =>
-                {
-                    if (limitOrder == executedOrder)
-                    {
-                        // we have been executed
-                        investorInstruction.NotifyOrderExecution(args.Quantity, args.Price);
-                        //remainingQuantityToBeExecuted -= args.Quantity;
-                    }
-                };
-                market.OrderExecuted += handler;
+                
+                limitOrder.OrderExecuted += handler;
                 try
                 {
                     limitOrder.Send();
@@ -72,7 +69,7 @@ namespace SimpleOrderRouting.Journey1
                 {
                 }
 
-                market.OrderExecuted -= handler;
+                limitOrder.OrderExecuted -= handler;
             }
         }
 

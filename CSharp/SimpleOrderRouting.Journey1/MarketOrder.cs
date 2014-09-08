@@ -21,11 +21,14 @@ namespace SimpleOrderRouting.Journey1
 
         private readonly int quantity;
 
-        public MarketOrder(Way buy, int quantity)
+        public MarketOrder(Market market, Way buy, int quantity)
         {
+            this.Market = market;
             this.buy = buy;
             this.quantity = quantity;
         }
+
+        public Market Market { get; private set; }
 
         public Way Way
         {
@@ -49,6 +52,11 @@ namespace SimpleOrderRouting.Journey1
             {
                 return false;
             }
+        }
+
+        public void Send()
+        {
+            this.Market.Send(this);
         }
     }
 }

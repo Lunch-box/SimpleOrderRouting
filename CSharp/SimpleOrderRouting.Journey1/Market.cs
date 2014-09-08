@@ -27,7 +27,7 @@ namespace SimpleOrderRouting.Journey1
 
         public IOrder CreateMarketOrder(Way buy, int quantity)
         {
-            return new MarketOrder(buy, quantity);
+            return new MarketOrder(this, buy, quantity);
         }
 
         public void Send(IOrder order)
@@ -66,7 +66,7 @@ namespace SimpleOrderRouting.Journey1
 
         public IOrder CreateLimitOrder(Way way, decimal price, int quantity, bool allowPartialExecution)
         {
-            return new LimitOrder(way, price, quantity, allowPartialExecution);
+            return new LimitOrder(this, way, price, quantity, allowPartialExecution);
         }
     }
 }

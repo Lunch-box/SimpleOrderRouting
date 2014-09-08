@@ -22,5 +22,9 @@ namespace SimpleOrderRouting.Journey1
         int Quantity { get; }
 
         bool AllowPartialExecution { get; }
+
+        Market Market { get; }
+
+        void Send();
     }
 }

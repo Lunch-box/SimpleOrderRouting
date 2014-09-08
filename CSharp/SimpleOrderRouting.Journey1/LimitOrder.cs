@@ -17,13 +17,16 @@ namespace SimpleOrderRouting.Journey1
 {
     public class LimitOrder : IOrder
     {
-        public LimitOrder(Way way, decimal price, int quantity, bool allowPartialExecution)
+        public LimitOrder(Market market, Way way, decimal price, int quantity, bool allowPartialExecution)
         {
+            this.Market = market;
             this.AllowPartialExecution = allowPartialExecution;
             this.Way = way;
             this.Price = price;
             this.Quantity = quantity;
         }
+
+        public Market Market { get; private set; }
 
         public bool AllowPartialExecution { get; private set; }
 
@@ -32,5 +35,10 @@ namespace SimpleOrderRouting.Journey1
         public decimal Price { get; set; }
 
         public int Quantity { get; private set; }
+
+        public void Send()
+        {
+            this.Market.Send(this);
+        }
     }
 }

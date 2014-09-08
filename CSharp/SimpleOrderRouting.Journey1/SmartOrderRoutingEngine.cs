@@ -17,7 +17,12 @@ namespace SimpleOrderRouting.Journey1
 {
     using System;
     using System.Collections.Generic;
-
+   
+    /// <summary>
+    /// Provides access to the various services offered by the external markets.
+    /// Manages incomming InvestorInstructions and monitor their lifecycle.
+    /// Is responsible for the consistency of the open positions (i.e. alive orders) that are present on every markets.
+    /// </summary>
     public class SmartOrderRoutingEngine
     {
         private readonly Market[] markets;
@@ -33,24 +38,25 @@ namespace SimpleOrderRouting.Journey1
             // 2. Prepare order book (solver)
             // 3. Send and monitor
             // 4. Feedback investor
+            var solver = new MarketSweepSolver(markets);
 
             //2.
-            var orderBasket = this.SolveMarketSweep(investorInstruction);
+            var orderBasket = solver.Solve(investorInstruction);
 
             //3.
 
             ExecuteOrderBasket(orderBasket, investorInstruction);
         }
 
-        private static void ExecuteOrderBasket(IEnumerable<OrderDescription> orderBasket, InvestorInstruction investorInstruction)
+        private static void ExecuteOrderBasket(IEnumerable<OrderDescription> orderInstructions, InvestorInstruction investorInstruction)
         {
-            foreach (var orderDescription in orderBasket)
+            foreach (var orderInstruction in orderInstructions)
             {
-                var market = orderDescription.TargetMarket;
-                var order = market.CreateLimitOrder(orderDescription.OrderWay, orderDescription.OrderPrice, orderDescription.Quantity, orderDescription.AllowPartial);
+                var market = orderInstruction.TargetMarket;
+                var limitOrder = market.CreateLimitOrder(orderInstruction.OrderWay, orderInstruction.OrderPrice, orderInstruction.Quantity, orderInstruction.AllowPartial);
                 EventHandler<DealExecutedEventArgs> handler = (executedOrder, args) =>
                 {
-                    if (order == executedOrder)
+                    if (limitOrder == executedOrder)
                     {
                         // we have been executed
                         investorInstruction.NotifyOrderExecution(args.Quantity, args.Price);
@@ -60,7 +66,7 @@ namespace SimpleOrderRouting.Journey1
                 market.OrderExecuted += handler;
                 try
                 {
-                    market.Send(order);
+                    limitOrder.Send();
                 }
                 catch (ApplicationException)
                 {
@@ -70,76 +76,9 @@ namespace SimpleOrderRouting.Journey1
             }
         }
 
-        /// <summary>
-        /// Build the description of the orders needed to fulfill the <see cref="investorInstruction"/>
-        /// </summary>
-        /// <param name="investorInstruction"></param>
-        /// <returns>Order description</returns>
-        private IList<OrderDescription> SolveMarketSweep(InvestorInstruction investorInstruction)
-        {
-            var description = new List<OrderDescription>();
-            // Checks liquidities available to weighted average for execution
-            int remainingQuantityToBeExecuted = investorInstruction.Quantity;
-
-            var requestedPrice = investorInstruction.Price;
-            
-            var availableQuantityOnMarkets = this.ComputeAvailableQuantityForThisPrice(requestedPrice);
-
-            var ratio = (remainingQuantityToBeExecuted / (decimal)availableQuantityOnMarkets);
-
-            foreach (var market in this.markets)
-            {
-                var convertedMarketQuantity = Math.Round((market.SellQuantity * ratio), 2, MidpointRounding.AwayFromZero);
-                var quantityToExecute = Convert.ToInt32(convertedMarketQuantity);
-
-                if (quantityToExecute > 0)
-                {
-                    description.Add(new OrderDescription(market, investorInstruction.Way, quantityToExecute, requestedPrice, true));
-                }
-            }
-
-            return description;
-        }
-
-        private int ComputeAvailableQuantityForThisPrice(decimal requestedPrice)
-        {
-            var availableQuantityOnMarkets = 0;
-
-            foreach (var market in this.markets)
-            {
-                if (requestedPrice >= market.SellPrice)
-                {
-                    availableQuantityOnMarkets += market.SellQuantity;
-                }
-            }
-            return availableQuantityOnMarkets;
-        }
-
         public InvestorInstruction CreateInvestorInstruction(Way way, int quantity, decimal price)
         {
             return new InvestorInstruction(way, quantity, price);
-        }
-
-        private struct OrderDescription
-        {
-            public Market TargetMarket;
-
-            public Way OrderWay;
-
-            public int Quantity;
-
-            public decimal OrderPrice;
-
-            public bool AllowPartial;
-
-            public OrderDescription(Market targetMarket, Way orderWay, int quantity, decimal orderPrice, bool allowPartial)
-            {
-                this.TargetMarket = targetMarket;
-                this.OrderWay = orderWay;
-                this.Quantity = quantity;
-                this.OrderPrice = orderPrice;
-                this.AllowPartial = allowPartial;
-            }
         }
     }
 }

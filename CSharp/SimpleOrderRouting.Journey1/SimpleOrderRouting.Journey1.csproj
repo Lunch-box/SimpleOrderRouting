@@ -40,10 +40,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DealExecutedEventArgs.cs" />
+    <Compile Include="IInvestorInstructionSolver.cs" />
     <Compile Include="IOrder.cs" />
     <Compile Include="LimitOrder.cs" />
     <Compile Include="Market.cs" />
     <Compile Include="MarketOrder.cs" />
+    <Compile Include="MarketSweepSolver.cs" />
+    <Compile Include="OrderDescription.cs" />
     <Compile Include="OrderExecutedEventArgs.cs" />
     <Compile Include="OrderStatus.cs" />
     <Compile Include="InvestorInstruction.cs" />

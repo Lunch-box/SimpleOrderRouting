@@ -9,6 +9,6 @@ namespace SimpleOrderRouting.Journey1
         /// </summary>
         /// <param name="investorInstruction"></param>
         /// <returns>Order description</returns>
-        IEnumerable<OrderDescription> Solve(InvestorInstruction investorInstruction);
+        OrderBasket Solve(InvestorInstruction investorInstruction);
     }
 }

@@ -17,9 +17,9 @@ namespace SimpleOrderRouting.Journey1
         /// </summary>
         /// <param name="investorInstruction"></param>
         /// <returns>Order description</returns>
-        public IEnumerable<OrderDescription> Solve(InvestorInstruction investorInstruction)
+        public OrderBasket Solve(InvestorInstruction investorInstruction)
         {
-            var description = new List<OrderDescription>();
+            var ordersDescription = new List<OrderDescription>();
             // Checks liquidities available to weighted average for execution
             int remainingQuantityToBeExecuted = investorInstruction.Quantity;
 
@@ -37,11 +37,11 @@ namespace SimpleOrderRouting.Journey1
 
                 if (quantityToExecute > 0)
                 {
-                    description.Add(new OrderDescription(market, investorInstruction.Way, quantityToExecute, requestedPrice, true));
+                    ordersDescription.Add(new OrderDescription(market, investorInstruction.Way, quantityToExecute, requestedPrice, true));
                 }
             }
 
-            return description;
+            return new OrderBasket(ordersDescription);
         }
 
         private int ComputeAvailableQuantityForThisPrice(decimal requestedPrice)

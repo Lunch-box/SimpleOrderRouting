@@ -47,6 +47,7 @@
     <Compile Include="MarketOrder.cs" />
     <Compile Include="MarketSweepSolver.cs" />
     <Compile Include="OrderDescription.cs" />
+    <Compile Include="OrderBasket.cs" />
     <Compile Include="OrderExecutedEventArgs.cs" />
     <Compile Include="OrderStatus.cs" />
     <Compile Include="InvestorInstruction.cs" />

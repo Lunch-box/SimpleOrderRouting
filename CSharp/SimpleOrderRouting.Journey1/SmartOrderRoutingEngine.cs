@@ -40,37 +40,18 @@ namespace SimpleOrderRouting.Journey1
             // 4. Feedback investor
             var solver = new MarketSweepSolver(markets);
 
-            //2.
             var orderBasket = solver.Solve(investorInstruction);
-
-            //3.
-
-            ExecuteOrderBasket(orderBasket, investorInstruction);
-        }
-
-        private static void ExecuteOrderBasket(IEnumerable<OrderDescription> orderInstructions, InvestorInstruction investorInstruction)
-        {
+            
             EventHandler<DealExecutedEventArgs> handler = (executedOrder, args) =>
             {
                 investorInstruction.NotifyOrderExecution(args.Quantity, args.Price);
             };
 
-            foreach (var orderInstruction in orderInstructions)
-            {
-                var market = orderInstruction.TargetMarket;
-                var limitOrder = market.CreateLimitOrder(orderInstruction.OrderWay, orderInstruction.OrderPrice, orderInstruction.Quantity, orderInstruction.AllowPartial);
-                
-                limitOrder.OrderExecuted += handler;
-                try
-                {
-                    limitOrder.Send();
-                }
-                catch (ApplicationException)
-                {
-                }
+            orderBasket.OrderExecuted += handler;
+            
+            orderBasket.Send();
 
-                limitOrder.OrderExecuted -= handler;
-            }
+            orderBasket.OrderExecuted -= handler;
         }
 
         public InvestorInstruction CreateInvestorInstruction(Way way, int quantity, decimal price)

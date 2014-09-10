@@ -83,6 +83,7 @@ namespace SimpleOrderRouting.Tests
             Check.That(executed).IsFalse();
             Check.That(market.SellQuantity).IsEqualTo(50);
         }
+
         [Fact]
         public void LimitOrderShouldSupportPartialExecution()
         {
@@ -102,6 +103,5 @@ namespace SimpleOrderRouting.Tests
             Check.That(executed).IsTrue();
             Check.That(market.SellQuantity).IsEqualTo(0);
         }
-
     }
 }

@@ -122,7 +122,6 @@ namespace SimpleOrderRouting.Tests
             Check.That(marketB.SellQuantity).IsEqualTo(25);
         }
 
-        
         #endregion
     }
 }

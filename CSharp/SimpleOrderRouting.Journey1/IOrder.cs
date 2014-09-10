@@ -19,6 +19,8 @@ namespace SimpleOrderRouting.Journey1
 
     public interface IOrder
     {
+        event EventHandler<DealExecutedEventArgs> OrderExecuted;
+
         Way Way { get; }
 
         int Quantity { get; }
@@ -28,7 +30,5 @@ namespace SimpleOrderRouting.Journey1
         Market Market { get; }
 
         void Send();
-
-        event EventHandler<DealExecutedEventArgs> OrderExecuted;
     }
 }

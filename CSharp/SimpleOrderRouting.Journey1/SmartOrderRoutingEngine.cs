@@ -20,7 +20,7 @@ namespace SimpleOrderRouting.Journey1
    
     /// <summary>
     /// Provides access to the various services offered by the external markets.
-    /// Manages incomming InvestorInstructions and monitor their lifecycle.
+    /// Manages incoming InvestorInstructions and monitor their lifecycle.
     /// Is responsible for the consistency of the open positions (i.e. alive orders) that are present on every markets.
     /// </summary>
     public class SmartOrderRoutingEngine
@@ -38,7 +38,7 @@ namespace SimpleOrderRouting.Journey1
             // 2. Prepare order book (solver)
             // 3. Send and monitor
             // 4. Feedback investor
-            var solver = new MarketSweepSolver(markets);
+            var solver = new MarketSweepSolver(this.markets);
 
             var orderBasket = solver.Solve(investorInstruction);
             

@@ -44,35 +44,7 @@ namespace SimpleOrderRouting.Journey1
         }
 
         public event EventHandler<DealExecutedEventArgs> OrderExecuted;
-
-        public void Send()
-        {
-            foreach (var orderInstruction in this.ordersDescription)
-            {
-                var market = orderInstruction.TargetMarket;
-                var limitOrder = market.CreateLimitOrder(orderInstruction.OrderWay, orderInstruction.OrderPrice, orderInstruction.Quantity, orderInstruction.AllowPartial);
-
-                limitOrder.OrderExecuted += limitOrder_OrderExecuted;
-                try
-                {
-                    limitOrder.Send();
-                }
-                catch (ApplicationException)
-                {
-                }
-
-                limitOrder.OrderExecuted -= limitOrder_OrderExecuted;
-            }
-        }
-
-        private void limitOrder_OrderExecuted(object sender, DealExecutedEventArgs e)
-        {
-            if (this.OrderExecuted != null)
-            {
-                this.OrderExecuted(this, e);
-            }
-        }
-
+        
         public bool AllowPartialExecution { get; private set; }
 
         public int Quantity { get; private set; }
@@ -81,5 +53,33 @@ namespace SimpleOrderRouting.Journey1
 
         // TODO: Introduce Virtual Market?
         public Market Market { get; private set; }
+
+        public void Send()
+        {
+            foreach (var orderInstruction in this.ordersDescription)
+            {
+                var market = orderInstruction.TargetMarket;
+                var limitOrder = market.CreateLimitOrder(orderInstruction.OrderWay, orderInstruction.OrderPrice, orderInstruction.Quantity, orderInstruction.AllowPartial);
+
+                limitOrder.OrderExecuted += this.LimitOrderOrderExecuted;
+                try
+                {
+                    limitOrder.Send();
+                }
+                catch (ApplicationException)
+                {
+                }
+
+                limitOrder.OrderExecuted -= this.LimitOrderOrderExecuted;
+            }
+        }
+
+        private void LimitOrderOrderExecuted(object sender, DealExecutedEventArgs e)
+        {
+            if (this.OrderExecuted != null)
+            {
+                this.OrderExecuted(this, e);
+            }
+        }
     }
 }

@@ -58,7 +58,6 @@ namespace SimpleOrderRouting.Journey1
                     if (this.OrderExecuted != null)
                     {
                         this.OrderExecuted(order, new DealExecutedEventArgs(this.SellPrice, executedQuantity));
-                        // the asynchronous lame way: this.OrderExecuted.BeginInvoke(order, new DealExecutedEventArgs(this.SellPrice, executedQuantity), null, null);
                     }
 
                     break;

@@ -47,7 +47,7 @@ namespace SimpleOrderRouting.Journey1
             this.Market.OrderExecuted -= this.Market_OrderExecuted;
         }
 
-        void Market_OrderExecuted(object sender, DealExecutedEventArgs e)
+        private void Market_OrderExecuted(object sender, DealExecutedEventArgs e)
         {
             if (this == sender)
             {

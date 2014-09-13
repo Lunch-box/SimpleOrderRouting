@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MarketSweepSolver.cs" company="">
+// <copyright file="MarketSweepSolver.cs" company="LunchBox corp">
 //    Copyright 2014 The Lunch-Box mob: Ozgur DEVELIOGLU (@Zgurrr), Cyrille  DUPUYDAUBY 
 //    (@Cyrdup), Tomasz JASKULA (@tjaskula), Thomas PIERRAIN (@tpierrain)
 //    Licensed under the Apache License, Version 2.0 (the "License");

@@ -37,12 +37,25 @@ namespace SimpleOrderRouting.Tests
         }
 
         [Fact]
-        public void LargeMarketOrderShouldTriggerException()
+        public void LargeMarketOrderShouldFail()
         {
             var market = new Market() { SellPrice = 100M, SellQuantity = 50 };
 
             var order = market.CreateMarketOrder(Way.Buy, quantity: 100);
-            Check.ThatCode(() => market.Send(order)).Throws<ApplicationException>();
+
+            bool failed = false;
+            string failureReason = null;
+
+            market.OrderFailed += (s, failure) =>
+            {
+                failed = true;
+                failureReason = failure;
+            };
+            
+            market.Send(order);
+
+            Check.That(failed).IsTrue();
+            Check.That(failureReason).IsEqualTo("Excessive quantity!");
         }
 
         [Fact]
@@ -78,12 +91,21 @@ namespace SimpleOrderRouting.Tests
         {
             var market = new Market() { SellPrice = 100M, SellQuantity = 50 };
             var executed = false;
+            bool failed = false;
+            string failureReason = null;
             var order = market.CreateLimitOrder(Way.Buy, price: 101M, quantity: 10, allowPartialExecution: false);
 
             market.OrderExecuted += (s, a) => executed = true;
+            market.OrderFailed += (s, failure) =>
+                                  {
+                                      failed = true;
+                                      failureReason = failure;
+                                  };
             market.Send(order);
 
             Check.That(executed).IsFalse();
+            Check.That(failed).IsTrue();
+            Check.That(failureReason).IsEqualTo("Invalid price");
             Check.That(market.SellQuantity).IsEqualTo(50);
         }
 
@@ -105,6 +127,12 @@ namespace SimpleOrderRouting.Tests
             Check.That(execQuantity).IsEqualTo(50);
             Check.That(executed).IsTrue();
             Check.That(market.SellQuantity).IsEqualTo(0);
+        }
+
+        [Fact]
+        public void MarketRejectsAnOrder()
+        {
+            
         }
     }
 }

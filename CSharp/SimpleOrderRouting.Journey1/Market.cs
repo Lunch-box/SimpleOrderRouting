@@ -20,6 +20,7 @@ namespace SimpleOrderRouting.Journey1
     public class Market
     {
         public event EventHandler<DealExecutedEventArgs> OrderExecuted;
+        public event EventHandler<string> OrderFailed;
 
         public int SellQuantity { get; set; }
 
@@ -40,6 +41,7 @@ namespace SimpleOrderRouting.Journey1
                         var limitOrder = order as LimitOrder;
                         if (limitOrder.Price > this.SellPrice)
                         {
+                            RaiseOrderFailed(order, "Invalid price");
                             return;
                         }
                     }
@@ -48,7 +50,8 @@ namespace SimpleOrderRouting.Journey1
                     {
                         if (!order.AllowPartialExecution)
                         {
-                            throw new ApplicationException("Excessive quantity!");
+                            RaiseOrderFailed(order, "Excessive quantity!");
+                            return;
                         }
                     }
 
@@ -64,9 +67,19 @@ namespace SimpleOrderRouting.Journey1
             }
         }
 
+        private void RaiseOrderFailed(IOrder order, string reason)
+        {
+            var onOrderFailed = OrderFailed;
+            if (onOrderFailed != null)
+            {
+                onOrderFailed(order, reason);
+            }
+        }
+
         public IOrder CreateLimitOrder(Way way, decimal price, int quantity, bool allowPartialExecution)
         {
             return new LimitOrder(this, way, price, quantity, allowPartialExecution);
         }
+
     }
 }

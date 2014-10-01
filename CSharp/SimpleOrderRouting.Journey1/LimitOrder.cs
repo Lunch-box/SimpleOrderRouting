@@ -29,6 +29,7 @@ namespace SimpleOrderRouting.Journey1
         }
 
         public event EventHandler<DealExecutedEventArgs> OrderExecuted;
+        public event EventHandler<string> OrderFailed;
 
         public Market Market { get; private set; }
 
@@ -43,8 +44,11 @@ namespace SimpleOrderRouting.Journey1
         public void Send()
         {
             this.Market.OrderExecuted += this.Market_OrderExecuted;
+            EventHandler<string> marketOnOrderFailed = (sender, s) => { if (OrderFailed != null) OrderFailed(this, s); };
+            this.Market.OrderFailed += marketOnOrderFailed;
             this.Market.Send(this);
             this.Market.OrderExecuted -= this.Market_OrderExecuted;
+            this.Market.OrderFailed -= marketOnOrderFailed;
         }
 
         private void Market_OrderExecuted(object sender, DealExecutedEventArgs e)

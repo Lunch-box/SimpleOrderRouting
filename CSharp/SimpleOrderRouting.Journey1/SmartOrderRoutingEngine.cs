@@ -31,7 +31,7 @@ namespace SimpleOrderRouting.Journey1
             this.markets = markets;
         }
 
-        public void Route(InvestorInstruction investorInstruction)
+        public void Route(InvestorInstruction investorInstruction, Action<TerminalState> notification)
         {
             // 1. Digest Investment instructions
             // 2. Prepare order book (solver)
@@ -48,7 +48,7 @@ namespace SimpleOrderRouting.Journey1
 
             orderBasket.OrderExecuted += handler;
             
-            orderBasket.Send();
+            orderBasket.Send(notification);
 
             orderBasket.OrderExecuted -= handler;
         }

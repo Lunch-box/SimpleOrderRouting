@@ -2,6 +2,7 @@ SOR Backlog
 ===========
 
 + Add market(s) rejection
+	- In progress (notification mechanism not validated)
 
 + Implement asynchronous nature of the markets (for their feedback)
 

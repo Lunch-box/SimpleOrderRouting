@@ -53,6 +53,7 @@
     <Compile Include="InvestorInstruction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SmartOrderRoutingEngine.cs" />
+    <Compile Include="TerminalState.cs" />
     <Compile Include="Way.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SimpleOrderRouting.Journey1", "SimpleOrderRouting.Journey1\SimpleOrderRouting.Journey1.fsproj", "{63815E01-AD47-4D83-98F5-87160A503D02}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SimpleOrderRouting.Tests", "SimpleOrderRouting.Tests\SimpleOrderRouting.Tests.fsproj", "{54D4D857-F008-4817-BFC5-0F3234FF8781}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{63815E01-AD47-4D83-98F5-87160A503D02}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63815E01-AD47-4D83-98F5-87160A503D02}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63815E01-AD47-4D83-98F5-87160A503D02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54D4D857-F008-4817-BFC5-0F3234FF8781}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54D4D857-F008-4817-BFC5-0F3234FF8781}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54D4D857-F008-4817-BFC5-0F3234FF8781}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54D4D857-F008-4817-BFC5-0F3234FF8781}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

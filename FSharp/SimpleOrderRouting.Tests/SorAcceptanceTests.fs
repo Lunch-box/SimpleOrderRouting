@@ -17,9 +17,10 @@
 namespace SimpleOrderRouting.Tests
 
 open Xunit
+open FsUnit
 
 module ``Sor acceptance tests`` =
 
     [<Fact>]
     let ``Should execute "Instruction" When there is enough liquidity on one "Market"``() =
-        Assert.False(false)
+        true |> should be True

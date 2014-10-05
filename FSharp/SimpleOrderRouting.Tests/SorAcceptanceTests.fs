@@ -17,7 +17,7 @@
 namespace SimpleOrderRouting.Tests
 
 open Xunit
-open FsUnit
+open FsUnit.Xunit
 
 module ``Sor acceptance tests`` =
 

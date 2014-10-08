@@ -14,8 +14,6 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-using System;
-
 namespace SimpleOrderRouting.Tests
 {
     using NFluent;
@@ -51,11 +49,9 @@ namespace SimpleOrderRouting.Tests
 
             OrderExecutedEventArgs orderExecutedEventArgs = null;
             investorInstruction.Executed += (sender, args) => { orderExecutedEventArgs = args; };
-
-
+            
             // orderRequest.Route(); ?
-            Action<TerminalState> notification = null;
-            sor.Route(investorInstruction, notification);
+            sor.Route(investorInstruction);
 
             // TODO :introduce autoreset event instead
             Check.That(orderExecutedEventArgs).HasFieldsWithSameValues(new { Way = Way.Buy, Quantity = 125, Price = 100M });
@@ -80,14 +76,18 @@ namespace SimpleOrderRouting.Tests
 
             var sor = new SmartOrderRoutingEngine(new[] { marketA, marketB });
 
-            var investorInstruction = sor.CreateInvestorInstruction(Way.Buy, quantity: 125, price: 100M);
+            var investorInstruction = sor.CreateInvestorInstruction(Way.Buy, quantity: 125, price: 100M, allowPartialExecution:false);
 
             OrderExecutedEventArgs orderExecutedEventArgs = null;
             investorInstruction.Executed += (sender, args) => { orderExecutedEventArgs = args; };
+
+            string failureReason = null;
+            investorInstruction.Failed += (sender, args) => { failureReason = args; };
             
             // orderRequest.Route(); ?
-            Action<TerminalState> notification = state => {};
-            sor.Route(investorInstruction, notification);
+            sor.Route(investorInstruction);
+
+            Check.That(failureReason).IsNotNull().And.IsEqualIgnoringCase("Excessive quantity!");
 
             // TODO :introduce autoreset event instead
             // Couldn't execute because order was too large
@@ -119,8 +119,7 @@ namespace SimpleOrderRouting.Tests
             investorInstruction.Executed += (sender, args) => { orderExecutedEventArgs = args; };
 
             // orderRequest.Route(); ?
-            Action<TerminalState> notification = null;
-            sor.Route(investorInstruction, notification);
+            sor.Route(investorInstruction);
 
             // TODO :introduce autoreset event instead
             Check.That(orderExecutedEventArgs).HasFieldsWithSameValues(new { Way = Way.Buy, Quantity = 125, Price = 100M });
@@ -153,8 +152,7 @@ namespace SimpleOrderRouting.Tests
             investorInstruction.Executed += (sender, args) => { orderExecutedEventArgs = args; };
 
             // orderRequest.Route(); ?
-            Action<TerminalState> notification = null;
-            sor.Route(investorInstruction, notification);
+            sor.Route(investorInstruction);
 
             // TODO :introduce autoreset event instead
             Check.That(orderExecutedEventArgs).HasFieldsWithSameValues(new { Way = Way.Buy, Quantity = 75, Price = 100M });

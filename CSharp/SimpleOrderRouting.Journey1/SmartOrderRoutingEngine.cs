@@ -31,7 +31,7 @@ namespace SimpleOrderRouting.Journey1
             this.markets = markets;
         }
 
-        public void Route(InvestorInstruction investorInstruction, Action<TerminalState> notification)
+        public void Route(InvestorInstruction investorInstruction)
         {
             // 1. Digest Investment instructions
             // 2. Prepare order book (solver)
@@ -46,16 +46,20 @@ namespace SimpleOrderRouting.Journey1
                 investorInstruction.NotifyOrderExecution(args.Quantity, args.Price);
             };
 
+            EventHandler<string> failHandler = (s, reason) => investorInstruction.NotifyOrderFailure(reason);
+
             orderBasket.OrderExecuted += handler;
+            orderBasket.OrderFailed += failHandler;
             
-            orderBasket.Send(notification);
+            orderBasket.Send();
 
             orderBasket.OrderExecuted -= handler;
+            orderBasket.OrderFailed -= failHandler;
         }
 
-        public InvestorInstruction CreateInvestorInstruction(Way way, int quantity, decimal price)
+        public InvestorInstruction CreateInvestorInstruction(Way way, int quantity, decimal price, bool allowPartialExecution = false)
         {
-            return new InvestorInstruction(way, quantity, price);
+            return new InvestorInstruction(way, quantity, price, allowPartialExecution);
         }
     }
 }

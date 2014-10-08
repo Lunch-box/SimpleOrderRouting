@@ -22,17 +22,23 @@ namespace SimpleOrderRouting.Journey1
     /// </summary>
     public class InvestorInstruction
     {
-        public InvestorInstruction(Way way, int quantity, decimal price)
+        public InvestorInstruction(Way way, int quantity, decimal price, bool allowPartialExecution)
         {
             this.Way = way;
             this.Quantity = quantity;
             this.Price = price;
+            this.AllowPartialExecution = allowPartialExecution;
         }
 
         /// <summary>
         /// Occurs when the <see cref="InvestorInstruction"/> is fully executed.
         /// </summary>
         public event EventHandler<OrderExecutedEventArgs> Executed;
+
+        /// <summary>
+        /// Occurs when the <see cref="InvestorInstruction"/> fails
+        /// </summary>
+        public event EventHandler<string> Failed;
 
         /// <summary>
         /// Gets the way to be used for the Instruction (Buy/Sell).
@@ -60,6 +66,8 @@ namespace SimpleOrderRouting.Journey1
         /// </value>
         public decimal Price { get; private set; }
 
+        public bool AllowPartialExecution { get; private set; }
+
         /// <summary>
         /// Just a naive implementation to make the test pass. 
         /// Code smell here: with the Executed event raised from outside the InvestorInstruction.
@@ -77,6 +85,16 @@ namespace SimpleOrderRouting.Journey1
                 {
                     this.Executed(this, new OrderExecutedEventArgs(this.Way, this.ExecutedQuantity, this.Price));
                 }
+            }
+        }
+
+        internal virtual void NotifyOrderFailure(string reason)
+        {
+            // instruction fully executed, I notify
+            EventHandler<string> onFailed = Failed;
+            if (onFailed != null)
+            {
+                onFailed(this, reason);
             }
         }
     }

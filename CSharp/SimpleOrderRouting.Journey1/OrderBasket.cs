@@ -17,6 +17,7 @@ namespace SimpleOrderRouting.Journey1
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// Aggregates multiple <see cref="IOrder"/> instances.
@@ -58,19 +59,14 @@ namespace SimpleOrderRouting.Journey1
         // TODO: Change the IOrder interface to always include the notification.
         public void Send()
         {
-            throw new NotImplementedException();
-        }
-
-        public void Send(Action<TerminalState> notification)
-        {
-            List<TerminalState> failures = new List<TerminalState>(this.ordersDescriptions.Count);
+            List<string> failures = new List<string>(this.ordersDescriptions.Count);
             foreach (var orderDescription in this.ordersDescriptions)
             {
                 var market = orderDescription.TargetMarket;
                 var limitOrder = market.CreateLimitOrder(orderDescription.OrderWay, orderDescription.OrderPrice, orderDescription.Quantity, orderDescription.AllowPartial);
 
                 limitOrder.OrderExecuted += this.LimitOrderOrderExecuted;
-                EventHandler<string> limitOrderOnOrderFailed = (sender, args) => failures.Add(TerminalState.Failed);
+                EventHandler<string> limitOrderOnOrderFailed = (sender, reason) => failures.Add(reason);
                 limitOrder.OrderFailed += limitOrderOnOrderFailed;
 
                 limitOrder.Send();
@@ -79,16 +75,10 @@ namespace SimpleOrderRouting.Journey1
                 limitOrder.OrderFailed -= limitOrderOnOrderFailed;
             }
 
-            if (notification != null)
+            EventHandler<string> onOrderFailed = OrderFailed;
+            if (failures.Count > 0 && onOrderFailed != null)
             {
-                if (failures.Count > 0)
-                {
-                    notification(TerminalState.Failed);
-                }
-                else
-                {
-                    notification(TerminalState.Executed);
-                }
+                onOrderFailed(this, failures.First());
             }
         }
 

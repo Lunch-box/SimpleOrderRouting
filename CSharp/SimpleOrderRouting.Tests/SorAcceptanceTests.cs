@@ -78,6 +78,7 @@ namespace SimpleOrderRouting.Tests
 
             var investorInstruction = sor.CreateInvestorInstruction(Way.Buy, quantity: 125, price: 100M, allowPartialExecution: false);
 
+            // Subscribes to the instruction's events
             OrderExecutedEventArgs orderExecutedEventArgs = null;
             investorInstruction.Executed += (sender, args) => { orderExecutedEventArgs = args; };
 
@@ -87,10 +88,8 @@ namespace SimpleOrderRouting.Tests
             // orderRequest.Route(); ?
             sor.Route(investorInstruction);
 
+            // Couldn't execute because order with excessive quantity
             Check.That(failureReason).IsNotNull().And.IsEqualIgnoringCase("Excessive quantity!");
-
-            // TODO :introduce autoreset event instead
-            // Couldn't execute because order was too large
             Check.That(orderExecutedEventArgs).IsNull();
         }
 
@@ -121,7 +120,6 @@ namespace SimpleOrderRouting.Tests
             // orderRequest.Route(); ?
             sor.Route(investorInstruction);
 
-            // TODO :introduce autoreset event instead
             Check.That(orderExecutedEventArgs).HasFieldsWithSameValues(new { Way = Way.Buy, Quantity = 125, Price = 100M });
         }
 
@@ -154,7 +152,6 @@ namespace SimpleOrderRouting.Tests
             // orderRequest.Route(); ?
             sor.Route(investorInstruction);
 
-            // TODO :introduce autoreset event instead
             Check.That(orderExecutedEventArgs).HasFieldsWithSameValues(new { Way = Way.Buy, Quantity = 75, Price = 100M });
             Check.That(marketA.SellQuantity).IsEqualTo(50);
             Check.That(marketB.SellQuantity).IsEqualTo(25);

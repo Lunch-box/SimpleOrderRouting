@@ -13,7 +13,6 @@
 //    limitations under the License.
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
-
 namespace SimpleOrderRouting.Tests
 {
     using NFluent;

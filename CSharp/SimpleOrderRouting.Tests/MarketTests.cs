@@ -15,8 +15,6 @@
 //  --------------------------------------------------------------------------------------------------------------------
 namespace SimpleOrderRouting.Tests
 {
-    using System;
-
     using NFluent;
 
     using SimpleOrderRouting.Journey1;

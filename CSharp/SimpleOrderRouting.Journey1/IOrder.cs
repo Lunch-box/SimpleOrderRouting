@@ -16,7 +16,7 @@
 namespace SimpleOrderRouting.Journey1
 {
     using System;
-    
+
     public interface IOrder
     {
         event EventHandler<DealExecutedEventArgs> OrderExecuted;

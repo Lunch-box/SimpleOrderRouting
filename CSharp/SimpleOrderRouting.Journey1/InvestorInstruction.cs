@@ -36,7 +36,7 @@ namespace SimpleOrderRouting.Journey1
         public event EventHandler<OrderExecutedEventArgs> Executed;
 
         /// <summary>
-        /// Occurs when the <see cref="InvestorInstruction"/> fails
+        /// Occurs when the <see cref="InvestorInstruction"/> has failed.
         /// </summary>
         public event EventHandler<string> Failed;
 
@@ -81,9 +81,10 @@ namespace SimpleOrderRouting.Journey1
                 this.ExecutedQuantity += executedQuantity;
 
                 // instruction fully executed, I notify
-                if (this.Executed != null && this.ExecutedQuantity >= this.Quantity)
+                var onExecuted = this.Executed;
+                if (onExecuted != null && this.ExecutedQuantity >= this.Quantity)
                 {
-                    this.Executed(this, new OrderExecutedEventArgs(this.Way, this.ExecutedQuantity, this.Price));
+                    onExecuted(this, new OrderExecutedEventArgs(this.Way, this.ExecutedQuantity, this.Price));
                 }
             }
         }
@@ -91,7 +92,7 @@ namespace SimpleOrderRouting.Journey1
         internal virtual void NotifyOrderFailure(string reason)
         {
             // instruction fully executed, I notify
-            EventHandler<string> onFailed = Failed;
+            EventHandler<string> onFailed = this.Failed;
             if (onFailed != null)
             {
                 onFailed(this, reason);

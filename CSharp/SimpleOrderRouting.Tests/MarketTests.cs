@@ -128,11 +128,5 @@ namespace SimpleOrderRouting.Tests
             Check.That(executed).IsTrue();
             Check.That(market.SellQuantity).IsEqualTo(0);
         }
-
-        [Fact]
-        public void MarketRejectsAnOrder()
-        {
-            
-        }
     }
 }

@@ -76,7 +76,7 @@ namespace SimpleOrderRouting.Tests
 
             var sor = new SmartOrderRoutingEngine(new[] { marketA, marketB });
 
-            var investorInstruction = sor.CreateInvestorInstruction(Way.Buy, quantity: 125, price: 100M, allowPartialExecution:false);
+            var investorInstruction = sor.CreateInvestorInstruction(Way.Buy, quantity: 125, price: 100M, allowPartialExecution: false);
 
             OrderExecutedEventArgs orderExecutedEventArgs = null;
             investorInstruction.Executed += (sender, args) => { orderExecutedEventArgs = args; };

@@ -53,8 +53,7 @@ namespace SimpleOrderRouting.Journey1
 
                 if (quantityToExecute > 0)
                 {
-                    ordersDescription.Add(new OrderDescription(market, investorInstruction.Way, quantityToExecute, 
-                        requestedPrice, investorInstruction.AllowPartialExecution));
+                    ordersDescription.Add(new OrderDescription(market, investorInstruction.Way, quantityToExecute, requestedPrice, investorInstruction.AllowPartialExecution));
                 }
             }
 

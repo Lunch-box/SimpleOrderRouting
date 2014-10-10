@@ -20,6 +20,7 @@ namespace SimpleOrderRouting.Journey1
     public class Market
     {
         public event EventHandler<DealExecutedEventArgs> OrderExecuted;
+
         public event EventHandler<string> OrderFailed;
 
         public int SellQuantity { get; set; }
@@ -41,7 +42,7 @@ namespace SimpleOrderRouting.Journey1
                         var limitOrder = order as LimitOrder;
                         if (limitOrder.Price > this.SellPrice)
                         {
-                            RaiseOrderFailed(order, "Invalid price");
+                            this.RaiseOrderFailed(order, "Invalid price");
                             return;
                         }
                     }
@@ -50,7 +51,7 @@ namespace SimpleOrderRouting.Journey1
                     {
                         if (!order.AllowPartialExecution)
                         {
-                            RaiseOrderFailed(order, "Excessive quantity!");
+                            this.RaiseOrderFailed(order, "Excessive quantity!");
                             return;
                         }
                     }
@@ -58,18 +59,24 @@ namespace SimpleOrderRouting.Journey1
                     var executedQuantity = Math.Min(order.Quantity, this.SellQuantity);
                     this.SellQuantity -= executedQuantity;
 
-                    if (this.OrderExecuted != null)
-                    {
-                        this.OrderExecuted(order, new DealExecutedEventArgs(this.SellPrice, executedQuantity));
-                    }
+                    this.RaiseOrderExecuted(order, executedQuantity);
 
                     break;
             }
         }
 
+        private void RaiseOrderExecuted(IOrder order, int executedQuantity)
+        {
+            var onOrderExecuted = this.OrderExecuted;
+            if (onOrderExecuted != null)
+            {
+                onOrderExecuted(order, new DealExecutedEventArgs(this.SellPrice, executedQuantity));
+            }
+        }
+
         private void RaiseOrderFailed(IOrder order, string reason)
         {
-            var onOrderFailed = OrderFailed;
+            var onOrderFailed = this.OrderFailed;
             if (onOrderFailed != null)
             {
                 onOrderFailed(order, reason);
@@ -80,6 +87,5 @@ namespace SimpleOrderRouting.Journey1
         {
             return new LimitOrder(this, way, price, quantity, allowPartialExecution);
         }
-
     }
 }

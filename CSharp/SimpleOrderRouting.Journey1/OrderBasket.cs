@@ -45,6 +45,7 @@ namespace SimpleOrderRouting.Journey1
         }
 
         public event EventHandler<DealExecutedEventArgs> OrderExecuted;
+
         public event EventHandler<string> OrderFailed;
 
         public bool AllowPartialExecution { get; private set; }
@@ -65,28 +66,37 @@ namespace SimpleOrderRouting.Journey1
                 var market = orderDescription.TargetMarket;
                 var limitOrder = market.CreateLimitOrder(orderDescription.OrderWay, orderDescription.OrderPrice, orderDescription.Quantity, orderDescription.AllowPartial);
 
-                limitOrder.OrderExecuted += this.LimitOrderOrderExecuted;
+                limitOrder.OrderExecuted += this.RaiseOrderExecuted;
                 EventHandler<string> limitOrderOnOrderFailed = (sender, reason) => failures.Add(reason);
                 limitOrder.OrderFailed += limitOrderOnOrderFailed;
 
                 limitOrder.Send();
 
-                limitOrder.OrderExecuted -= this.LimitOrderOrderExecuted;
+                limitOrder.OrderExecuted -= this.RaiseOrderExecuted;
                 limitOrder.OrderFailed -= limitOrderOnOrderFailed;
             }
 
-            EventHandler<string> onOrderFailed = OrderFailed;
-            if (failures.Count > 0 && onOrderFailed != null)
+            if (failures.Count > 0)
+            {
+                this.RaiseOrderFailed(failures);
+            }
+        }
+
+        private void RaiseOrderFailed(List<string> failures)
+        {
+            var onOrderFailed = this.OrderFailed;
+            if (onOrderFailed != null)
             {
                 onOrderFailed(this, failures.First());
             }
         }
 
-        private void LimitOrderOrderExecuted(object sender, DealExecutedEventArgs e)
+        private void RaiseOrderExecuted(object sender, DealExecutedEventArgs e)
         {
-            if (this.OrderExecuted != null)
+            var onOrderExecuted = this.OrderExecuted;
+            if (onOrderExecuted != null)
             {
-                this.OrderExecuted(this, e);
+                onOrderExecuted(this, e);
             }
         }
     }

@@ -45,17 +45,20 @@ namespace SimpleOrderRouting.Journey1
         public void Send()
         {
             this.Market.OrderExecuted += this.Market_OrderExecuted;
-            EventHandler<string> marketOnOrderFailed = (sender, s) => 
-                                                                        {
-                                                                          if (OrderFailed != null)
-                                                                          {
-                                                                              OrderFailed(this, s);
-                                                                          }
-                                                                        };
+            EventHandler<string> marketOnOrderFailed = (sender, s) => this.RaiseOrderFailed(s);
             this.Market.OrderFailed += marketOnOrderFailed;
             this.Market.Send(this);
             this.Market.OrderExecuted -= this.Market_OrderExecuted;
             this.Market.OrderFailed -= marketOnOrderFailed;
+        }
+
+        private void RaiseOrderFailed(string s)
+        {
+            var onOrderFailed = this.OrderFailed;
+            if (onOrderFailed != null)
+            {
+                onOrderFailed(this, s);
+            }
         }
 
         private void Market_OrderExecuted(object sender, DealExecutedEventArgs e)
@@ -69,9 +72,10 @@ namespace SimpleOrderRouting.Journey1
 
         protected void OnOrderExecuted(DealExecutedEventArgs args)
         {
-            if (this.OrderExecuted != null)
+            var onOrderExecuted = this.OrderExecuted;
+            if (onOrderExecuted != null)
             {
-                this.OrderExecuted(this, args);
+                onOrderExecuted(this, args);
             }
         }
     }

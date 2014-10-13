@@ -17,7 +17,8 @@ namespace SimpleOrderRouting.Journey1
         public Way Way { get; set; }
 
         public bool AllowPartialExecution { get; set; }
-
+        
+        public void Executed(int quantity)
         {
             this.Quantity -= quantity;
         }

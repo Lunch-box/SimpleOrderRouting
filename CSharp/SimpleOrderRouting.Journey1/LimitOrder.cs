@@ -35,7 +35,7 @@ namespace SimpleOrderRouting.Journey1
 
         public event EventHandler<DealExecutedEventArgs> OrderExecuted;
 
-        public event EventHandler<string> OrderFailed;
+        public event EventHandler<OrderFailedEventArgs> OrderFailed;
 
         public Market Market { get; private set; }
 
@@ -62,7 +62,7 @@ namespace SimpleOrderRouting.Journey1
             var onOrderFailed = this.OrderFailed;
             if (onOrderFailed != null)
             {
-                onOrderFailed(this, s);
+                onOrderFailed(this, new OrderFailedEventArgs(this.Market, s));
             }
         }
 

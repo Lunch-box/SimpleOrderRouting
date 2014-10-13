@@ -22,7 +22,7 @@ namespace SimpleOrderRouting.Journey1
         event EventHandler<DealExecutedEventArgs> OrderExecuted;
 
         // TODO: Maybe not necessary if we change the Send() signature to inlcude the notification.
-        event EventHandler<string> OrderFailed;
+        event EventHandler<OrderFailedEventArgs> OrderFailed;
 
         Way Way { get; }
 

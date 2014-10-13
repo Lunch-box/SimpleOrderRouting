@@ -20,8 +20,8 @@ namespace SimpleOrderRouting.Journey1
         /// <summary>
         /// Build the description of the orders needed to fulfill the <see cref="investorInstruction"/>
         /// </summary>
-        /// <param name="investorInstruction">The Investor instruction.</param>
+        /// <param name="executionStatection">The Investor instruction.</param>
         /// <returns>Order description.</returns>
-        OrderBasket Solve(InvestorInstruction investorInstruction);
+        OrderBasket Solve(ExecutionState executionState);
     }
 }

@@ -27,12 +27,13 @@ namespace SimpleOrderRouting.Journey1
     /// </summary>
     public class InvestorInstruction
     {
-        public InvestorInstruction(Way way, int quantity, decimal price, bool allowPartialExecution)
+        public InvestorInstruction(Way way, int quantity, decimal price, bool allowPartialExecution, DateTime? goodTill)
         {
             this.Way = way;
             this.Quantity = quantity;
             this.Price = price;
             this.AllowPartialExecution = allowPartialExecution;
+            this.GoodTill = goodTill;
         }
 
         /// <summary>
@@ -72,6 +73,8 @@ namespace SimpleOrderRouting.Journey1
         public decimal Price { get; private set; }
 
         public bool AllowPartialExecution { get; private set; }
+
+        public DateTime? GoodTill { get; private set; }
 
         /// <summary>
         /// Just a naive implementation to make the test pass. 

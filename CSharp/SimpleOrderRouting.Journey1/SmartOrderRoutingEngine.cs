@@ -21,6 +21,8 @@
 namespace SimpleOrderRouting.Journey1
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// Provides access to the various services offered by the external markets.
@@ -29,11 +31,12 @@ namespace SimpleOrderRouting.Journey1
     /// </summary>
     public class SmartOrderRoutingEngine
     {
-        private readonly Market[] markets;
+//        private readonly Market[] markets;
+        private readonly Dictionary<Market, MarketInfo> markets;
 
         public SmartOrderRoutingEngine(Market[] markets)
         {
-            this.markets = markets;
+            this.markets = markets.ToDictionary(market => market, market => new MarketInfo(market));
         }
 
         public void Route(InvestorInstruction investorInstruction)
@@ -42,29 +45,63 @@ namespace SimpleOrderRouting.Journey1
             // 2. Prepare order book (solver)
             // 3. Send and monitor
             // 4. Feedback investor
-            var solver = new MarketSweepSolver(this.markets);
+            var executionState = new ExecutionState(investorInstruction);
 
-            var orderBasket = solver.Solve(investorInstruction);
+            this.RouteImpl(investorInstruction, executionState);
+        }
+
+        // TODO: remove investor instruction as arg here?
+        private void RouteImpl(InvestorInstruction investorInstruction, ExecutionState executionState)
+        {
+            var solver = new MarketSweepSolver(this.markets.Values);
+
+            var orderBasket = solver.Solve(executionState);
             
-            EventHandler<DealExecutedEventArgs> handler = (executedOrder, args) =>
-            {
-                investorInstruction.NotifyOrderExecution(args.Quantity, args.Price);
-            };
+            EventHandler<DealExecutedEventArgs> handler = (executedOrder, args) => { investorInstruction.NotifyOrderExecution(args.Quantity, args.Price); };
 
-            EventHandler<string> failHandler = (s, reason) => investorInstruction.NotifyOrderFailure(reason);
+            EventHandler<OrderFailedEventArgs> failHandler = (s, failure) => SendOrderFailed(investorInstruction, failure, executionState);
 
             orderBasket.OrderExecuted += handler;
             orderBasket.OrderFailed += failHandler;
-            
+
             orderBasket.Send();
 
             orderBasket.OrderExecuted -= handler;
             orderBasket.OrderFailed -= failHandler;
         }
 
-        public InvestorInstruction CreateInvestorInstruction(Way way, int quantity, decimal price, bool allowPartialExecution = false)
+        private void SendOrderFailed(InvestorInstruction investorInstruction, OrderFailedEventArgs reason, ExecutionState executionState)
         {
-            return new InvestorInstruction(way, quantity, price, allowPartialExecution);
+            this.markets[reason.Market].Failures++;
+
+            if (investorInstruction.GoodTill != null && 
+                investorInstruction.GoodTill > DateTime.Now && 
+                executionState.Quantity > 0)
+            {
+                // retries
+                this.RouteImpl(investorInstruction, executionState);
+            }
+            else
+            {
+                investorInstruction.NotifyOrderFailure(reason.Reason);
+            }
         }
+
+        public InvestorInstruction CreateInvestorInstruction(Way way, int quantity, decimal price, bool allowPartialExecution = false, DateTime? goodTill = null)
+        {
+            return new InvestorInstruction(way, quantity, price, allowPartialExecution, goodTill);
+        }
+    }
+
+    public class MarketInfo
+    {
+        public MarketInfo(Market market)
+        {
+            this.Market = market;
+        }
+
+        public Market Market { get; private set; }
+
+        public int Failures { get; set; }
     }
 }

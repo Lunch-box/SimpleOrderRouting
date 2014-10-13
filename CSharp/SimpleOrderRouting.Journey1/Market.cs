@@ -22,7 +22,7 @@ namespace SimpleOrderRouting.Journey1
 {
     using System;
 
-    public class Market
+    public class Market : ITestableMarket
     {
         public event EventHandler<DealExecutedEventArgs> OrderExecuted;
 
@@ -32,6 +32,8 @@ namespace SimpleOrderRouting.Journey1
 
         public decimal SellPrice { get; set; }
 
+        public Predicate<IOrder> OrderPredicate { get; set; }
+
         public IOrder CreateMarketOrder(Way buy, int quantity)
         {
             return new MarketOrder(this, buy, quantity);
@@ -39,6 +41,14 @@ namespace SimpleOrderRouting.Journey1
 
         public void Send(IOrder order)
         {
+            TimesSent++;
+
+            if(this.OrderPredicate != null && this.OrderPredicate(order)== false)
+            {
+                this.RaiseOrderFailed(order, "Predicate failed.");
+                return;
+            }
+
             switch (order.Way)
             {
                 case Way.Buy:
@@ -92,5 +102,12 @@ namespace SimpleOrderRouting.Journey1
         {
             return new LimitOrder(this, way, price, quantity, allowPartialExecution);
         }
+
+        public int TimesSent { get; private set; }
+    }
+
+    public interface ITestableMarket
+    {
+        int TimesSent { get; }
     }
 }

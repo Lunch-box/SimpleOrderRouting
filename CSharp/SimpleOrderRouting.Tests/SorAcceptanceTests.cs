@@ -20,7 +20,12 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace SimpleOrderRouting.Tests
 {
+    using System;
+
     using NFluent;
+
+    using NSubstitute;
+    using NSubstitute.Routing.Handlers;
 
     using SimpleOrderRouting.Journey1;
 
@@ -95,6 +100,60 @@ namespace SimpleOrderRouting.Tests
             // Couldn't execute because order with excessive quantity
             Check.That(failureReason).IsNotNull().And.IsEqualIgnoringCase("Excessive quantity!");
             Check.That(orderExecutedEventArgs).IsNull();
+        }
+
+        [Fact]
+        public void ShouldStopSendingOrdersToAMarketAfter3Rejects()
+        {
+            var rejectingMarket = new Market
+                             {
+                                 SellQuantity = 100,
+                                 SellPrice = 100M,
+                                 OrderPredicate = order => false
+                             };
+
+            var sor = new SmartOrderRoutingEngine(new[] { rejectingMarket });
+            var investorInstruction = sor.CreateInvestorInstruction(Way.Buy, quantity: 50, price: 100M, goodTill: DateTime.Now.AddMinutes(5));
+            sor.Route(investorInstruction);
+
+            Check.That(rejectingMarket.TimesSent).IsEqualTo(3);
+        }
+
+        [Fact]
+        public void ShouldSucceededWhenLiquidityISAvailableEvenIfOneMarketRejects()
+        {
+            // Given market A: 150 @ $100, market B: 55 @ $101 
+            // When Investor wants to buy 125 stocks @ $100 Then SOR can execute at the requested price
+            var marketA = new Market()
+            {
+                SellQuantity = 50,
+                SellPrice = 100M
+            };
+
+            var rejectMarket = new Market()
+            {
+                SellQuantity = 50,
+                SellPrice = 100M,
+                OrderPredicate = (o) => false
+            };
+
+            var sor = new SmartOrderRoutingEngine(new[] { marketA, rejectMarket });
+
+            var investorInstruction = sor.CreateInvestorInstruction(Way.Buy, quantity: 50, price: 100M, goodTill: DateTime.Now.AddMinutes(5));
+
+            // Subscribes to the instruction's events
+            OrderExecutedEventArgs orderExecutedEventArgs = null;
+            investorInstruction.Executed += (sender, args) => { orderExecutedEventArgs = args; };
+
+            string failureReason = null;
+            investorInstruction.Failed += (sender, args) => { failureReason = args; };
+
+            // orderRequest.Route(); ?
+            sor.Route(investorInstruction);
+
+            Check.That(orderExecutedEventArgs).IsNotNull();
+            Check.That(failureReason).IsNull();
+
         }
 
         [Fact]

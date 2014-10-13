@@ -32,13 +32,13 @@ namespace SimpleOrderRouting.Journey1
     {
         private readonly List<OrderDescription> ordersDescriptions;
 
-        public OrderBasket(List<OrderDescription> ordersDescription)
+        public OrderBasket(List<OrderDescription> ordersDescriptions)
         {
-            this.ordersDescriptions = ordersDescription;
+            this.ordersDescriptions = ordersDescriptions;
 
-            this.Way = ordersDescription[0].OrderWay;
+            this.Way = ordersDescriptions[0].OrderWay;
 
-            foreach (var orderDescription in ordersDescription)
+            foreach (var orderDescription in ordersDescriptions)
             {
                 if (orderDescription.AllowPartial)
                 {
@@ -51,7 +51,7 @@ namespace SimpleOrderRouting.Journey1
 
         public event EventHandler<DealExecutedEventArgs> OrderExecuted;
 
-        public event EventHandler<string> OrderFailed;
+        public event EventHandler<OrderFailedEventArgs> OrderFailed;
 
         public bool AllowPartialExecution { get; private set; }
 
@@ -65,21 +65,23 @@ namespace SimpleOrderRouting.Journey1
         // TODO: Change the IOrder interface to always include the notification.
         public void Send()
         {
-            List<string> failures = new List<string>(this.ordersDescriptions.Count);
+            List<OrderFailedEventArgs> failures = new List<OrderFailedEventArgs>(this.ordersDescriptions.Count);
             foreach (var orderDescription in this.ordersDescriptions)
             {
                 var market = orderDescription.TargetMarket;
                 var limitOrder = market.CreateLimitOrder(orderDescription.OrderWay, orderDescription.OrderPrice, orderDescription.Quantity, orderDescription.AllowPartial);
 
-                limitOrder.OrderExecuted += this.RaiseOrderExecuted;
-                EventHandler<string> limitOrderOnOrderFailed = (sender, reason) => failures.Add(reason);
+                limitOrder.OrderExecuted += (o, e) => this.OnOrderExecuted(orderDescription, e);
+                EventHandler<OrderFailedEventArgs> limitOrderOnOrderFailed = (sender, reason) => failures.Add(reason);
                 limitOrder.OrderFailed += limitOrderOnOrderFailed;
 
                 limitOrder.Send();
 
-                limitOrder.OrderExecuted -= this.RaiseOrderExecuted;
+                limitOrder.OrderExecuted -= (sender, e) => this.OnOrderExecuted(orderDescription, e);
                 limitOrder.OrderFailed -= limitOrderOnOrderFailed;
             }
+
+            // retry?
 
             if (failures.Count > 0)
             {
@@ -87,7 +89,13 @@ namespace SimpleOrderRouting.Journey1
             }
         }
 
-        private void RaiseOrderFailed(List<string> failures)
+        private void OnOrderExecuted(OrderDescription orderDescription, DealExecutedEventArgs e)
+        {
+            orderDescription.Executed(e.Quantity);
+            this.RaiseOrderExecuted(e);
+        }
+
+        private void RaiseOrderFailed(List<OrderFailedEventArgs> failures)
         {
             var onOrderFailed = this.OrderFailed;
             if (onOrderFailed != null)
@@ -96,7 +104,7 @@ namespace SimpleOrderRouting.Journey1
             }
         }
 
-        private void RaiseOrderExecuted(object sender, DealExecutedEventArgs e)
+        private void RaiseOrderExecuted(DealExecutedEventArgs e)
         {
             var onOrderExecuted = this.OrderExecuted;
             if (onOrderExecuted != null)

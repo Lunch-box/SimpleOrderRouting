@@ -153,7 +153,6 @@ namespace SimpleOrderRouting.Tests
 
             Check.That(orderExecutedEventArgs).IsNotNull();
             Check.That(failureReason).IsNull();
-
         }
 
         [Fact]

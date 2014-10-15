@@ -41,7 +41,7 @@ namespace SimpleOrderRouting.Journey1
 
         public void Executed(int quantity)
         {
-            executionState.Executed(quantity);
+            this.executionState.Executed(quantity);
         }
     }
 }

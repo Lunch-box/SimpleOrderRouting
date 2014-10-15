@@ -34,6 +34,8 @@ namespace SimpleOrderRouting.Journey1
 
         public Predicate<IOrder> OrderPredicate { get; set; }
 
+        public int TimesSent { get; private set; }
+
         public IOrder CreateMarketOrder(Way buy, int quantity)
         {
             return new MarketOrder(this, buy, quantity);
@@ -41,9 +43,9 @@ namespace SimpleOrderRouting.Journey1
 
         public void Send(IOrder order)
         {
-            TimesSent++;
+            this.TimesSent++;
 
-            if(this.OrderPredicate != null && this.OrderPredicate(order)== false)
+            if (this.OrderPredicate != null && this.OrderPredicate(order) == false)
             {
                 this.RaiseOrderFailed(order, "Predicate failed.");
                 return;
@@ -102,12 +104,5 @@ namespace SimpleOrderRouting.Journey1
         {
             return new LimitOrder(this, way, price, quantity, allowPartialExecution);
         }
-
-        public int TimesSent { get; private set; }
-    }
-
-    public interface ITestableMarket
-    {
-        int TimesSent { get; }
     }
 }

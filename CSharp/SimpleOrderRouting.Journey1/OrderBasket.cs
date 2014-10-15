@@ -65,7 +65,7 @@ namespace SimpleOrderRouting.Journey1
         // TODO: Change the IOrder interface to always include the notification.
         public void Send()
         {
-            List<OrderFailedEventArgs> failures = new List<OrderFailedEventArgs>(this.ordersDescriptions.Count);
+            var failures = new List<OrderFailedEventArgs>(this.ordersDescriptions.Count);
             foreach (var orderDescription in this.ordersDescriptions)
             {
                 var market = orderDescription.TargetMarket;
@@ -80,8 +80,6 @@ namespace SimpleOrderRouting.Journey1
                 limitOrder.OrderExecuted -= (sender, e) => this.OnOrderExecuted(orderDescription, e);
                 limitOrder.OrderFailed -= limitOrderOnOrderFailed;
             }
-
-            // retry?
 
             if (failures.Count > 0)
             {

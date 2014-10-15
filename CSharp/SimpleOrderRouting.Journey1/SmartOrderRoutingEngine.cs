@@ -31,10 +31,9 @@ namespace SimpleOrderRouting.Journey1
     /// </summary>
     public class SmartOrderRoutingEngine
     {
-//        private readonly Market[] markets;
         private readonly Dictionary<Market, MarketInfo> markets;
 
-        public SmartOrderRoutingEngine(Market[] markets)
+        public SmartOrderRoutingEngine(IEnumerable<Market> markets)
         {
             this.markets = markets.ToDictionary(market => market, market => new MarketInfo(market));
         }
@@ -50,7 +49,7 @@ namespace SimpleOrderRouting.Journey1
             this.RouteImpl(investorInstruction, executionState);
         }
 
-        // TODO: remove investor instruction as arg here?
+        //// TODO: remove investor instruction as arg here?
         private void RouteImpl(InvestorInstruction investorInstruction, ExecutionState executionState)
         {
             var solver = new MarketSweepSolver(this.markets.Values);
@@ -59,7 +58,7 @@ namespace SimpleOrderRouting.Journey1
             
             EventHandler<DealExecutedEventArgs> handler = (executedOrder, args) => { investorInstruction.NotifyOrderExecution(args.Quantity, args.Price); };
 
-            EventHandler<OrderFailedEventArgs> failHandler = (s, failure) => SendOrderFailed(investorInstruction, failure, executionState);
+            EventHandler<OrderFailedEventArgs> failHandler = (s, failure) => this.SendOrderFailed(investorInstruction, failure, executionState);
 
             orderBasket.OrderExecuted += handler;
             orderBasket.OrderFailed += failHandler;
@@ -72,7 +71,7 @@ namespace SimpleOrderRouting.Journey1
 
         private void SendOrderFailed(InvestorInstruction investorInstruction, OrderFailedEventArgs reason, ExecutionState executionState)
         {
-            this.markets[reason.Market].Failures++;
+            this.markets[reason.Market].OrdersFailureCount++;
 
             if (investorInstruction.GoodTill != null && 
                 investorInstruction.GoodTill > DateTime.Now && 
@@ -91,17 +90,5 @@ namespace SimpleOrderRouting.Journey1
         {
             return new InvestorInstruction(way, quantity, price, allowPartialExecution, goodTill);
         }
-    }
-
-    public class MarketInfo
-    {
-        public MarketInfo(Market market)
-        {
-            this.Market = market;
-        }
-
-        public Market Market { get; private set; }
-
-        public int Failures { get; set; }
     }
 }

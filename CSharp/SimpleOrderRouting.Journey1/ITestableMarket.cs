@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="OrderFailedEventArgs.cs" company="LunchBox corp">
+// <copyright file="ITestableMarket.cs" company="LunchBox corp">
 //     Copyright 2014 The Lunch-Box mob: 
 //           Ozgur DEVELIOGLU (@Zgurrr)
 //           Cyrille  DUPUYDAUBY (@Cyrdup)
@@ -20,16 +20,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace SimpleOrderRouting.Journey1
 {
-    public class OrderFailedEventArgs
+    public interface ITestableMarket
     {
-        public OrderFailedEventArgs(Market market, string reason)
-        {
-            this.Reason = reason;
-            this.Market = market;
-        }
-
-        public Market Market { get; private set; }
-
-        public string Reason { get; private set; }
+        int TimesSent { get; }
     }
 }

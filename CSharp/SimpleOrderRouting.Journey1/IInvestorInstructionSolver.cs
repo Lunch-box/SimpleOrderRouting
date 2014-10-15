@@ -15,13 +15,17 @@
 //  --------------------------------------------------------------------------------------------------------------------
 namespace SimpleOrderRouting.Journey1
 {
+    /// <summary>
+    /// Transforms an <see cref="InvestorInstruction"/> into an <see cref="OrderBasket"/>.
+    /// </summary>
     public interface IInvestorInstructionSolver
     {
         /// <summary>
-        /// Build the description of the orders needed to fulfill the <see cref="investorInstruction"/>
+        /// Build the description of the orders needed to fulfill an <see cref="InvestorInstruction"/> which 
+        /// is aggregated within an <see cref="ExecutionState"/> instance.
         /// </summary>
-        /// <param name="executionStatection">The Investor instruction.</param>
-        /// <returns>Order description.</returns>
+        /// <param name="executionState">The <see cref="ExecutionState"/> instance that aggregates the <see cref="InvestorInstruction"/>.</param>
+        /// <returns>An <see cref="OrderBasket"/> containing all the orders to be routed in order to fulfill the initial <see cref="InvestorInstruction"/>.</returns>
         OrderBasket Solve(ExecutionState executionState);
     }
 }

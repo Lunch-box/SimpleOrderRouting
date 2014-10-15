@@ -19,21 +19,33 @@ namespace SimpleOrderRouting.Journey1
     using System.Collections.Generic;
     using System.Linq;
 
+    /// <summary>
+    /// Transforms an <see cref="InvestorInstruction"/> into an <see cref="OrderBasket"/> that 
+    /// will allow us to route <see cref="LimitOrder"/> following a weight average strategy on 
+    /// the relevant markets.
+    /// </summary>
     public class MarketSweepSolver : IInvestorInstructionSolver
     {
+        private const int MaxSupportedFailuresPerMarket = 3;
         private readonly IEnumerable<MarketInfo> marketInfos;
-        const int maxSupportedFailuresPerMarket = 3;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MarketSweepSolver"/> class.
+        /// </summary>
+        /// <param name="marketInfos">The market information.</param>
         public MarketSweepSolver(IEnumerable<MarketInfo> marketInfos)
         {
             this.marketInfos = marketInfos;
         }
 
         /// <summary>
-        /// Build the description of the orders needed to fulfill the <see cref="investorInstruction"/>
+        /// Build the description of the orders needed to fulfill an <see cref="InvestorInstruction" /> which
+        /// is aggregated within an <see cref="ExecutionState" /> instance.
         /// </summary>
-        /// <param name="executionStatection">The Investor instruction.</param>
-        /// <returns>Order description.</returns>
+        /// <param name="executionState">The <see cref="ExecutionState" /> instance that aggregates the <see cref="InvestorInstruction" />.</param>
+        /// <returns>
+        /// An <see cref="OrderBasket" /> containing all the orders to be routed in order to fulfill the initial <see cref="InvestorInstruction" />.
+        /// </returns>
         public OrderBasket Solve(ExecutionState executionState)
         {
             var ordersDescription = new List<OrderDescription>();
@@ -48,7 +60,7 @@ namespace SimpleOrderRouting.Journey1
             var ratio = remainingQuantityToBeExecuted / (decimal)availableQuantityOnMarkets;
 
             // ReSharper disable once LoopCanBeConvertedToQuery
-            foreach (var marketInfo in this.marketInfos.Where(m => m.Failures < maxSupportedFailuresPerMarket))
+            foreach (var marketInfo in this.marketInfos.Where(m => m.OrdersFailureCount < MaxSupportedFailuresPerMarket))
             {
                 var convertedMarketQuantity = Math.Round(marketInfo.Market.SellQuantity * ratio, 2, MidpointRounding.AwayFromZero);
                 var quantityToExecute = Convert.ToInt32(convertedMarketQuantity);

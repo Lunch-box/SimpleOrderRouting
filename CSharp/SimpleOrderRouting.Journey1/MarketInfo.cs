@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="OrderFailedEventArgs.cs" company="LunchBox corp">
+// <copyright file="MarketInfo.cs" company="LunchBox corp">
 //     Copyright 2014 The Lunch-Box mob: 
 //           Ozgur DEVELIOGLU (@Zgurrr)
 //           Cyrille  DUPUYDAUBY (@Cyrdup)
@@ -20,16 +20,34 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace SimpleOrderRouting.Journey1
 {
-    public class OrderFailedEventArgs
+    /// <summary>
+    /// Keeps information about a given Market (e.g. # of failures, etc.).
+    /// </summary>
+    public class MarketInfo
     {
-        public OrderFailedEventArgs(Market market, string reason)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MarketInfo"/> class.
+        /// </summary>
+        /// <param name="market">The market.</param>
+        public MarketInfo(Market market)
         {
-            this.Reason = reason;
             this.Market = market;
         }
 
+        /// <summary>
+        /// Gets the corresponding market.
+        /// </summary>
+        /// <value>
+        /// The corresponding market.
+        /// </value>
         public Market Market { get; private set; }
 
-        public string Reason { get; private set; }
+        /// <summary>
+        /// Gets or sets the number of failures for orders we received from this market.
+        /// </summary>
+        /// <value>
+        /// The number of failures for orders we received from this market.
+        /// </value>
+        public int OrdersFailureCount { get; set; }
     }
 }

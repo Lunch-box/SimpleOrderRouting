@@ -74,13 +74,13 @@ namespace SimpleOrderRouting.Journey1
                 var market = orderDescription.TargetMarket;
                 var limitOrder = market.CreateLimitOrder(orderDescription.OrderWay, orderDescription.OrderPrice, orderDescription.Quantity, orderDescription.AllowPartial);
 
-                limitOrder.OrderExecuted += (o, e) => this.OnOrderExecuted(orderDescription, e);
+                limitOrder.OrderExecuted += (o, e) => this.OnOrderExecuted(e);
                 EventHandler<OrderFailedEventArgs> limitOrderOnOrderFailed = (sender, reason) => failures.Add(reason);
                 limitOrder.OrderFailed += limitOrderOnOrderFailed;
 
                 limitOrder.Send();
 
-                limitOrder.OrderExecuted -= (sender, e) => this.OnOrderExecuted(orderDescription, e);
+                limitOrder.OrderExecuted -= (sender, e) => this.OnOrderExecuted(e);
                 limitOrder.OrderFailed -= limitOrderOnOrderFailed;
             }
 
@@ -90,9 +90,8 @@ namespace SimpleOrderRouting.Journey1
             }
         }
 
-        private void OnOrderExecuted(OrderDescription orderDescription, DealExecutedEventArgs e)
+        private void OnOrderExecuted(DealExecutedEventArgs e)
         {
-            orderDescription.Executed(e.Quantity);
             this.RaiseOrderExecuted(e);
         }
 

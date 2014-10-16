@@ -40,22 +40,23 @@ namespace SimpleOrderRouting.Journey1
 
         /// <summary>
         /// Build the description of the orders needed to fulfill an <see cref="InvestorInstruction" /> which
-        /// is aggregated within an <see cref="ExecutionContext" /> instance.
+        /// is aggregated within an <see cref="InstructionExecutionContext" /> instance.
         /// </summary>
-        /// <param name="executionContext">The <see cref="ExecutionContext" /> instance that aggregates the <see cref="InvestorInstruction" />.</param>
+        /// <param name="instructionExecutionContext">The <see cref="InstructionExecutionContext" /> instance that aggregates the <see cref="InvestorInstruction" />.</param>
         /// <returns>
         /// An <see cref="OrderBasket" /> containing all the orders to be routed in order to fulfill the initial <see cref="InvestorInstruction" />.
         /// </returns>
-        public OrderBasket Solve(ExecutionContext executionContext)
+        public OrderBasket Solve(InstructionExecutionContext instructionExecutionContext)
         {
             var ordersDescription = new List<OrderDescription>();
 
             // Checks liquidities available to weighted average for execution
-            int remainingQuantityToBeExecuted = executionContext.Quantity;
+            int remainingQuantityToBeExecuted = instructionExecutionContext.Quantity;
 
-            var requestedPrice = executionContext.Price;
-            
-            var availableQuantityOnMarkets = this.ComputeAvailableQuantityForThisPrice(requestedPrice);
+            var requestedPrice = instructionExecutionContext.Price;
+
+            var validMarkets = this.GetValidMarkets(requestedPrice);
+            var availableQuantityOnMarkets = this.ComputeAvailableQuantityForThisPrice(validMarkets);
 
             if (availableQuantityOnMarkets == 0)
             {
@@ -65,35 +66,32 @@ namespace SimpleOrderRouting.Journey1
             var ratio = remainingQuantityToBeExecuted / (decimal)availableQuantityOnMarkets;
 
             // ReSharper disable once LoopCanBeConvertedToQuery
-            foreach (var marketInfo in this.GetValidMarkets())
+            foreach (var marketInfo in validMarkets)
             {
                 var convertedMarketQuantity = Math.Round(marketInfo.Market.SellQuantity * ratio, 2, MidpointRounding.AwayFromZero);
                 var quantityToExecute = Convert.ToInt32(convertedMarketQuantity);
 
                 if (quantityToExecute > 0)
                 {
-                    ordersDescription.Add(new OrderDescription(marketInfo.Market, executionContext.Way, quantityToExecute, requestedPrice, executionContext.AllowPartialExecution, executionContext));
+                    ordersDescription.Add(new OrderDescription(marketInfo.Market, instructionExecutionContext.Way, quantityToExecute, requestedPrice, instructionExecutionContext.AllowPartialExecution));
                 }
             }
 
             return new OrderBasket(ordersDescription);
         }
 
-        private IEnumerable<MarketInfo> GetValidMarkets()
+        private IEnumerable<MarketInfo> GetValidMarkets(decimal requestedPrice)
         {
-            return this.marketInfos.Where(m => m.OrdersFailureCount < MaxSupportedFailuresPerMarket);
+            return this.marketInfos.Where(m => m.OrdersFailureCount < MaxSupportedFailuresPerMarket && requestedPrice >= m.Market.SellPrice);
         }
 
-        private int ComputeAvailableQuantityForThisPrice(decimal requestedPrice)
+        private int ComputeAvailableQuantityForThisPrice(IEnumerable<MarketInfo> validMarkets)
         {
             var availableQuantityOnMarkets = 0;
 
-            foreach (var marketInfo in this.GetValidMarkets())
+            foreach (var marketInfo in validMarkets)
             {
-                if (requestedPrice >= marketInfo.Market.SellPrice)
-                {
-                    availableQuantityOnMarkets += marketInfo.Market.SellQuantity;
-                }
+                availableQuantityOnMarkets += marketInfo.Market.SellQuantity;
             }
 
             return availableQuantityOnMarkets;

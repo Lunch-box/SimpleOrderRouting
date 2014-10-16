@@ -40,7 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DealExecutedEventArgs.cs" />
-    <Compile Include="ExecutionContext.cs" />
+    <Compile Include="InstructionExecutionContext.cs" />
     <Compile Include="IInvestorInstructionSolver.cs" />
     <Compile Include="IOrder.cs" />
     <Compile Include="ITestableMarket.cs" />

@@ -62,8 +62,6 @@ namespace SimpleOrderRouting.Journey1
         /// </value>
         public int Quantity { get; private set; }
 
-        public int ExecutedQuantity { get; private set; }
-
         /// <summary>
         /// Gets the price we are looking for the execution.
         /// </summary>
@@ -84,16 +82,11 @@ namespace SimpleOrderRouting.Journey1
         /// <param name="executedPrice">The executed Price.</param>
         internal virtual void NotifyOrderExecution(int executedQuantity, decimal executedPrice)
         {
-            if (executedPrice == this.Price)
+            // instruction fully executed, I notify
+            var onExecuted = this.Executed;
+            if (onExecuted != null)
             {
-                this.ExecutedQuantity += executedQuantity;
-
-                // instruction fully executed, I notify
-                var onExecuted = this.Executed;
-                if (onExecuted != null && this.ExecutedQuantity >= this.Quantity)
-                {
-                    onExecuted(this, new OrderExecutedEventArgs(this.Way, this.ExecutedQuantity, this.Price));
-                }
+                onExecuted(this, new OrderExecutedEventArgs(this.Way, executedQuantity, executedPrice));
             }
         }
 

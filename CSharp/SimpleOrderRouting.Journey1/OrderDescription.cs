@@ -27,21 +27,13 @@ namespace SimpleOrderRouting.Journey1
 
         public bool AllowPartial;
 
-        private readonly ExecutionContext executionContext;
-
-        public OrderDescription(Market targetMarket, Way orderWay, int quantity, decimal orderPrice, bool allowPartial, ExecutionContext executionContext)
+        public OrderDescription(Market targetMarket, Way orderWay, int quantity, decimal orderPrice, bool allowPartial)
         {
             this.TargetMarket = targetMarket;
             this.OrderWay = orderWay;
             this.Quantity = quantity;
             this.OrderPrice = orderPrice;
             this.AllowPartial = allowPartial;
-            this.executionContext = executionContext;
-        }
-
-        public void Executed(int quantity)
-        {
-            this.executionContext.Executed(quantity);
         }
     }
 }

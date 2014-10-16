@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ExecutionContext.cs" company="LunchBox corp">
+// <copyright file="InstructionExecutionContext.cs" company="LunchBox corp">
 //     Copyright 2014 The Lunch-Box mob: 
 //           Ozgur DEVELIOGLU (@Zgurrr)
 //           Cyrille  DUPUYDAUBY (@Cyrdup)
@@ -20,27 +20,50 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace SimpleOrderRouting.Journey1
 {
-    public class ExecutionContext
+    using System;
+
+    /// <summary>
+    /// 1 to 1 relationship with an <see cref="InvestorInstruction"/>.  Keeps the current state of the instruction execution.
+    /// </summary>
+    public class InstructionExecutionContext
     {
-        public ExecutionContext(InvestorInstruction investorInstruction)
+        private readonly InvestorInstruction investorInstruction;
+
+        private readonly int initialQuantity;
+
+        public InstructionExecutionContext(InvestorInstruction investorInstruction)
         {
+            this.investorInstruction = investorInstruction;
+            this.initialQuantity = investorInstruction.Quantity;
             this.Quantity = investorInstruction.Quantity;
             this.Price = investorInstruction.Price;
             this.Way = investorInstruction.Way;
             this.AllowPartialExecution = investorInstruction.AllowPartialExecution;
         }
 
-        public int Quantity { get; set; }
+        public int Quantity { get; private set; }
 
-        public decimal Price { get; set; }
+        public decimal Price { get; private set; }
 
-        public Way Way { get; set; }
+        public Way Way { get; private set; }
 
-        public bool AllowPartialExecution { get; set; }
-        
+        public bool AllowPartialExecution { get; private set; }
+
+        /// <summary>
+        /// Called when an order has been executed - called by the order basket
+        /// </summary>
+        /// <param name="quantity"></param>
         public void Executed(int quantity)
         {
             this.Quantity -= quantity;
+            if (Quantity == 0)
+            {
+                investorInstruction.NotifyOrderExecution(this.initialQuantity, Price);
+            }
+            else if (Quantity < 0)
+            {
+                throw new ApplicationException("Executed more than specified in the investor instruction.");
+            }
         }
     }
 }

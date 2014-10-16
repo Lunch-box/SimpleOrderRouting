@@ -1,8 +1,7 @@
 SOR Backlog
 ===========
 
-+ Add market(s) rejection
-	- In progress (notification mechanism not validated)
++ Null object pattern instead of nulls
 
 + Implement asynchronous nature of the markets (for their feedback)
 

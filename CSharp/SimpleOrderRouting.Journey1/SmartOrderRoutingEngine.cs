@@ -44,21 +44,20 @@ namespace SimpleOrderRouting.Journey1
             // 2. Prepare order book (solver)
             // 3. Send and monitor
             // 4. Feedback investor
-            var executionState = new ExecutionContext(investorInstruction);
+            var executionState = new InstructionExecutionContext(investorInstruction);
 
             this.RouteImpl(investorInstruction, executionState);
         }
 
         //// TODO: remove investor instruction as arg here?
-        private void RouteImpl(InvestorInstruction investorInstruction, ExecutionContext executionContext)
+        private void RouteImpl(InvestorInstruction investorInstruction, InstructionExecutionContext instructionExecutionContext)
         {
             var solver = new MarketSweepSolver(this.markets.Values);
 
-            var orderBasket = solver.Solve(executionContext);
+            var orderBasket = solver.Solve(instructionExecutionContext);
             
-            EventHandler<DealExecutedEventArgs> handler = (executedOrder, args) => { investorInstruction.NotifyOrderExecution(args.Quantity, args.Price); };
-
-            EventHandler<OrderFailedEventArgs> failHandler = (s, failure) => this.SendOrderFailed(investorInstruction, failure, executionContext);
+            EventHandler<DealExecutedEventArgs> handler = (executedOrder, args) => instructionExecutionContext.Executed(args.Quantity);
+            EventHandler<OrderFailedEventArgs> failHandler = (s, failure) => this.SendOrderFailed(investorInstruction, failure, instructionExecutionContext);
 
             orderBasket.OrderExecuted += handler;
             orderBasket.OrderFailed += failHandler;
@@ -69,16 +68,16 @@ namespace SimpleOrderRouting.Journey1
             orderBasket.OrderFailed -= failHandler;
         }
 
-        private void SendOrderFailed(InvestorInstruction investorInstruction, OrderFailedEventArgs reason, ExecutionContext executionContext)
+        private void SendOrderFailed(InvestorInstruction investorInstruction, OrderFailedEventArgs reason, InstructionExecutionContext instructionExecutionContext)
         {
             this.markets[reason.Market].OrdersFailureCount++;
 
             if (investorInstruction.GoodTill != null && 
                 investorInstruction.GoodTill > DateTime.Now && 
-                executionContext.Quantity > 0)
+                instructionExecutionContext.Quantity > 0)
             {
                 // retries
-                this.RouteImpl(investorInstruction, executionContext);
+                this.RouteImpl(investorInstruction, instructionExecutionContext);
             }
             else
             {

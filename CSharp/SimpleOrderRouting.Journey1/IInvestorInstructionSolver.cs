@@ -22,10 +22,10 @@ namespace SimpleOrderRouting.Journey1
     {
         /// <summary>
         /// Build the description of the orders needed to fulfill an <see cref="InvestorInstruction"/> which 
-        /// is aggregated within an <see cref="ExecutionContext"/> instance.
+        /// is aggregated within an <see cref="InstructionExecutionContext"/> instance.
         /// </summary>
-        /// <param name="executionContext">The <see cref="ExecutionContext"/> instance that aggregates the <see cref="InvestorInstruction"/>.</param>
+        /// <param name="instructionExecutionContext">The <see cref="InstructionExecutionContext"/> instance that aggregates the <see cref="InvestorInstruction"/>.</param>
         /// <returns>An <see cref="OrderBasket"/> containing all the orders to be routed in order to fulfill the initial <see cref="InvestorInstruction"/>.</returns>
-        OrderBasket Solve(ExecutionContext executionContext);
+        OrderBasket Solve(InstructionExecutionContext instructionExecutionContext);
     }
 }

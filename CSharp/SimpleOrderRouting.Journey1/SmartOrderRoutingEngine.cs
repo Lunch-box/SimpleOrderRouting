@@ -44,21 +44,21 @@ namespace SimpleOrderRouting.Journey1
             // 2. Prepare order book (solver)
             // 3. Send and monitor
             // 4. Feedback investor
-            var executionState = new ExecutionState(investorInstruction);
+            var executionState = new ExecutionContext(investorInstruction);
 
             this.RouteImpl(investorInstruction, executionState);
         }
 
         //// TODO: remove investor instruction as arg here?
-        private void RouteImpl(InvestorInstruction investorInstruction, ExecutionState executionState)
+        private void RouteImpl(InvestorInstruction investorInstruction, ExecutionContext executionContext)
         {
             var solver = new MarketSweepSolver(this.markets.Values);
 
-            var orderBasket = solver.Solve(executionState);
+            var orderBasket = solver.Solve(executionContext);
             
             EventHandler<DealExecutedEventArgs> handler = (executedOrder, args) => { investorInstruction.NotifyOrderExecution(args.Quantity, args.Price); };
 
-            EventHandler<OrderFailedEventArgs> failHandler = (s, failure) => this.SendOrderFailed(investorInstruction, failure, executionState);
+            EventHandler<OrderFailedEventArgs> failHandler = (s, failure) => this.SendOrderFailed(investorInstruction, failure, executionContext);
 
             orderBasket.OrderExecuted += handler;
             orderBasket.OrderFailed += failHandler;
@@ -69,16 +69,16 @@ namespace SimpleOrderRouting.Journey1
             orderBasket.OrderFailed -= failHandler;
         }
 
-        private void SendOrderFailed(InvestorInstruction investorInstruction, OrderFailedEventArgs reason, ExecutionState executionState)
+        private void SendOrderFailed(InvestorInstruction investorInstruction, OrderFailedEventArgs reason, ExecutionContext executionContext)
         {
             this.markets[reason.Market].OrdersFailureCount++;
 
             if (investorInstruction.GoodTill != null && 
                 investorInstruction.GoodTill > DateTime.Now && 
-                executionState.Quantity > 0)
+                executionContext.Quantity > 0)
             {
                 // retries
-                this.RouteImpl(investorInstruction, executionState);
+                this.RouteImpl(investorInstruction, executionContext);
             }
             else
             {

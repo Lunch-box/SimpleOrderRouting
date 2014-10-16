@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ExecutionState.cs" company="LunchBox corp">
+// <copyright file="ExecutionContext.cs" company="LunchBox corp">
 //     Copyright 2014 The Lunch-Box mob: 
 //           Ozgur DEVELIOGLU (@Zgurrr)
 //           Cyrille  DUPUYDAUBY (@Cyrdup)
@@ -20,9 +20,9 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace SimpleOrderRouting.Journey1
 {
-    public class ExecutionState
+    public class ExecutionContext
     {
-        public ExecutionState(InvestorInstruction investorInstruction)
+        public ExecutionContext(InvestorInstruction investorInstruction)
         {
             this.Quantity = investorInstruction.Quantity;
             this.Price = investorInstruction.Price;

@@ -40,45 +40,55 @@ namespace SimpleOrderRouting.Journey1
 
         /// <summary>
         /// Build the description of the orders needed to fulfill an <see cref="InvestorInstruction" /> which
-        /// is aggregated within an <see cref="ExecutionState" /> instance.
+        /// is aggregated within an <see cref="ExecutionContext" /> instance.
         /// </summary>
-        /// <param name="executionState">The <see cref="ExecutionState" /> instance that aggregates the <see cref="InvestorInstruction" />.</param>
+        /// <param name="executionContext">The <see cref="ExecutionContext" /> instance that aggregates the <see cref="InvestorInstruction" />.</param>
         /// <returns>
         /// An <see cref="OrderBasket" /> containing all the orders to be routed in order to fulfill the initial <see cref="InvestorInstruction" />.
         /// </returns>
-        public OrderBasket Solve(ExecutionState executionState)
+        public OrderBasket Solve(ExecutionContext executionContext)
         {
             var ordersDescription = new List<OrderDescription>();
 
             // Checks liquidities available to weighted average for execution
-            int remainingQuantityToBeExecuted = executionState.Quantity;
+            int remainingQuantityToBeExecuted = executionContext.Quantity;
 
-            var requestedPrice = executionState.Price;
+            var requestedPrice = executionContext.Price;
             
             var availableQuantityOnMarkets = this.ComputeAvailableQuantityForThisPrice(requestedPrice);
+
+            if (availableQuantityOnMarkets == 0)
+            {
+                return new OrderBasket(new List<OrderDescription>());    
+            }
 
             var ratio = remainingQuantityToBeExecuted / (decimal)availableQuantityOnMarkets;
 
             // ReSharper disable once LoopCanBeConvertedToQuery
-            foreach (var marketInfo in this.marketInfos.Where(m => m.OrdersFailureCount < MaxSupportedFailuresPerMarket))
+            foreach (var marketInfo in this.GetValidMarkets())
             {
                 var convertedMarketQuantity = Math.Round(marketInfo.Market.SellQuantity * ratio, 2, MidpointRounding.AwayFromZero);
                 var quantityToExecute = Convert.ToInt32(convertedMarketQuantity);
 
                 if (quantityToExecute > 0)
                 {
-                    ordersDescription.Add(new OrderDescription(marketInfo.Market, executionState.Way, quantityToExecute, requestedPrice, executionState.AllowPartialExecution, executionState));
+                    ordersDescription.Add(new OrderDescription(marketInfo.Market, executionContext.Way, quantityToExecute, requestedPrice, executionContext.AllowPartialExecution, executionContext));
                 }
             }
 
             return new OrderBasket(ordersDescription);
         }
 
+        private IEnumerable<MarketInfo> GetValidMarkets()
+        {
+            return this.marketInfos.Where(m => m.OrdersFailureCount < MaxSupportedFailuresPerMarket);
+        }
+
         private int ComputeAvailableQuantityForThisPrice(decimal requestedPrice)
         {
             var availableQuantityOnMarkets = 0;
 
-            foreach (var marketInfo in this.marketInfos)
+            foreach (var marketInfo in this.GetValidMarkets())
             {
                 if (requestedPrice >= marketInfo.Market.SellPrice)
                 {

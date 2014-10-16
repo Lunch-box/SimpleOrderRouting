@@ -36,16 +36,19 @@ namespace SimpleOrderRouting.Journey1
         {
             this.ordersDescriptions = ordersDescriptions;
 
-            this.Way = ordersDescriptions[0].OrderWay;
-
-            foreach (var orderDescription in ordersDescriptions)
+            if (ordersDescriptions.Count > 0)
             {
-                if (orderDescription.AllowPartial)
-                {
-                    this.AllowPartialExecution = true;
-                }
+                this.Way = ordersDescriptions[0].OrderWay;
 
-                this.Quantity += orderDescription.Quantity;
+                foreach (var orderDescription in ordersDescriptions)
+                {
+                    if (orderDescription.AllowPartial)
+                    {
+                        this.AllowPartialExecution = true;
+                    }
+
+                    this.Quantity += orderDescription.Quantity;
+                }
             }
         }
 

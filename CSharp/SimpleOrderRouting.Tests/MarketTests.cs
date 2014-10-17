@@ -31,7 +31,7 @@ namespace SimpleOrderRouting.Tests
         [Fact]
         public void MarketOrderShouldDecreaseAvailableQuantity()
         {
-            var market = new Market() { SellPrice = 100M, SellQuantity = 50 };
+            var market = new Market { SellPrice = 100M, SellQuantity = 50 };
 
             var order = market.CreateMarketOrder(Way.Buy, quantity: 10);
             market.Send(order);
@@ -42,7 +42,7 @@ namespace SimpleOrderRouting.Tests
         [Fact]
         public void LargeMarketOrderShouldFail()
         {
-            var market = new Market() { SellPrice = 100M, SellQuantity = 50 };
+            var market = new Market { SellPrice = 100M, SellQuantity = 50 };
 
             var order = market.CreateMarketOrder(Way.Buy, quantity: 100);
 
@@ -64,7 +64,7 @@ namespace SimpleOrderRouting.Tests
         [Fact]
         public void MarketOrderShouldCaptureExec()
         {
-            var market = new Market() { SellPrice = 100M, SellQuantity = 50 };
+            var market = new Market { SellPrice = 100M, SellQuantity = 50 };
             var executed = false;
             var order = market.CreateMarketOrder(Way.Buy, quantity: 10);
 
@@ -78,7 +78,7 @@ namespace SimpleOrderRouting.Tests
         [Fact]
         public void LimitOrderShouldCaptureExec()
         {
-            var market = new Market() { SellPrice = 100M, SellQuantity = 50 };
+            var market = new Market { SellPrice = 100M, SellQuantity = 50 };
             var executed = false;
             var order = market.CreateLimitOrder(Way.Buy, price: 100M, quantity: 10, allowPartialExecution: false);
 
@@ -92,7 +92,7 @@ namespace SimpleOrderRouting.Tests
         [Fact]
         public void LimitOrderShouldFailIfPriceTooHigh()
         {
-            var market = new Market() { SellPrice = 100M, SellQuantity = 50 };
+            var market = new Market { SellPrice = 100M, SellQuantity = 50 };
             var executed = false;
             bool failed = false;
             string failureReason = null;
@@ -115,7 +115,7 @@ namespace SimpleOrderRouting.Tests
         [Fact]
         public void LimitOrderShouldSupportPartialExecution()
         {
-            var market = new Market() { SellPrice = 100M, SellQuantity = 50 };
+            var market = new Market { SellPrice = 100M, SellQuantity = 50 };
             var executed = false;
             var order = market.CreateLimitOrder(Way.Buy, price: 100M, quantity: 110, allowPartialExecution: true);
 

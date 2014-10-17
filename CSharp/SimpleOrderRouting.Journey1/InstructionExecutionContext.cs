@@ -50,17 +50,17 @@ namespace SimpleOrderRouting.Journey1
         public bool AllowPartialExecution { get; private set; }
 
         /// <summary>
-        /// Called when an order has been executed - called by the order basket
+        /// Called when an order has been executed - called by the order basket.
         /// </summary>
-        /// <param name="quantity"></param>
+        /// <param name="quantity">The executed quantity.</param>
         public void Executed(int quantity)
         {
             this.Quantity -= quantity;
-            if (Quantity == 0)
+            if (this.Quantity == 0)
             {
-                investorInstruction.NotifyOrderExecution(this.initialQuantity, Price);
+                this.investorInstruction.NotifyOrderExecution(this.initialQuantity, this.Price);
             }
-            else if (Quantity < 0)
+            else if (this.Quantity < 0)
             {
                 throw new ApplicationException("Executed more than specified in the investor instruction.");
             }

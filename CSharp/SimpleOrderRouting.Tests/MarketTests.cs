@@ -22,7 +22,7 @@ namespace SimpleOrderRouting.Tests
 {
     using NFluent;
 
-    using SimpleOrderRouting.Journey1;
+    using Journey1;
 
     using Xunit;
 

@@ -23,11 +23,7 @@ namespace SimpleOrderRouting.Tests
     using System;
 
     using NFluent;
-
-    using NSubstitute;
-    using NSubstitute.Routing.Handlers;
-
-    using SimpleOrderRouting.Journey1;
+    using Journey1;
 
     using Xunit;
 
@@ -40,14 +36,14 @@ namespace SimpleOrderRouting.Tests
         {
             // Given market A: 150 @ $100, market B: 55 @ $101 
             // When Investor wants to buy 125 stocks @ $100 Then SOR can execute at the requested price
-            var marketA = new Market()
-                              {
+            var marketA = new Market
+            {
                                   SellQuantity = 150,
                                   SellPrice = 100M
                               };
             
-            var marketB = new Market()
-                              {
+            var marketB = new Market
+            {
                                   SellQuantity = 55,
                                   SellPrice = 101M
                               };
@@ -71,14 +67,14 @@ namespace SimpleOrderRouting.Tests
         {
             // Given market A: 150 @ $100, market B: 55 @ $101 
             // When Investor wants to buy 125 stocks @ $100 Then SOR can execute at the requested price
-            var marketA = new Market()
-                              {
+            var marketA = new Market
+            {
                                   SellQuantity = 15,
                                   SellPrice = 100M
                               };
             
-            var marketB = new Market()
-                              {
+            var marketB = new Market
+            {
                                   SellQuantity = 55,
                                   SellPrice = 101M
                               };

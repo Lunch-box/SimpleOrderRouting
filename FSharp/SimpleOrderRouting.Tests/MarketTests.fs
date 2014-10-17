@@ -24,8 +24,10 @@ namespace SimpleOrderRouting.Tests
 open Xunit
 open FsUnit.Xunit
 
-module ``Sor acceptance tests`` =
-
+module ``Market tests`` =
+    
     [<Fact>]
-    let ``Should execute "Instruction" When there is enough liquidity on one "Market"``() =
-        true |> should be True
+    let ``Market order should decrease available quantity`` =
+            ()
+        
+

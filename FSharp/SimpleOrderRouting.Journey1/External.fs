@@ -1,4 +1,3 @@
 ﻿namespace SimpleOrderRouting.Journey1
 
-type Class1() = 
-    member this.X = "F#"
+type Market = {SellQuantity : int; SellPrice : decimal; TimeSent : int}

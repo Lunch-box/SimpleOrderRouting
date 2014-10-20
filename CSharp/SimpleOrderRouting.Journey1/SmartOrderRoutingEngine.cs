@@ -29,13 +29,18 @@ namespace SimpleOrderRouting.Journey1
     /// Manages incoming InvestorInstructions and monitor their lifecycle.
     /// Is responsible for the consistency of the open positions (i.e. alive orders) that are present on every markets.
     /// </summary>
-    public class SmartOrderRoutingEngine
+    public class SmartOrderRoutingEngine : ISmartOrderRouting
     {
         private readonly Dictionary<Market, MarketInfo> markets;
 
         public SmartOrderRoutingEngine(IEnumerable<Market> markets)
         {
             this.markets = markets.ToDictionary(market => market, market => new MarketInfo(market));
+        }
+
+        public InvestorInstructionIdentifier RequestUniqueIdentifier()
+        {
+            return new InvestorInstructionIdentifier();
         }
 
         public void Route(InvestorInstruction investorInstruction)
@@ -85,7 +90,7 @@ namespace SimpleOrderRouting.Journey1
             }
         }
 
-        public InvestorInstruction CreateInvestorInstruction(Way way, int quantity, decimal price, bool allowPartialExecution = false, DateTime? goodTill = null)
+        public InvestorInstruction CreateInvestorInstruction(InvestorInstructionIdentifier instructionIdentifier, Way way, int quantity, decimal price, bool allowPartialExecution = false, DateTime? goodTill = null)
         {
             return new InvestorInstruction(way, quantity, price, allowPartialExecution, goodTill);
         }

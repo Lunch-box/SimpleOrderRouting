@@ -24,9 +24,6 @@ namespace SimpleOrderRouting.Tests
 
     using NFluent;
 
-    using NSubstitute;
-    using NSubstitute.Routing.Handlers;
-
     using SimpleOrderRouting.Journey1;
 
     using Xunit;
@@ -54,7 +51,7 @@ namespace SimpleOrderRouting.Tests
 
             var sor = new SmartOrderRoutingEngine(new[] { marketA, marketB });
 
-            var investorInstruction = sor.CreateInvestorInstruction(Way.Buy, quantity: 125, price: 100M);
+            var investorInstruction = sor.CreateInvestorInstruction(new InvestorInstructionIdentifier(), Way.Buy, quantity: 125, price: 100M);
 
             OrderExecutedEventArgs orderExecutedEventArgs = null;
             investorInstruction.Executed += (sender, args) => { orderExecutedEventArgs = args; };
@@ -85,7 +82,7 @@ namespace SimpleOrderRouting.Tests
 
             var sor = new SmartOrderRoutingEngine(new[] { marketA, marketB });
 
-            var investorInstruction = sor.CreateInvestorInstruction(Way.Buy, quantity: 125, price: 100M, allowPartialExecution: false);
+            var investorInstruction = sor.CreateInvestorInstruction(new InvestorInstructionIdentifier(), Way.Buy, quantity: 125, price: 100M, allowPartialExecution: false);
 
             // Subscribes to the instruction's events
             OrderExecutedEventArgs orderExecutedEventArgs = null;
@@ -113,7 +110,7 @@ namespace SimpleOrderRouting.Tests
                              };
 
             var sor = new SmartOrderRoutingEngine(new[] { rejectingMarket });
-            var investorInstruction = sor.CreateInvestorInstruction(Way.Buy, quantity: 50, price: 100M, goodTill: DateTime.Now.AddMinutes(5));
+            var investorInstruction = sor.CreateInvestorInstruction(new InvestorInstructionIdentifier(), Way.Buy, quantity: 50, price: 100M, goodTill: DateTime.Now.AddMinutes(5));
             sor.Route(investorInstruction);
 
             Check.That(rejectingMarket.TimesSent).IsEqualTo(3);
@@ -139,7 +136,7 @@ namespace SimpleOrderRouting.Tests
 
             var sor = new SmartOrderRoutingEngine(new[] { marketA, rejectMarket });
 
-            var investorInstruction = sor.CreateInvestorInstruction(Way.Buy, quantity: 50, price: 100M, goodTill: DateTime.Now.AddMinutes(5));
+            var investorInstruction = sor.CreateInvestorInstruction(new InvestorInstructionIdentifier(), Way.Buy, quantity: 50, price: 100M, goodTill: DateTime.Now.AddMinutes(5));
 
             // Subscribes to the instruction's events
             OrderExecutedEventArgs orderExecutedEventArgs = null;
@@ -174,7 +171,7 @@ namespace SimpleOrderRouting.Tests
 
             var sor = new SmartOrderRoutingEngine(new[] { marketA, marketB });
 
-            var investorInstruction = sor.CreateInvestorInstruction(Way.Buy, quantity: 125, price: 100M);
+            var investorInstruction = sor.CreateInvestorInstruction(new InvestorInstructionIdentifier(), Way.Buy, quantity: 125, price: 100M);
 
             OrderExecutedEventArgs orderExecutedEventArgs = null;
             investorInstruction.Executed += (sender, args) => { orderExecutedEventArgs = args; };
@@ -206,7 +203,7 @@ namespace SimpleOrderRouting.Tests
 
             var sor = new SmartOrderRoutingEngine(new[] { marketA, marketB });
 
-            var investorInstruction = sor.CreateInvestorInstruction(Way.Buy, quantity: 75, price: 100M);
+            var investorInstruction = sor.CreateInvestorInstruction(new InvestorInstructionIdentifier(), Way.Buy, quantity: 75, price: 100M);
 
             OrderExecutedEventArgs orderExecutedEventArgs = null;
             investorInstruction.Executed += (sender, args) => { orderExecutedEventArgs = args; };

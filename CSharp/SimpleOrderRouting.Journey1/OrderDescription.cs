@@ -15,6 +15,9 @@
 //  --------------------------------------------------------------------------------------------------------------------
 namespace SimpleOrderRouting.Journey1
 {
+    using SimpleOrderRouting.Interfaces;
+    using SimpleOrderRouting.Interfaces.SmartOrderRouting;
+
     public struct OrderDescription
     {
         public Market TargetMarket;

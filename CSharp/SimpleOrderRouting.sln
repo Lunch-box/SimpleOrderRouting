@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{F7A88D
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleOrderRouting.Interfaces", "SimpleOrderRouting.Interfaces\SimpleOrderRouting.Interfaces.csproj", "{4F66C7D2-8CBD-4280-9A2D-6555E276C6A7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{7F099472-E44E-4252-BBB8-633BF48EECBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F099472-E44E-4252-BBB8-633BF48EECBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F099472-E44E-4252-BBB8-633BF48EECBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F66C7D2-8CBD-4280-9A2D-6555E276C6A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F66C7D2-8CBD-4280-9A2D-6555E276C6A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F66C7D2-8CBD-4280-9A2D-6555E276C6A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F66C7D2-8CBD-4280-9A2D-6555E276C6A7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

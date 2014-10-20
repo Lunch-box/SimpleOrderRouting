@@ -22,6 +22,9 @@ namespace SimpleOrderRouting.Journey1
 {
     using System;
 
+    using SimpleOrderRouting.Interfaces;
+    using SimpleOrderRouting.Interfaces.SmartOrderRouting;
+
     /// <summary>
     /// 1 to 1 relationship with an <see cref="InvestorInstruction"/>.  Keeps the current state of the instruction execution.
     /// </summary>

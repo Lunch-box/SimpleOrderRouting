@@ -2,6 +2,9 @@
 {
     using System;
 
+    using SimpleOrderRouting.Interfaces;
+    using SimpleOrderRouting.Interfaces.SmartOrderRouting;
+    using SimpleOrderRouting.Interfaces.SmartOrderRouting.Investor;
 
     /// <summary>
     /// External API for the Smart Order Routing service. Aggregates all instruction events.
@@ -37,7 +40,8 @@
             var onInstructionUpdated = this.InstructionUpdated;
             if (onInstructionUpdated != null)
             {
-                onInstructionUpdated(this, new InvestorInstructionUpdatedEventArgs(InvestorInstructionStatus.Failed));
+                var instruction = (InvestorInstruction)sender;
+                onInstructionUpdated(this, new InvestorInstructionUpdatedEventArgs(instruction.Identifier, InvestorInstructionStatus.Failed));
             }
         }
 
@@ -46,7 +50,8 @@
             var onInstructionUpdated = this.InstructionUpdated;
             if (onInstructionUpdated != null)
             {
-                onInstructionUpdated(this, new InvestorInstructionUpdatedEventArgs(InvestorInstructionStatus.Executed));
+                var instruction = (InvestorInstruction)sender;
+                onInstructionUpdated(this, new InvestorInstructionUpdatedEventArgs(instruction.Identifier, InvestorInstructionStatus.Executed));
             }
         }
     }

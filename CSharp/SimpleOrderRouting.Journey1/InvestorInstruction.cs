@@ -22,14 +22,18 @@ namespace SimpleOrderRouting.Journey1
 {
     using System;
 
+    using SimpleOrderRouting.Interfaces;
+    using SimpleOrderRouting.Interfaces.SmartOrderRouting;
+
     /// <summary>
     /// Trading instruction given to the SOR on the investor-side.
     /// </summary>
     public class InvestorInstruction : InvestorInstructionDto
     {
-        public InvestorInstruction(Way way, int quantity, decimal price, bool allowPartialExecution, DateTime? goodTill)
+        public InvestorInstruction(InvestorInstructionIdentifier identifier, Way way, int quantity, decimal price, bool allowPartialExecution, DateTime? goodTill)
             : base(way, quantity, price, allowPartialExecution, goodTill)
         {
+            this.Identifier = identifier;
         }
 
         /// <summary>
@@ -41,6 +45,8 @@ namespace SimpleOrderRouting.Journey1
         /// Occurs when the <see cref="InvestorInstruction"/> has failed.
         /// </summary>
         public event EventHandler<string> Failed;
+
+        public InvestorInstructionIdentifier Identifier { get; private set; }
 
         /// <summary>
         /// Just a naive implementation to make the test pass. 

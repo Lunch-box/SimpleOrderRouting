@@ -24,6 +24,9 @@ namespace SimpleOrderRouting.Journey1
     using System.Collections.Generic;
     using System.Linq;
 
+    using SimpleOrderRouting.Interfaces;
+    using SimpleOrderRouting.Interfaces.SmartOrderRouting;
+
     /// <summary>
     /// Provides access to the various services offered by the external markets.
     /// Manages incoming InvestorInstructions and monitor their lifecycle.
@@ -92,7 +95,7 @@ namespace SimpleOrderRouting.Journey1
 
         public InvestorInstruction CreateInvestorInstruction(InvestorInstructionIdentifier instructionIdentifier, Way way, int quantity, decimal price, bool allowPartialExecution = false, DateTime? goodTill = null)
         {
-            return new InvestorInstruction(way, quantity, price, allowPartialExecution, goodTill);
+            return new InvestorInstruction(instructionIdentifier, way, quantity, price, allowPartialExecution, goodTill);
         }
     }
 }

@@ -24,6 +24,9 @@ namespace SimpleOrderRouting.Journey1
     using System.Collections.Generic;
     using System.Linq;
 
+    using SimpleOrderRouting.Interfaces;
+    using SimpleOrderRouting.Interfaces.SmartOrderRouting;
+
     /// <summary>
     /// Aggregates multiple <see cref="IOrder"/> instances.
     /// <remarks>OrderBasket is a composite (pattern).</remarks>

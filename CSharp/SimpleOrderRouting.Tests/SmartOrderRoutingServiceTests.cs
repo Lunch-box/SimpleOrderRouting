@@ -6,6 +6,9 @@ namespace SimpleOrderRouting.Tests
 {
     using NFluent;
 
+    using SimpleOrderRouting.Interfaces;
+    using SimpleOrderRouting.Interfaces.SmartOrderRouting;
+    using SimpleOrderRouting.Interfaces.SmartOrderRouting.Investor;
     using SimpleOrderRouting.Journey1;
 
     using Xunit;

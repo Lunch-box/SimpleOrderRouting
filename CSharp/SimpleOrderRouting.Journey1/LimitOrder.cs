@@ -22,6 +22,9 @@ namespace SimpleOrderRouting.Journey1
 {
     using System;
 
+    using SimpleOrderRouting.Interfaces;
+    using SimpleOrderRouting.Interfaces.SmartOrderRouting;
+
     public class LimitOrder : IOrder
     {
         public LimitOrder(Market market, Way way, decimal price, int quantity, bool allowPartialExecution)

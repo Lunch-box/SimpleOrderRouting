@@ -22,6 +22,9 @@ namespace SimpleOrderRouting.Journey1
 {
     using System;
 
+    using SimpleOrderRouting.Interfaces;
+    using SimpleOrderRouting.Interfaces.SmartOrderRouting;
+
     public class Market : ITestableMarket
     {
         public event EventHandler<DealExecutedEventArgs> OrderExecuted;

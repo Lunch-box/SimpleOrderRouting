@@ -17,6 +17,9 @@ namespace SimpleOrderRouting.Journey1
 {
     using System;
 
+    using SimpleOrderRouting.Interfaces;
+    using SimpleOrderRouting.Interfaces.SmartOrderRouting;
+
     public interface IOrder
     {
         event EventHandler<DealExecutedEventArgs> OrderExecuted;

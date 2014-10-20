@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Way.cs" company="LunchBox corp">
 //    Copyright 2014 The Lunch-Box mob: Ozgur DEVELIOGLU (@Zgurrr), Cyrille  DUPUYDAUBY 
 //    (@Cyrdup), Tomasz JASKULA (@tjaskula), Thomas PIERRAIN (@tpierrain)
@@ -13,7 +13,7 @@
 //    limitations under the License.
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
-namespace SimpleOrderRouting.Journey1
+namespace SimpleOrderRouting.Interfaces.SmartOrderRouting
 {
     /// <summary>
     /// Sell or Buy way for Orders.

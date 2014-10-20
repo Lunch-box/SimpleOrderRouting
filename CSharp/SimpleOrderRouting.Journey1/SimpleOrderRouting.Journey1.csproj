@@ -42,9 +42,6 @@
     <Compile Include="DealExecutedEventArgs.cs" />
     <Compile Include="InstructionExecutionContext.cs" />
     <Compile Include="IInvestorInstructionSolver.cs" />
-    <Compile Include="InvestorInstructionDto.cs" />
-    <Compile Include="InvestorInstructionIdentifier.cs" />
-    <Compile Include="InvestorInstructionUpdatedEventArgs.cs" />
     <Compile Include="IOrder.cs" />
     <Compile Include="ISmartOrderRouting.cs" />
     <Compile Include="ITestableMarket.cs" />
@@ -61,10 +58,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SmartOrderRoutingEngine.cs" />
     <Compile Include="SmartOrderRoutingService.cs" />
-    <Compile Include="Way.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Settings.StyleCop" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SimpleOrderRouting.Interfaces\SimpleOrderRouting.Interfaces.csproj">
+      <Project>{4F66C7D2-8CBD-4280-9A2D-6555E276C6A7}</Project>
+      <Name>SimpleOrderRouting.Interfaces</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

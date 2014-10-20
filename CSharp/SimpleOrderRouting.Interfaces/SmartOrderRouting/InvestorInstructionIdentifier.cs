@@ -1,4 +1,4 @@
-namespace SimpleOrderRouting.Journey1
+namespace SimpleOrderRouting.Interfaces.SmartOrderRouting
 {
     using System.Threading;
 

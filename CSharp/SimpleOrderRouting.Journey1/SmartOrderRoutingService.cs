@@ -18,16 +18,16 @@
             this.smartOrderRouting = smartOrderRouting;
         }
 
-        public InvestorInstructionIdentifier RequestUniqueIdentifier()
+        public InvestorInstructionIdentifierDto RequestUniqueIdentifier()
         {
             return this.smartOrderRouting.RequestUniqueIdentifier();
         }
 
-        public event EventHandler<InvestorInstructionUpdatedEventArgs> InstructionUpdated;
+        public event EventHandler<InvestorInstructionUpdatedDto> InstructionUpdated;
 
-        public void Send(InvestorInstructionIdentifier instructionIdentifier, InvestorInstructionDto instruction)
+        public void Send(InvestorInstructionIdentifierDto instructionIdentifierDto, InvestorInstructionDto instruction)
         {
-            var internalInstruction = this.smartOrderRouting.CreateInvestorInstruction(instructionIdentifier, instruction.Way, instruction.Quantity, instruction.Price, instruction.AllowPartialExecution, instruction.GoodTill);
+            var internalInstruction = this.smartOrderRouting.CreateInvestorInstruction(instructionIdentifierDto, instruction.Way, instruction.Quantity, instruction.Price, instruction.AllowPartialExecution, instruction.GoodTill);
             internalInstruction.Executed += internalInstruction_Executed;
             internalInstruction.Failed += internalInstruction_Failed;
             this.smartOrderRouting.Route(internalInstruction);
@@ -41,7 +41,7 @@
             if (onInstructionUpdated != null)
             {
                 var instruction = (InvestorInstruction)sender;
-                onInstructionUpdated(this, new InvestorInstructionUpdatedEventArgs(instruction.Identifier, InvestorInstructionStatus.Failed));
+                onInstructionUpdated(this, new InvestorInstructionUpdatedDto(instruction.IdentifierDto, InvestorInstructionStatus.Failed));
             }
         }
 
@@ -51,7 +51,7 @@
             if (onInstructionUpdated != null)
             {
                 var instruction = (InvestorInstruction)sender;
-                onInstructionUpdated(this, new InvestorInstructionUpdatedEventArgs(instruction.Identifier, InvestorInstructionStatus.Executed));
+                onInstructionUpdated(this, new InvestorInstructionUpdatedDto(instruction.IdentifierDto, InvestorInstructionStatus.Executed));
             }
         }
     }

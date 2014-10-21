@@ -10,10 +10,10 @@ namespace SimpleOrderRouting.Journey1
     /// </summary>
     public interface ISmartOrderRouting
     {
-        InvestorInstructionIdentifier RequestUniqueIdentifier();
+        InvestorInstructionIdentifierDto RequestUniqueIdentifier();
 
         void Route(InvestorInstruction investorInstruction);
 
-        InvestorInstruction CreateInvestorInstruction(InvestorInstructionIdentifier instructionIdentifier, Way way, int quantity, decimal price, bool allowPartialExecution = false, DateTime? goodTill = null);
+        InvestorInstruction CreateInvestorInstruction(InvestorInstructionIdentifierDto instructionIdentifierDto, Way way, int quantity, decimal price, bool allowPartialExecution = false, DateTime? goodTill = null);
     }
 }

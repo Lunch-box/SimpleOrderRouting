@@ -40,9 +40,9 @@ namespace SimpleOrderRouting.Journey1
             this.markets = markets.ToDictionary(market => market, market => new MarketInfo(market));
         }
 
-        public InvestorInstructionIdentifier RequestUniqueIdentifier()
+        public InvestorInstructionIdentifierDto RequestUniqueIdentifier()
         {
-            return new InvestorInstructionIdentifier();
+            return new InvestorInstructionIdentifierDto();
         }
 
         public void Route(InvestorInstruction investorInstruction)
@@ -92,9 +92,9 @@ namespace SimpleOrderRouting.Journey1
             }
         }
 
-        public InvestorInstruction CreateInvestorInstruction(InvestorInstructionIdentifier instructionIdentifier, Way way, int quantity, decimal price, bool allowPartialExecution = false, DateTime? goodTill = null)
+        public InvestorInstruction CreateInvestorInstruction(InvestorInstructionIdentifierDto instructionIdentifierDto, Way way, int quantity, decimal price, bool allowPartialExecution = false, DateTime? goodTill = null)
         {
-            return new InvestorInstruction(instructionIdentifier, way, quantity, price, allowPartialExecution, goodTill);
+            return new InvestorInstruction(instructionIdentifierDto, way, quantity, price, allowPartialExecution, goodTill);
         }
     }
 }

@@ -5,21 +5,21 @@ namespace SimpleOrderRouting.Interfaces.SmartOrderRouting.Investor
     public interface ISmartOrderRoutingService
     {
         /// <summary>
-        /// Get a new identifier for an investor instruction
+        /// Get a new IdentifierDto for an investor instruction
         /// </summary>
         /// <returns></returns>
-        InvestorInstructionIdentifier RequestUniqueIdentifier();
+        InvestorInstructionIdentifierDto RequestUniqueIdentifier();
 
         /// <summary>
         /// Occurs when an <see cref="SimpleOrderRouting.Journey1.InvestorInstruction"/> has been updated.
         /// </summary>
-        event EventHandler<InvestorInstructionUpdatedEventArgs> InstructionUpdated;
+        event EventHandler<InvestorInstructionUpdatedDto> InstructionUpdated;
 
         /// <summary>
         /// Send an instruction to the smart order routing service to be executed.
         /// </summary>
-        /// <param name="instructionIdentifier"></param>
+        /// <param name="instructionIdentifierDto"></param>
         /// <param name="investorInstructionDto"></param>
-        void Send(InvestorInstructionIdentifier instructionIdentifier, InvestorInstructionDto investorInstructionDto);
+        void Send(InvestorInstructionIdentifierDto instructionIdentifierDto, InvestorInstructionDto investorInstructionDto);
     }
 }

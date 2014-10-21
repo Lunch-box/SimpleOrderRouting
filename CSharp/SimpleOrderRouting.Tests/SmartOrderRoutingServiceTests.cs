@@ -33,7 +33,7 @@ namespace SimpleOrderRouting.Tests
             ISmartOrderRoutingService sorService = new SmartOrderRoutingService(new SmartOrderRoutingEngine(new[] { marketA, marketB }));
             
             var uniqueIdentifier = sorService.RequestUniqueIdentifier();
-            var updates = new List<InvestorInstructionUpdatedEventArgs>();
+            var updates = new List<InvestorInstructionUpdatedDto>();
 
             sorService.InstructionUpdated += (s, e) => updates.Add(e);
             sorService.Send(uniqueIdentifier, new InvestorInstructionDto(Way.Buy, quantity:125, price: 100M, allowPartialExecution:true, goodTill:DateTime.MaxValue));

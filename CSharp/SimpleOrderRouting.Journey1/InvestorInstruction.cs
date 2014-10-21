@@ -30,10 +30,10 @@ namespace SimpleOrderRouting.Journey1
     /// </summary>
     public class InvestorInstruction : InvestorInstructionDto
     {
-        public InvestorInstruction(InvestorInstructionIdentifier identifier, Way way, int quantity, decimal price, bool allowPartialExecution, DateTime? goodTill)
+        public InvestorInstruction(InvestorInstructionIdentifierDto identifierDto, Way way, int quantity, decimal price, bool allowPartialExecution, DateTime? goodTill)
             : base(way, quantity, price, allowPartialExecution, goodTill)
         {
-            this.Identifier = identifier;
+            this.IdentifierDto = identifierDto;
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace SimpleOrderRouting.Journey1
         /// </summary>
         public event EventHandler<string> Failed;
 
-        public InvestorInstructionIdentifier Identifier { get; private set; }
+        public InvestorInstructionIdentifierDto IdentifierDto { get; private set; }
 
         /// <summary>
         /// Just a naive implementation to make the test pass. 

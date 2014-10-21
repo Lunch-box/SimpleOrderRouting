@@ -7,10 +7,10 @@ namespace SimpleOrderRouting.Interfaces.SmartOrderRouting
     /// </summary>
     public interface IInvestorService
     {
-        InvestorInstructionIdentifier RequestUniqueIdentifier();
+        InvestorInstructionIdentifierDto RequestUniqueIdentifier();
 
         event EventHandler<InvestorInstructionDto> InvestorInstructionReceived;
 
-        void Update(InvestorInstructionUpdatedEventArgs update);
+        void Update(InvestorInstructionUpdatedDto update);
     }
 }

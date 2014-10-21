@@ -1,11 +1,17 @@
-SOR Backlog
-===========
+# SOR Backlog
 
++ Introduce an instrument concept
+
++ Introduce market data starting with acceptance test
+
++ Introduce order API
+
++ Create our acceptance test harness (a console app generating report after each runs session)
+
+## Remarks
 + Null object pattern instead of nulls
 
 + Implement asynchronous nature of the markets (for their feedback)
-
-+ Create our acceptance test harness (a console app generating report after each runs session)
 
 + Try various technical strategy for the inside-the-hexagon implementation (LMAX, F#, Michonne, ...)
 

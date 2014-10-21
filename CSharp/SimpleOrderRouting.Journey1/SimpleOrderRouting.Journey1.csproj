@@ -42,6 +42,7 @@
     <Compile Include="DealExecutedEventArgs.cs" />
     <Compile Include="InstructionExecutionContext.cs" />
     <Compile Include="IInvestorInstructionSolver.cs" />
+    <Compile Include="InstrumentIdentifier.cs" />
     <Compile Include="IOrder.cs" />
     <Compile Include="ISmartOrderRouting.cs" />
     <Compile Include="ITestableMarket.cs" />

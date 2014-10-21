@@ -92,7 +92,7 @@ namespace SimpleOrderRouting.Journey1
             }
         }
 
-        public InvestorInstruction CreateInvestorInstruction(InvestorInstructionIdentifierDto instructionIdentifierDto, Way way, int quantity, decimal price, bool allowPartialExecution = false, DateTime? goodTill = null)
+        public InvestorInstruction CreateInvestorInstruction(InvestorInstructionIdentifierDto instructionIdentifierDto, InstrumentIdentifier instrumentIdentifier, Way way, int quantity, decimal price, bool allowPartialExecution = false, DateTime? goodTill = null)
         {
             return new InvestorInstruction(instructionIdentifierDto, way, quantity, price, allowPartialExecution, goodTill);
         }

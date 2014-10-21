@@ -14,6 +14,6 @@ namespace SimpleOrderRouting.Journey1
 
         void Route(InvestorInstruction investorInstruction);
 
-        InvestorInstruction CreateInvestorInstruction(InvestorInstructionIdentifierDto instructionIdentifierDto, Way way, int quantity, decimal price, bool allowPartialExecution = false, DateTime? goodTill = null);
+        InvestorInstruction CreateInvestorInstruction(InvestorInstructionIdentifierDto instructionIdentifierDto, InstrumentIdentifier instrumentIdentifier, Way way, int quantity, decimal price, bool allowPartialExecution = false, DateTime? goodTill = null);
     }
 }

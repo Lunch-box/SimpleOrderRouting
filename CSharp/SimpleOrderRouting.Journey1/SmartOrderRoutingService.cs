@@ -27,7 +27,7 @@
 
         public void Send(InvestorInstructionIdentifierDto instructionIdentifierDto, InvestorInstructionDto instruction)
         {
-            var internalInstruction = this.smartOrderRouting.CreateInvestorInstruction(instructionIdentifierDto, instruction.Way, instruction.Quantity, instruction.Price, instruction.AllowPartialExecution, instruction.GoodTill);
+            var internalInstruction = this.smartOrderRouting.CreateInvestorInstruction(instructionIdentifierDto, new InstrumentIdentifier(instruction.InstrumentIdentifier), instruction.Way, instruction.Quantity, instruction.Price, instruction.AllowPartialExecution, instruction.GoodTill);
             internalInstruction.Executed += internalInstruction_Executed;
             internalInstruction.Failed += internalInstruction_Failed;
             this.smartOrderRouting.Route(internalInstruction);

@@ -40,5 +40,7 @@ namespace SimpleOrderRouting.Interfaces.SmartOrderRouting
         public bool AllowPartialExecution { get; private set; }
 
         public DateTime? GoodTill { get; private set; }
+
+        public string InstrumentIdentifier { get; private set; }
     }
 }

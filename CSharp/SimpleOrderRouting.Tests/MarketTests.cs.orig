@@ -22,9 +22,13 @@ namespace SimpleOrderRouting.Tests
 {
     using NFluent;
 
+<<<<<<< HEAD
     using SimpleOrderRouting.Interfaces;
-    using Journey1;
     using SimpleOrderRouting.Interfaces.SmartOrderRouting;
+    using SimpleOrderRouting.Journey1;
+=======
+    using Journey1;
+>>>>>>> origin/master
 
     using Xunit;
 

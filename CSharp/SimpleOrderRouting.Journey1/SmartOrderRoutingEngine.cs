@@ -24,7 +24,6 @@ namespace SimpleOrderRouting.Journey1
     using System.Collections.Generic;
     using System.Linq;
 
-    using SimpleOrderRouting.Interfaces;
     using SimpleOrderRouting.Interfaces.SmartOrderRouting;
 
     /// <summary>

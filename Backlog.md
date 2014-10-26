@@ -1,12 +1,14 @@
 # SOR Backlog
 
-+ Introduce an instrument concept
+1. To introduce the concept of (financial) instrument (mandatory to support the concept of *Market data* feeds)
 
-+ Introduce market data starting with acceptance test
+1. To introduce the notion of market data and the MarketData API & Port/Adapter (starting from our acceptance tests)
 
-+ Introduce order API
+1. To introduce the *OrderRouting* API & corresponding port/adapter
 
-+ Create our acceptance test harness (a console app generating report after each runs session)
+1. To create our acceptance test harness (i.e. a console application generating a report after each runs session)
+
+
 
 ## Remarks
 + Null object pattern instead of nulls

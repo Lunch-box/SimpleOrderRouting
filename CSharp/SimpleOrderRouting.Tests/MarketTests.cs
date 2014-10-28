@@ -22,7 +22,6 @@ namespace SimpleOrderRouting.Tests
 {
     using NFluent;
 
-    using SimpleOrderRouting.Interfaces;
     using Journey1;
     using SimpleOrderRouting.Interfaces.SmartOrderRouting;
 

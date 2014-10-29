@@ -1,14 +1,12 @@
 namespace SimpleOrderRouting.Journey1
 {
     using System;
-
-    using SimpleOrderRouting.Interfaces;
     using SimpleOrderRouting.Interfaces.SmartOrderRouting;
 
     /// <summary>
     /// 
     /// </summary>
-    public interface ISmartOrderRouting
+    public interface ISmartOrderRoutingEntryPoint
     {
         InvestorInstructionIdentifierDto RequestUniqueIdentifier();
 

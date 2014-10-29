@@ -2,7 +2,7 @@ namespace SimpleOrderRouting.Interfaces.SmartOrderRouting.Investor
 {
     using System;
 
-    public interface ISmartOrderRoutingService
+    public interface ISmartOrderRoutingRawInprocPort
     {
         /// <summary>
         /// Get a new IdentifierDto for an investor instruction

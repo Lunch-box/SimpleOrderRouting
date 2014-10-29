@@ -25,6 +25,7 @@ namespace SimpleOrderRouting.Journey1
     using System.Threading;
 
     using SimpleOrderRouting.Interfaces.SmartOrderRouting;
+    using SimpleOrderRouting.Journey1.Infrastructure;
 
     public class SorTestHarness
     {
@@ -43,7 +44,7 @@ namespace SimpleOrderRouting.Journey1
 
 
             // instantiate the service
-            var service = new SmartOrderRoutingService(sor);
+            var service = new SmartOrderRoutingRawInprocPort(sor);
 
             // initialize our engine
             service.InstructionUpdated += ServiceOnInstructionUpdated;
@@ -92,7 +93,7 @@ namespace SimpleOrderRouting.Journey1
             }
         }
 
-        private static SmartOrderRoutingEngine BuildSor()
+        private static SmartOrderRoutingEntryPointEngine BuildSor()
         {
             var marketA = new Market
                               {
@@ -106,7 +107,7 @@ namespace SimpleOrderRouting.Journey1
                                   SellPrice = 101M
                               };
 
-            var sor = new SmartOrderRoutingEngine(new[] { marketA, marketB });
+            var sor = new SmartOrderRoutingEntryPointEngine(new[] { marketA, marketB });
             return sor;
         }
 

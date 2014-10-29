@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SmartOrderRoutingEngine.cs" company="LunchBox corp">
+// <copyright file="SmartOrderRoutingEntryPointEngine.cs" company="LunchBox corp">
 //     Copyright 2014 The Lunch-Box mob: 
 //           Ozgur DEVELIOGLU (@Zgurrr)
 //           Cyrille  DUPUYDAUBY (@Cyrdup)
@@ -31,11 +31,11 @@ namespace SimpleOrderRouting.Journey1
     /// Manages incoming InvestorInstructions and monitor their lifecycle.
     /// Is responsible for the consistency of the open positions (i.e. alive orders) that are present on every markets.
     /// </summary>
-    public class SmartOrderRoutingEngine : ISmartOrderRouting
+    public class SmartOrderRoutingEntryPointEngine : ISmartOrderRoutingEntryPoint
     {
         private readonly Dictionary<Market, MarketInfo> markets;
 
-        public SmartOrderRoutingEngine(IEnumerable<Market> markets)
+        public SmartOrderRoutingEntryPointEngine(IEnumerable<Market> markets)
         {
             this.markets = markets.ToDictionary(market => market, market => new MarketInfo(market));
         }

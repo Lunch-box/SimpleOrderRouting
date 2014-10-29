@@ -10,6 +10,7 @@ namespace SimpleOrderRouting.Tests
     using SimpleOrderRouting.Interfaces.SmartOrderRouting;
     using SimpleOrderRouting.Interfaces.SmartOrderRouting.Investor;
     using SimpleOrderRouting.Journey1;
+    using SimpleOrderRouting.Journey1.Infrastructure;
 
     using Xunit;
 
@@ -30,13 +31,13 @@ namespace SimpleOrderRouting.Tests
                 SellPrice = 101M
             };
 
-            ISmartOrderRoutingService sorService = new SmartOrderRoutingService(new SmartOrderRoutingEngine(new[] { marketA, marketB }));
+            ISmartOrderRoutingRawInprocPort sorRawInprocPort = new SmartOrderRoutingRawInprocPort(new SmartOrderRoutingEntryPointEngine(new[] { marketA, marketB }));
             
-            var uniqueIdentifier = sorService.RequestUniqueIdentifier();
+            var uniqueIdentifier = sorRawInprocPort.RequestUniqueIdentifier();
             var updates = new List<InvestorInstructionUpdatedDto>();
 
-            sorService.InstructionUpdated += (s, e) => updates.Add(e);
-            sorService.Send(uniqueIdentifier, new InvestorInstructionDto(Way.Buy, quantity:125, price: 100M, allowPartialExecution:true, goodTill:DateTime.MaxValue));
+            sorRawInprocPort.InstructionUpdated += (s, e) => updates.Add(e);
+            sorRawInprocPort.Send(uniqueIdentifier, new InvestorInstructionDto(Way.Buy, quantity:125, price: 100M, allowPartialExecution:true, goodTill:DateTime.MaxValue));
 
             // NFluent: CountIs
             Check.That(updates).HasSize(1);

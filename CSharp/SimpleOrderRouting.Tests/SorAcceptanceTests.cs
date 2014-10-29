@@ -50,7 +50,7 @@ namespace SimpleOrderRouting.Tests
                                   SellPrice = 101M
                               };
 
-            var sor = new SmartOrderRoutingEngine(new[] { marketA, marketB });
+            var sor = new SmartOrderRoutingEntryPointEngine(new[] { marketA, marketB });
 
             var investorInstruction = sor.CreateInvestorInstruction(new InvestorInstructionIdentifierDto(), new InstrumentIdentifier("EURUSD"), Way.Buy, quantity: 125, price: 100M);
 
@@ -81,7 +81,7 @@ namespace SimpleOrderRouting.Tests
                                   SellPrice = 101M
                               };
 
-            var sor = new SmartOrderRoutingEngine(new[] { marketA, marketB });
+            var sor = new SmartOrderRoutingEntryPointEngine(new[] { marketA, marketB });
 
             var investorInstruction = sor.CreateInvestorInstruction(new InvestorInstructionIdentifierDto(), new InstrumentIdentifier("EURUSD"), Way.Buy, quantity: 125, price: 100M, allowPartialExecution: false);
 
@@ -110,7 +110,7 @@ namespace SimpleOrderRouting.Tests
                                  OrderPredicate = order => false
                              };
 
-            var sor = new SmartOrderRoutingEngine(new[] { rejectingMarket });
+            var sor = new SmartOrderRoutingEntryPointEngine(new[] { rejectingMarket });
             var investorInstruction = sor.CreateInvestorInstruction(new InvestorInstructionIdentifierDto(), new InstrumentIdentifier("EURUSD"), Way.Buy, quantity: 50, price: 100M, goodTill: DateTime.Now.AddMinutes(5));
             sor.Route(investorInstruction);
 
@@ -135,7 +135,7 @@ namespace SimpleOrderRouting.Tests
                 OrderPredicate = (o) => false
             };
 
-            var sor = new SmartOrderRoutingEngine(new[] { marketA, rejectMarket });
+            var sor = new SmartOrderRoutingEntryPointEngine(new[] { marketA, rejectMarket });
 
             var investorInstruction = sor.CreateInvestorInstruction(new InvestorInstructionIdentifierDto(), new InstrumentIdentifier("EURUSD"), Way.Buy, quantity: 50, price: 100M, goodTill: DateTime.Now.AddMinutes(5));
 
@@ -170,7 +170,7 @@ namespace SimpleOrderRouting.Tests
                                   SellPrice = 100M
                               };
 
-            var sor = new SmartOrderRoutingEngine(new[] { marketA, marketB });
+            var sor = new SmartOrderRoutingEntryPointEngine(new[] { marketA, marketB });
 
             var investorInstruction = sor.CreateInvestorInstruction(new InvestorInstructionIdentifierDto(), new InstrumentIdentifier("EURUSD"), Way.Buy, quantity: 125, price: 100M);
 
@@ -202,7 +202,7 @@ namespace SimpleOrderRouting.Tests
                 SellPrice = 100M
             };
 
-            var sor = new SmartOrderRoutingEngine(new[] { marketA, marketB });
+            var sor = new SmartOrderRoutingEntryPointEngine(new[] { marketA, marketB });
 
             var investorInstruction = sor.CreateInvestorInstruction(new InvestorInstructionIdentifierDto(), new InstrumentIdentifier("EURUSD"), Way.Buy, quantity: 75, price: 100M);
 

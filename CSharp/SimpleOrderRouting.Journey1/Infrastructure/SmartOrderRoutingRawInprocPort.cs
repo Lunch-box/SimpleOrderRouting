@@ -1,4 +1,4 @@
-﻿namespace SimpleOrderRouting.Journey1
+﻿namespace SimpleOrderRouting.Journey1.Infrastructure
 {
     using System;
 
@@ -8,28 +8,28 @@
     /// <summary>
     /// External API for the Smart Order Routing service. Aggregates all instruction events.
     /// </summary>
-    public class SmartOrderRoutingService : ISmartOrderRoutingService
+    public class SmartOrderRoutingRawInprocPort : ISmartOrderRoutingRawInprocPort
     {
-        private readonly ISmartOrderRouting smartOrderRouting;
+        private readonly ISmartOrderRoutingEntryPoint smartOrderRoutingEntryPoint;
 
-        public SmartOrderRoutingService(ISmartOrderRouting smartOrderRouting)
+        public SmartOrderRoutingRawInprocPort(ISmartOrderRoutingEntryPoint smartOrderRoutingEntryPoint)
         {
-            this.smartOrderRouting = smartOrderRouting;
+            this.smartOrderRoutingEntryPoint = smartOrderRoutingEntryPoint;
         }
 
         public InvestorInstructionIdentifierDto RequestUniqueIdentifier()
         {
-            return this.smartOrderRouting.RequestUniqueIdentifier();
+            return this.smartOrderRoutingEntryPoint.RequestUniqueIdentifier();
         }
 
         public event EventHandler<InvestorInstructionUpdatedDto> InstructionUpdated;
 
         public void Send(InvestorInstructionIdentifierDto instructionIdentifierDto, InvestorInstructionDto instruction)
         {
-            var internalInstruction = this.smartOrderRouting.CreateInvestorInstruction(instructionIdentifierDto, new InstrumentIdentifier(instruction.InstrumentIdentifier), instruction.Way, instruction.Quantity, instruction.Price, instruction.AllowPartialExecution, instruction.GoodTill);
-            internalInstruction.Executed += internalInstruction_Executed;
-            internalInstruction.Failed += internalInstruction_Failed;
-            this.smartOrderRouting.Route(internalInstruction);
+            var internalInstruction = this.smartOrderRoutingEntryPoint.CreateInvestorInstruction(instructionIdentifierDto, new InstrumentIdentifier(instruction.InstrumentIdentifier), instruction.Way, instruction.Quantity, instruction.Price, instruction.AllowPartialExecution, instruction.GoodTill);
+            internalInstruction.Executed += this.internalInstruction_Executed;
+            internalInstruction.Failed += this.internalInstruction_Failed;
+            this.smartOrderRoutingEntryPoint.Route(internalInstruction);
 
             // TODO: unsubscribe
         }

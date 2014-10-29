@@ -39,6 +39,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ICanReceiveMarketData.cs" />
+    <Compile Include="ICanRouteOrders.cs" />
+    <Compile Include="IProvideMarkets.cs" />
+    <Compile Include="Order\InstrumentIdentifier.cs" />
     <Compile Include="SmartOrderRouting\IInvestorService.cs" />
     <Compile Include="SmartOrderRouting\InvestorInstructionDto.cs" />
     <Compile Include="SmartOrderRouting\InvestorInstructionIdentifierDto.cs" />
@@ -50,7 +54,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Feed\" />
-    <Folder Include="Order\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

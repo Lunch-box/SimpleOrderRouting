@@ -2,6 +2,7 @@
 {
     using System;
 
+    using SimpleOrderRouting.Interfaces.Order;
     using SimpleOrderRouting.Interfaces.SmartOrderRouting;
     using SimpleOrderRouting.Interfaces.SmartOrderRouting.Investor;
 

@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SmartOrderRoutingEntryPointEngine.cs" company="LunchBox corp">
+// <copyright file="SmartOrderRoutingEngine.cs" company="LunchBox corp">
 //     Copyright 2014 The Lunch-Box mob: 
 //           Ozgur DEVELIOGLU (@Zgurrr)
 //           Cyrille  DUPUYDAUBY (@Cyrdup)
@@ -24,6 +24,8 @@ namespace SimpleOrderRouting.Journey1
     using System.Collections.Generic;
     using System.Linq;
 
+    using SimpleOrderRouting.Interfaces;
+    using SimpleOrderRouting.Interfaces.Order;
     using SimpleOrderRouting.Interfaces.SmartOrderRouting;
 
     /// <summary>
@@ -31,13 +33,24 @@ namespace SimpleOrderRouting.Journey1
     /// Manages incoming InvestorInstructions and monitor their lifecycle.
     /// Is responsible for the consistency of the open positions (i.e. alive orders) that are present on every markets.
     /// </summary>
-    public class SmartOrderRoutingEntryPointEngine : ISmartOrderRoutingEntryPoint
+    public class SmartOrderRoutingEngine : ISmartOrderRoutingEntryPoint
     {
-        private readonly Dictionary<Market, MarketInfo> markets;
+        private readonly IProvideMarkets provideMarkets;
+        private readonly ICanRouteOrders canRouteOrders;
+        private readonly ICanReceiveMarketData canReceiveMarketData;
 
-        public SmartOrderRoutingEntryPointEngine(IEnumerable<Market> markets)
+        private MarketSnapshotProvider marketSnapshotProvider;
+
+        private Dictionary<IMarket, IMarket> markets;
+
+        public SmartOrderRoutingEngine(IProvideMarkets provideMarkets, ICanRouteOrders canRouteOrders, ICanReceiveMarketData canReceiveMarketData)
         {
-            this.markets = markets.ToDictionary(market => market, market => new MarketInfo(market));
+            this.provideMarkets = provideMarkets;
+            this.canRouteOrders = canRouteOrders;
+            this.canReceiveMarketData = canReceiveMarketData;
+            var availableMarkets = provideMarkets.GetAvailableMarkets();
+            this.markets = availableMarkets.ToDictionary(market => market, market => market);
+            this.marketSnapshotProvider = new MarketSnapshotProvider(availableMarkets, canReceiveMarketData);
         }
 
         public InvestorInstructionIdentifierDto RequestUniqueIdentifier()
@@ -59,7 +72,7 @@ namespace SimpleOrderRouting.Journey1
         //// TODO: remove investor instruction as arg here?
         private void RouteImpl(InvestorInstruction investorInstruction, InstructionExecutionContext instructionExecutionContext)
         {
-            var solver = new MarketSweepSolver(this.markets.Values);
+            var solver = new MarketSweepSolver(this.markets.Keys, this.marketSnapshotProvider);
 
             var orderBasket = solver.Solve(instructionExecutionContext);
             
@@ -77,7 +90,7 @@ namespace SimpleOrderRouting.Journey1
 
         private void SendOrderFailed(InvestorInstruction investorInstruction, OrderFailedEventArgs reason, InstructionExecutionContext instructionExecutionContext)
         {
-            this.markets[reason.Market].OrdersFailureCount++;
+            this.marketSnapshotProvider.MarketFailed(reason.Market);
 
             if (investorInstruction.GoodTill != null && 
                 investorInstruction.GoodTill > DateTime.Now && 

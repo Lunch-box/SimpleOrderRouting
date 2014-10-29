@@ -43,7 +43,6 @@
     <Compile Include="Infrastructure\SmartOrderRoutingRawInprocPort.cs" />
     <Compile Include="InstructionExecutionContext.cs" />
     <Compile Include="IInvestorInstructionSolver.cs" />
-    <Compile Include="InstrumentIdentifier.cs" />
     <Compile Include="IOrder.cs" />
     <Compile Include="ISmartOrderRoutingEntryPoint.cs" />
     <Compile Include="ITestableMarket.cs" />
@@ -58,8 +57,11 @@
     <Compile Include="InvestorInstruction.cs" />
     <Compile Include="OrderFailedEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SmartOrderRoutingEntryPointEngine.cs" />
+    <Compile Include="SmartOrderRoutingEngine.cs" />
     <Compile Include="SorTestHarness.cs" />
+    <Compile Include="TestHelpers\ExternalMarket.cs" />
+    <Compile Include="TestHelpers\MarketDataProvider.cs" />
+    <Compile Include="TestHelpers\MarketProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Settings.StyleCop" />

@@ -20,8 +20,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace SimpleOrderRouting.Tests
 {
-    using System.Diagnostics;
-
     using NFluent;
 
     using SimpleOrderRouting.Journey1;
@@ -33,9 +31,7 @@ namespace SimpleOrderRouting.Tests
         [Fact]
         public void ShouldReturnALatency()
         {
-
             var runner = new SorTestHarness();
-
             runner.Run();
 
             Check.That<double>(runner.AverageLatency).IsPositive();

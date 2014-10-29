@@ -1,6 +1,8 @@
 namespace SimpleOrderRouting.Journey1
 {
     using System;
+
+    using SimpleOrderRouting.Interfaces.Order;
     using SimpleOrderRouting.Interfaces.SmartOrderRouting;
 
     /// <summary>

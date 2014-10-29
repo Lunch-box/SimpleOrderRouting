@@ -27,6 +27,8 @@ namespace SimpleOrderRouting.Journey1
 
     public class Market : ITestableMarket
     {
+        public IMarket ExternalMarket { get; set; }
+
         public event EventHandler<DealExecutedEventArgs> OrderExecuted;
 
         public event EventHandler<string> OrderFailed;

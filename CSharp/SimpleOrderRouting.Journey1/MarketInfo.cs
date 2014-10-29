@@ -20,6 +20,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace SimpleOrderRouting.Journey1
 {
+    using SimpleOrderRouting.Interfaces;
+
     /// <summary>
     /// Keeps information about a given Market (e.g. # of failures, etc.).
     /// </summary>

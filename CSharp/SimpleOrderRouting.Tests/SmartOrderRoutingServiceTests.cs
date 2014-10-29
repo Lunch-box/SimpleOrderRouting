@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace SimpleOrderRouting.Tests
 {
     using NFluent;
-
-    using SimpleOrderRouting.Interfaces;
     using SimpleOrderRouting.Interfaces.SmartOrderRouting;
     using SimpleOrderRouting.Interfaces.SmartOrderRouting.Investor;
     using SimpleOrderRouting.Journey1;
     using SimpleOrderRouting.Journey1.Infrastructure;
+    using SimpleOrderRouting.Journey1.TestHelpers;
 
     using Xunit;
 
@@ -31,7 +29,9 @@ namespace SimpleOrderRouting.Tests
                 SellPrice = 101M
             };
 
-            ISmartOrderRoutingRawInprocPort sorRawInprocPort = new SmartOrderRoutingRawInprocPort(new SmartOrderRoutingEntryPointEngine(new[] { marketA, marketB }));
+            var markets = new[] { marketA, marketB };
+            var routingEngine = CreateSmartOrderRoutingEngine(markets);
+            ISmartOrderRoutingRawInprocPort sorRawInprocPort = new SmartOrderRoutingRawInprocPort(routingEngine);
             
             var uniqueIdentifier = sorRawInprocPort.RequestUniqueIdentifier();
             var updates = new List<InvestorInstructionUpdatedDto>();
@@ -41,6 +41,16 @@ namespace SimpleOrderRouting.Tests
 
             // NFluent: CountIs
             Check.That(updates).HasSize(1);
+        }
+
+        private static SmartOrderRoutingEngine CreateSmartOrderRoutingEngine(Market[] markets)
+        {
+            foreach (var market in markets)
+            {
+                market.ExternalMarket = new ExternalMarket();
+            }
+            var routingEngine = new SmartOrderRoutingEngine(new MarketProvider(markets), null, new MarketDataProvider(markets));
+            return routingEngine;
         }
     }
 }

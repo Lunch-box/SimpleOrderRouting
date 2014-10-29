@@ -25,7 +25,9 @@ namespace SimpleOrderRouting.Tests
     using NFluent;
     using Journey1;
     using SimpleOrderRouting.Interfaces;
+    using SimpleOrderRouting.Interfaces.Order;
     using SimpleOrderRouting.Interfaces.SmartOrderRouting;
+    using SimpleOrderRouting.Journey1.TestHelpers;
 
     using Xunit;
 
@@ -41,16 +43,23 @@ namespace SimpleOrderRouting.Tests
             var marketA = new Market
             {
                                   SellQuantity = 150,
-                                  SellPrice = 100M
+                                  SellPrice = 100M,
+                                  ExternalMarket = new ExternalMarket()
                               };
             
             var marketB = new Market
             {
                                   SellQuantity = 55,
-                                  SellPrice = 101M
+                                  SellPrice = 101M,
+                                  ExternalMarket = new ExternalMarket()
                               };
 
-            var sor = new SmartOrderRoutingEntryPointEngine(new[] { marketA, marketB });
+            var marketsInvolved = new[] { marketA, marketB };
+
+            ICanRouteOrders canRouteOrders = null;//new OrderRoutingService(marketsInvolved);
+            ICanReceiveMarketData canReceiveMarketData = new MarketDataProvider(marketsInvolved);
+            IProvideMarkets provideMarkets = new MarketProvider(marketsInvolved);
+            var sor = new SmartOrderRoutingEngine(provideMarkets, canRouteOrders, canReceiveMarketData);
 
             var investorInstruction = sor.CreateInvestorInstruction(new InvestorInstructionIdentifierDto(), new InstrumentIdentifier("EURUSD"), Way.Buy, quantity: 125, price: 100M);
 
@@ -81,7 +90,7 @@ namespace SimpleOrderRouting.Tests
                                   SellPrice = 101M
                               };
 
-            var sor = new SmartOrderRoutingEntryPointEngine(new[] { marketA, marketB });
+            var sor = CreateSmartOrderRoutingEngine(new[] { marketA, marketB });
 
             var investorInstruction = sor.CreateInvestorInstruction(new InvestorInstructionIdentifierDto(), new InstrumentIdentifier("EURUSD"), Way.Buy, quantity: 125, price: 100M, allowPartialExecution: false);
 
@@ -100,6 +109,17 @@ namespace SimpleOrderRouting.Tests
             Check.That(orderExecutedEventArgs).IsNull();
         }
 
+        private static SmartOrderRoutingEngine CreateSmartOrderRoutingEngine(Market[] markets)
+        {
+            foreach (var market in markets)
+            {
+                market.ExternalMarket = new ExternalMarket();
+            }
+            var routingEngine = new SmartOrderRoutingEngine(new MarketProvider(markets), null, new MarketDataProvider(markets));
+            return routingEngine;
+        }
+
+
         [Fact]
         public void ShouldStopSendingOrdersToAMarketAfter3Rejects()
         {
@@ -110,7 +130,7 @@ namespace SimpleOrderRouting.Tests
                                  OrderPredicate = order => false
                              };
 
-            var sor = new SmartOrderRoutingEntryPointEngine(new[] { rejectingMarket });
+            var sor = CreateSmartOrderRoutingEngine(new[] { rejectingMarket });
             var investorInstruction = sor.CreateInvestorInstruction(new InvestorInstructionIdentifierDto(), new InstrumentIdentifier("EURUSD"), Way.Buy, quantity: 50, price: 100M, goodTill: DateTime.Now.AddMinutes(5));
             sor.Route(investorInstruction);
 
@@ -135,7 +155,7 @@ namespace SimpleOrderRouting.Tests
                 OrderPredicate = (o) => false
             };
 
-            var sor = new SmartOrderRoutingEntryPointEngine(new[] { marketA, rejectMarket });
+            var sor = CreateSmartOrderRoutingEngine(new[] { marketA, rejectMarket });
 
             var investorInstruction = sor.CreateInvestorInstruction(new InvestorInstructionIdentifierDto(), new InstrumentIdentifier("EURUSD"), Way.Buy, quantity: 50, price: 100M, goodTill: DateTime.Now.AddMinutes(5));
 
@@ -170,7 +190,7 @@ namespace SimpleOrderRouting.Tests
                                   SellPrice = 100M
                               };
 
-            var sor = new SmartOrderRoutingEntryPointEngine(new[] { marketA, marketB });
+            var sor = CreateSmartOrderRoutingEngine(new[] { marketA, marketB });
 
             var investorInstruction = sor.CreateInvestorInstruction(new InvestorInstructionIdentifierDto(), new InstrumentIdentifier("EURUSD"), Way.Buy, quantity: 125, price: 100M);
 
@@ -202,7 +222,7 @@ namespace SimpleOrderRouting.Tests
                 SellPrice = 100M
             };
 
-            var sor = new SmartOrderRoutingEntryPointEngine(new[] { marketA, marketB });
+            var sor = CreateSmartOrderRoutingEngine(new[] { marketA, marketB });
 
             var investorInstruction = sor.CreateInvestorInstruction(new InvestorInstructionIdentifierDto(), new InstrumentIdentifier("EURUSD"), Way.Buy, quantity: 75, price: 100M);
 

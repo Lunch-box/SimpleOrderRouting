@@ -19,6 +19,8 @@ namespace SimpleOrderRouting.Journey1
     using System.Collections.Generic;
     using System.Linq;
 
+    using SimpleOrderRouting.Interfaces;
+
     /// <summary>
     /// Transforms an <see cref="InvestorInstruction"/> into an <see cref="OrderBasket"/> that 
     /// will allow us to route <see cref="LimitOrder"/> following a weight average strategy on 
@@ -27,15 +29,20 @@ namespace SimpleOrderRouting.Journey1
     public class MarketSweepSolver : IInvestorInstructionSolver
     {
         private const int MaxSupportedFailuresPerMarket = 3;
-        private readonly IEnumerable<MarketInfo> marketInfos;
+        private readonly IEnumerable<IMarket> markets;
+
+        private readonly MarketSnapshotProvider marketSnapshotProvider;
+
+        private readonly ICanReceiveMarketData canReceiveMarketData;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MarketSweepSolver"/> class.
         /// </summary>
-        /// <param name="marketInfos">The market information.</param>
-        public MarketSweepSolver(IEnumerable<MarketInfo> marketInfos)
+        /// <param name="markets">The market information.</param>
+        public MarketSweepSolver(IEnumerable<IMarket> markets, MarketSnapshotProvider marketSnapshotProvider)
         {
-            this.marketInfos = marketInfos;
+            this.markets = markets;
+            this.marketSnapshotProvider = marketSnapshotProvider;
         }
 
         /// <summary>
@@ -82,7 +89,8 @@ namespace SimpleOrderRouting.Journey1
 
         private IEnumerable<MarketInfo> GetValidMarkets(decimal requestedPrice)
         {
-            return this.marketInfos.Where(m => m.OrdersFailureCount < MaxSupportedFailuresPerMarket && requestedPrice >= m.Market.SellPrice);
+            var allMarkets = marketSnapshotProvider.GetSnapshot();
+            return allMarkets.Markets.Where(m => m.OrdersFailureCount < MaxSupportedFailuresPerMarket && requestedPrice >= m.Market.SellPrice);
         }
 
         private int ComputeAvailableQuantityForThisPrice(IEnumerable<MarketInfo> validMarkets)
@@ -96,5 +104,49 @@ namespace SimpleOrderRouting.Journey1
 
             return availableQuantityOnMarkets;
         }
+    }
+
+    public class MarketSnapshotProvider
+    {
+        private Dictionary<IMarket, MarketInfo> _lastMarketUpdates = new Dictionary<IMarket, MarketInfo>();
+
+        public MarketSnapshotProvider(IEnumerable<IMarket> marketsToWatch, ICanReceiveMarketData canReceiveMarketData)
+        {
+            canReceiveMarketData.InstrumentMarketDataUpdated += InstrumentMarketDataUpdated;
+            foreach (var market in marketsToWatch)
+            {
+                _lastMarketUpdates[market] = new MarketInfo(new Market());
+                canReceiveMarketData.Subscribe(market);
+            }
+        }
+
+        private void InstrumentMarketDataUpdated(object sender, MarketDataUpdateDto marketDataUpdateDto)
+        {
+            var marketInfo = _lastMarketUpdates[marketDataUpdateDto.Market];
+            marketInfo.Market.SellPrice = marketDataUpdateDto.Price;
+            marketInfo.Market.SellQuantity = marketDataUpdateDto.Quantity;
+        }
+
+        public MarketSnapshot GetSnapshot()
+        {
+            return new MarketSnapshot(_lastMarketUpdates.Values.ToList());
+        }
+
+        public void MarketFailed(Market market)
+        {
+            // TODO: refactor this so the method accepts IMarket instead
+            _lastMarketUpdates.First(m => m.Value.Market == market).Value.OrdersFailureCount++;
+        }
+    }
+
+    public class MarketSnapshot
+    {
+        public MarketSnapshot(IList<MarketInfo> markets)
+        {
+            this.Markets = markets;
+        }
+
+        public IList<MarketInfo> Markets { get; set; }
+
     }
 }

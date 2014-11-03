@@ -1,5 +1,9 @@
 # SOR Backlog
 
+1. Migrate Market into another project as ExternalMarket
+
+1. To introduce IMarket/Market for indomain use
+
 1. To introduce the concept of (financial) instrument (mandatory to support the concept of *Market data* feeds)
 
 1. To introduce the notion of market data and the MarketData API & Port/Adapter (starting from our acceptance tests)

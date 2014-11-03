@@ -103,49 +103,4 @@ namespace SimpleOrderRouting.Journey1
             return availableQuantityOnMarkets;
         }
     }
-
-    public class MarketSnapshotProvider
-    {
-        private Dictionary<IMarket, MarketInfo> _lastMarketUpdates = new Dictionary<IMarket, MarketInfo>();
-
-        public MarketSnapshotProvider(IEnumerable<IMarket> marketsToWatch, ICanReceiveMarketData canReceiveMarketData)
-        {
-            canReceiveMarketData.InstrumentMarketDataUpdated += InstrumentMarketDataUpdated;
-            foreach (var market in marketsToWatch)
-            {
-                // TODO : Get rid of the hack (casting to concrete class)
-                _lastMarketUpdates[market] = new MarketInfo((Market)market);
-                canReceiveMarketData.Subscribe(market);
-            }
-        }
-
-        private void InstrumentMarketDataUpdated(object sender, MarketDataUpdateDto marketDataUpdateDto)
-        {
-            var marketInfo = _lastMarketUpdates[marketDataUpdateDto.Market];
-            marketInfo.Market.SellPrice = marketDataUpdateDto.Price;
-            marketInfo.Market.SellQuantity = marketDataUpdateDto.Quantity;
-        }
-
-        public MarketSnapshot GetSnapshot()
-        {
-            return new MarketSnapshot(_lastMarketUpdates.Values.ToList());
-        }
-
-        public void MarketFailed(Market market)
-        {
-            // TODO: refactor this so the method accepts IMarket instead
-            _lastMarketUpdates.First(m => m.Value.Market == market).Value.OrdersFailureCount++;
-        }
-    }
-
-    public class MarketSnapshot
-    {
-        public MarketSnapshot(IList<MarketInfo> markets)
-        {
-            this.Markets = markets;
-        }
-
-        public IList<MarketInfo> Markets { get; set; }
-
-    }
 }

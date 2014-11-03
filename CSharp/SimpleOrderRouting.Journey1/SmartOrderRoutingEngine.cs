@@ -72,7 +72,7 @@ namespace SimpleOrderRouting.Journey1
         //// TODO: remove investor instruction as arg here?
         private void RouteImpl(InvestorInstruction investorInstruction, InstructionExecutionContext instructionExecutionContext)
         {
-            var solver = new MarketSweepSolver(this.markets.Keys, this.marketSnapshotProvider);
+            var solver = new MarketSweepSolver(this.marketSnapshotProvider);
 
             var orderBasket = solver.Solve(instructionExecutionContext);
             

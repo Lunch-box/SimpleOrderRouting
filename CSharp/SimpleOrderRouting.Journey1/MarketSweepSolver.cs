@@ -29,7 +29,6 @@ namespace SimpleOrderRouting.Journey1
     public class MarketSweepSolver : IInvestorInstructionSolver
     {
         private const int MaxSupportedFailuresPerMarket = 3;
-        private readonly IEnumerable<IMarket> markets;
 
         private readonly MarketSnapshotProvider marketSnapshotProvider;
 
@@ -39,9 +38,8 @@ namespace SimpleOrderRouting.Journey1
         /// Initializes a new instance of the <see cref="MarketSweepSolver"/> class.
         /// </summary>
         /// <param name="markets">The market information.</param>
-        public MarketSweepSolver(IEnumerable<IMarket> markets, MarketSnapshotProvider marketSnapshotProvider)
+        public MarketSweepSolver(MarketSnapshotProvider marketSnapshotProvider)
         {
-            this.markets = markets;
             this.marketSnapshotProvider = marketSnapshotProvider;
         }
 
@@ -115,7 +113,8 @@ namespace SimpleOrderRouting.Journey1
             canReceiveMarketData.InstrumentMarketDataUpdated += InstrumentMarketDataUpdated;
             foreach (var market in marketsToWatch)
             {
-                _lastMarketUpdates[market] = new MarketInfo(new Market());
+                // TODO : Get rid of the hack (casting to concrete class)
+                _lastMarketUpdates[market] = new MarketInfo((Market)market);
                 canReceiveMarketData.Subscribe(market);
             }
         }

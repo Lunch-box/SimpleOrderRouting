@@ -25,10 +25,8 @@ namespace SimpleOrderRouting.Journey1
     using SimpleOrderRouting.Interfaces;
     using SimpleOrderRouting.Interfaces.SmartOrderRouting;
 
-    public class Market : ITestableMarket
+    public class Market : ITestableMarket, IMarket
     {
-        public IMarket ExternalMarket { get; set; }
-
         public event EventHandler<DealExecutedEventArgs> OrderExecuted;
 
         public event EventHandler<string> OrderFailed;

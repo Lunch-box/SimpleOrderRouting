@@ -45,10 +45,7 @@ namespace SimpleOrderRouting.Tests
 
         private static SmartOrderRoutingEngine CreateSmartOrderRoutingEngine(Market[] markets)
         {
-            foreach (var market in markets)
-            {
-                market.ExternalMarket = new ExternalMarket();
-            }
+            
             var routingEngine = new SmartOrderRoutingEngine(new MarketProvider(markets), null, new MarketDataProvider(markets));
             return routingEngine;
         }

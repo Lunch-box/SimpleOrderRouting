@@ -18,7 +18,8 @@ namespace SimpleOrderRouting.Journey1.TestHelpers
 
         public void Subscribe(IMarket market)
         {
-            var internalMarket = this.marketsInvolved.First(m => m.ExternalMarket == market);
+            var internalMarket = this.marketsInvolved.First(m => m == market);
+            
             var onInstrumentMarketDataUpdated = this.InstrumentMarketDataUpdated;
             if (onInstrumentMarketDataUpdated != null)
             {

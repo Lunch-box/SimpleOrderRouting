@@ -97,15 +97,13 @@ namespace SimpleOrderRouting.Journey1
             var marketA = new Market
                               {
                                   SellQuantity = 150,
-                                  SellPrice = 100M,
-                                  ExternalMarket=new ExternalMarket()
+                                  SellPrice = 100M,     
                               };
 
             var marketB = new Market
                               {
                                   SellQuantity = 55,
                                   SellPrice = 101M,
-                                  ExternalMarket = new ExternalMarket()
                               };
 
             var markets = new[] { marketA, marketB };

@@ -43,15 +43,13 @@ namespace SimpleOrderRouting.Tests
             var marketA = new Market
             {
                                   SellQuantity = 150,
-                                  SellPrice = 100M,
-                                  ExternalMarket = new ExternalMarket()
+                                  SellPrice = 100M
                               };
             
             var marketB = new Market
             {
                                   SellQuantity = 55,
-                                  SellPrice = 101M,
-                                  ExternalMarket = new ExternalMarket()
+                                  SellPrice = 101M
                               };
 
             var marketsInvolved = new[] { marketA, marketB };
@@ -111,10 +109,6 @@ namespace SimpleOrderRouting.Tests
 
         private static SmartOrderRoutingEngine CreateSmartOrderRoutingEngine(Market[] markets)
         {
-            foreach (var market in markets)
-            {
-                market.ExternalMarket = new ExternalMarket();
-            }
             var routingEngine = new SmartOrderRoutingEngine(new MarketProvider(markets), null, new MarketDataProvider(markets));
             return routingEngine;
         }

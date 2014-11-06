@@ -1,3 +1,5 @@
 ﻿namespace SimpleOrderRouting.Journey1
 
-type Market = {SellQuantity : int; SellPrice : decimal; TimeSent : int}
+module Markets =
+
+    type ExternalMarket = {SellQuantity : int; SellPrice : decimal; TimeSent : int}

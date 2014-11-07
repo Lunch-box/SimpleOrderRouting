@@ -53,6 +53,7 @@
     <Compile Include="MarketTests.fs" />
     <Content Include="packages.config" />
     <Content Include="app.config" />
+    <Compile Include="UtilitiesTests.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FsUnit.CustomMatchers">
@@ -78,6 +79,13 @@
       <HintPath>..\packages\xunit.1.9.2\lib\net20\xunit.dll</HintPath>
       <Private>True</Private>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SimpleOrderRouting.Journey1\SimpleOrderRouting.Journey1.fsproj">
+      <Name>SimpleOrderRouting.Journey1</Name>
+      <Project>{63815e01-ad47-4d83-98f5-87160a503d02}</Project>
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,5 +1,5 @@
 ﻿namespace SimpleOrderRouting.Journey1
 
-module Domain = 
+module Markets = 
 
     type ExternalMarket

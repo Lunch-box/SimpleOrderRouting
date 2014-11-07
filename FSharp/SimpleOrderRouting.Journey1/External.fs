@@ -8,6 +8,8 @@ module Markets =
 module MarketAdapters =
 
     open System
+    open Rop
+    open Domain
     
     type WayDto =
         | Buy
@@ -29,4 +31,9 @@ module MarketAdapters =
     
     /// This is the adapter entry point for converting the external InvestorInstructionDto to the internal domain
     let dtoToInvestorInstruction dto =
+        //if dto = null then
+            //Rop.fail "Investor instruction is required"
+        //else
+            
+        //{Way = Buy; Quantity = 0; Price = 0m; AllowPartialExecution = false}
         ()

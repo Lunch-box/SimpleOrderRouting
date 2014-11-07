@@ -8,5 +8,7 @@ module ``Rop tests`` =
 
     [<Fact>]
     let ``Create a Success with no messages``() =
-        
-        true |> should be True
+        let result = succeed 10
+        match result with
+            | Success v -> v |> should equal 10
+            | Failure errors -> errors.Length |> should equal 0

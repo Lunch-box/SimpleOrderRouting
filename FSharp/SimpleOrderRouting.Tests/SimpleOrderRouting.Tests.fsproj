@@ -49,11 +49,11 @@
   </Choose>
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
+    <Compile Include="UtilitiesTests.fs" />
     <Compile Include="SorAcceptanceTests.fs" />
     <Compile Include="MarketTests.fs" />
     <Content Include="packages.config" />
     <Content Include="app.config" />
-    <Compile Include="UtilitiesTests.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FsUnit.CustomMatchers">

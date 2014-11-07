@@ -42,9 +42,10 @@
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Utilities.fs" />
+    <Compile Include="Domain.fs" />
     <Compile Include="External.fs" />
     <Compile Include="ExternalDefinition.fsi" />
-    <Compile Include="Domain.fs" />
     <Compile Include="MarketDataAdapter.fs" />
     <None Include="Script.fsx" />
     <Compile Include="SORoutingEngine.fs" />

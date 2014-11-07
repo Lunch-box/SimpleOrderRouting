@@ -1,4 +1,6 @@
-﻿module Rop
+﻿namespace SimpleOrderRouting.Journey1
+
+module Rop =
 
     // ==============================================
     // This is a utility library for managing Success/Failure results

@@ -27,5 +27,9 @@ open FsUnit.Xunit
 module ``Sor acceptance tests`` =
 
     [<Fact>]
+    let ``External Api visibility tests``() =
+        true |> should be True
+
+    [<Fact>]
     let ``Should execute "Instruction" When there is enough liquidity on one "Market"``() =
         true |> should be True

@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="External.fs" />
+    <Compile Include="ExternalDefinition.fsi" />
     <Compile Include="Domain.fs" />
     <Compile Include="MarketDataAdapter.fs" />
     <None Include="Script.fsx" />

@@ -64,3 +64,21 @@ module ``Rop tests`` =
             | Success _ -> failBranch()
             | Failure errors -> errors |> List.rev
                                        |> List.iteri (fun i e -> e |> should equal expectedErrors.[i])
+
+    [<Fact>]
+    let ``Litf a function and applies it if the result is on the Success branch``() =
+        let intToString i = i.ToString()
+        let value = succeed 10
+        let result = liftR intToString value
+        match result with
+            | Success r -> r |> should equal "10"
+            | Failure _ -> failBranch()
+
+    [<Fact>]
+    let ``Litf a function and not applies it if the result is on the Failure branch``() =
+        let intToString i = i.ToString()
+        let value = fail "Failed value"
+        let result = liftR intToString value
+        match result with
+            | Success r -> failBranch()
+            | Failure errors -> errors.[0] |> should equal "Failed value"

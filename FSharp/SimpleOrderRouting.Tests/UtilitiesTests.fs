@@ -112,3 +112,59 @@ module ``Rop tests`` =
         match result with
             | Success _ -> failBranch()
             | Failure errors -> errors.[0] |> should equal "Second value failed"
+
+    [<Fact>]
+    let ``Litf three functions and applies it if the results are on the Success branch``() =
+        let intToString i i' i'' = (i * i' + i'').ToString()
+        let value = succeed 10
+        let value' = succeed 5
+        let value'' = succeed 2
+        let result = lift3R intToString value value' value''
+        match result with
+            | Success r -> r |> should equal "52"
+            | Failure _ -> failBranch()
+
+    [<Fact>]
+    let ``Litf three functions and not applies it if one the results are on the Failure branch``() =
+        let intToString i i' i'' = (i * i' + i'').ToString()
+        let value = fail "First value failure"
+        let value' = succeed 5
+        let value'' = succeed 2
+        let result = lift3R intToString value value' value''
+        match result with
+            | Success _ -> failBranch()
+            | Failure errors-> errors.[0] |> should equal "First value failure"
+
+    [<Fact>]
+    let ``Litf three functions and not applies it if one the results are on the Failure branch'``() =
+        let intToString i i' i'' = (i * i' + i'').ToString()
+        let value = succeed 10
+        let value' = fail "Second value failure"
+        let value'' = succeed 2
+        let result = lift3R intToString value value' value''
+        match result with
+            | Success _ -> failBranch()
+            | Failure errors-> errors.[0] |> should equal "Second value failure"
+
+    [<Fact>]
+    let ``Litf three functions and not applies it if one the results are on the Failure branch''``() =
+        let intToString i i' i'' = (i * i' + i'').ToString()
+        let value = succeed 10
+        let value' = succeed 5
+        let value'' = fail "Third value failure"
+        let result = lift3R intToString value value' value''
+        match result with
+            | Success _ -> failBranch()
+            | Failure errors-> errors.[0] |> should equal "Third value failure"
+
+    [<Fact>]
+    let ``Litf three functions and not applies it if one the results are on the Failure branch'''``() =
+        let expectedErrors = ["First value failure"; "Third value failure"]
+        let intToString i i' i'' = (i * i' + i'').ToString()
+        let value = fail expectedErrors.[0]
+        let value' = succeed 5
+        let value'' = fail expectedErrors.[1]
+        let result = lift3R intToString value value' value''
+        match result with
+            | Success _ -> failBranch()
+            | Failure errors-> errors |> List.iteri (fun i e -> e |> should equal expectedErrors.[i])

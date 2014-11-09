@@ -82,3 +82,33 @@ module ``Rop tests`` =
         match result with
             | Success r -> failBranch()
             | Failure errors -> errors.[0] |> should equal "Failed value"
+
+    [<Fact>]
+    let ``Litf two functions and applies it if the results are on the Success branch``() =
+        let intToString i i' = (i * i').ToString()
+        let value = succeed 10
+        let value' = succeed 5
+        let result = lift2R intToString value value'
+        match result with
+            | Success r -> r |> should equal "50"
+            | Failure _ -> failBranch()
+
+    [<Fact>]
+    let ``Litf two functions and not applies it if one of the results are on the Failure branch``() =
+        let intToString i i' = (i * i').ToString()
+        let value = fail "First value failed"
+        let value' = succeed 10
+        let result = lift2R intToString value value'
+        match result with
+            | Success _ -> failBranch()
+            | Failure errors -> errors.[0] |> should equal "First value failed"
+
+    [<Fact>]
+    let ``Litf two functions and not applies it if one of the results are on the Failure branch'``() =
+        let intToString i i' = (i * i').ToString()
+        let value = succeed 10
+        let value' = fail "Second value failed"
+        let result = lift2R intToString value value'
+        match result with
+            | Success _ -> failBranch()
+            | Failure errors -> errors.[0] |> should equal "Second value failed"

@@ -22,7 +22,6 @@ namespace SimpleOrderRouting.Journey1
 {
     using System;
 
-    using SimpleOrderRouting.Interfaces;
     using SimpleOrderRouting.Interfaces.SmartOrderRouting;
 
     /// <summary>
@@ -31,7 +30,7 @@ namespace SimpleOrderRouting.Journey1
     public class InvestorInstruction : InvestorInstructionDto
     {
         public InvestorInstruction(InvestorInstructionIdentifierDto identifierDto, Way way, int quantity, decimal price, bool allowPartialExecution, DateTime? goodTill)
-            : base(way, quantity, price, allowPartialExecution, goodTill)
+            : base(identifierDto, way, quantity, price, allowPartialExecution, goodTill)
         {
             this.IdentifierDto = identifierDto;
         }

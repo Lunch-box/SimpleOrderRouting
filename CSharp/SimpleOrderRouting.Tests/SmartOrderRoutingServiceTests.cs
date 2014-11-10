@@ -36,7 +36,7 @@ namespace SimpleOrderRouting.Tests
             var updates = new List<InvestorInstructionUpdatedDto>();
 
             sorRawInprocPort.InstructionUpdated += (s, e) => updates.Add(e);
-            sorRawInprocPort.Send(uniqueIdentifier, new InvestorInstructionDto(Way.Buy, quantity:125, price: 100M, allowPartialExecution:true, goodTill:DateTime.MaxValue));
+            sorRawInprocPort.Send(new InvestorInstructionDto(uniqueIdentifier, Way.Buy, quantity:125, price: 100M, allowPartialExecution:true, goodTill:DateTime.MaxValue));
 
             // NFluent: CountIs
             Check.That(updates).HasSize(1);

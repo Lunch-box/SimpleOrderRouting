@@ -4,14 +4,17 @@ namespace SimpleOrderRouting.Interfaces.SmartOrderRouting
 
     public class InvestorInstructionDto
     {
-        public InvestorInstructionDto(Way way, int quantity, decimal price, bool allowPartialExecution, DateTime? goodTill)
+        public InvestorInstructionDto(InvestorInstructionIdentifierDto uniqueIdentifier, Way way, int quantity, decimal price, bool allowPartialExecution, DateTime? goodTill)
         {
+            this.UniqueIdentifier = uniqueIdentifier;
             this.Way = way;
             this.Quantity = quantity;
             this.Price = price;
             this.AllowPartialExecution = allowPartialExecution;
             this.GoodTill = goodTill;
         }
+
+        public InvestorInstructionIdentifierDto UniqueIdentifier { get; private set; }
 
         /// <summary>
         /// Gets the way to be used for the Instruction (Buy/Sell).

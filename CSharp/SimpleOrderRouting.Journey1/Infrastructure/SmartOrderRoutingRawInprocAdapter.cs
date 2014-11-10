@@ -24,9 +24,9 @@
 
         public event EventHandler<InvestorInstructionUpdatedDto> InstructionUpdated;
 
-        public void Send(InvestorInstructionIdentifierDto instructionIdentifierDto, InvestorInstructionDto instruction)
+        public void Send(InvestorInstructionDto instruction)
         {
-            var internalInstruction = this.smartOrderRoutingEntryPoint.CreateInvestorInstruction(instructionIdentifierDto, new InstrumentIdentifier(instruction.InstrumentIdentifier), instruction.Way, instruction.Quantity, instruction.Price, instruction.AllowPartialExecution, instruction.GoodTill);
+            var internalInstruction = this.smartOrderRoutingEntryPoint.CreateInvestorInstruction(instruction.UniqueIdentifier, new InstrumentIdentifier(instruction.InstrumentIdentifier), instruction.Way, instruction.Quantity, instruction.Price, instruction.AllowPartialExecution, instruction.GoodTill);
             internalInstruction.Executed += this.internalInstruction_Executed;
             internalInstruction.Failed += this.internalInstruction_Failed;
             this.smartOrderRoutingEntryPoint.Route(internalInstruction);

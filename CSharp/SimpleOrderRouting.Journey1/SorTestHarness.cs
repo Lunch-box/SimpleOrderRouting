@@ -41,6 +41,7 @@ namespace SimpleOrderRouting.Journey1
         {
             // initialize the context
             var sor = BuildSor();
+            var identifier = sor.RequestUniqueIdentifier();
 
             // instantiate the service
             var service = new SmartOrderRoutingRawInprocAdapter(sor);
@@ -50,13 +51,13 @@ namespace SimpleOrderRouting.Journey1
             this.instructionIdentifier = service.RequestUniqueIdentifier();
 
             // build demo order
-            this.investorInstructionDto = new InvestorInstructionDto(Way.Buy, 10, 100M, true, null);
+            this.investorInstructionDto = new InvestorInstructionDto(identifier, Way.Buy, 10, 100M, true, null);
 
             var stopWatch = new Stopwatch();
 
             // sends the instruction
             stopWatch.Start();
-            service.Send(this.instructionIdentifier, investorInstructionDto);
+            service.Send(investorInstructionDto);
 
             // wait for the exit condition
             lock (this.synchro)

@@ -48,12 +48,12 @@
     <Compile Include="SmartOrderRouting\InvestorInstructionIdentifierDto.cs" />
     <Compile Include="SmartOrderRouting\InvestorInstructionStatus.cs" />
     <Compile Include="SmartOrderRouting\InvestorInstructionUpdatedDto.cs" />
-    <Compile Include="SmartOrderRouting\Investor\ISmartOrderRoutingRawInprocPort.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SmartOrderRouting\Way.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Feed\" />
+    <Folder Include="SmartOrderRouting\Investor\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

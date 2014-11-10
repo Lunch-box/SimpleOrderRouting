@@ -43,7 +43,7 @@ namespace SimpleOrderRouting.Journey1
             var sor = BuildSor();
 
             // instantiate the service
-            var service = new SmartOrderRoutingRawInprocPort(sor);
+            var service = new SmartOrderRoutingRawInprocAdapter(sor);
 
             // initialize our engine
             service.InstructionUpdated += ServiceOnInstructionUpdated;

@@ -5,7 +5,6 @@ namespace SimpleOrderRouting.Tests
 {
     using NFluent;
     using SimpleOrderRouting.Interfaces.SmartOrderRouting;
-    using SimpleOrderRouting.Interfaces.SmartOrderRouting.Investor;
     using SimpleOrderRouting.Journey1;
     using SimpleOrderRouting.Journey1.Infrastructure;
     using SimpleOrderRouting.Journey1.TestHelpers;
@@ -31,7 +30,7 @@ namespace SimpleOrderRouting.Tests
 
             var markets = new[] { marketA, marketB };
             var routingEngine = CreateSmartOrderRoutingEngine(markets);
-            ISmartOrderRoutingRawInprocPort sorRawInprocPort = new SmartOrderRoutingRawInprocPort(routingEngine);
+            var sorRawInprocPort = new SmartOrderRoutingRawInprocAdapter(routingEngine);
             
             var uniqueIdentifier = sorRawInprocPort.RequestUniqueIdentifier();
             var updates = new List<InvestorInstructionUpdatedDto>();

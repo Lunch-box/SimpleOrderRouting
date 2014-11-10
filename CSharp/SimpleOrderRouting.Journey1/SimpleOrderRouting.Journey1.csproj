@@ -40,7 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DealExecutedEventArgs.cs" />
-    <Compile Include="Infrastructure\SmartOrderRoutingRawInprocPort.cs" />
+    <Compile Include="Infrastructure\SmartOrderRoutingRawInprocAdapter.cs" />
     <Compile Include="InstructionExecutionContext.cs" />
     <Compile Include="IInvestorInstructionSolver.cs" />
     <Compile Include="IOrder.cs" />

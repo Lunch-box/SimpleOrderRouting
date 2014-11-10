@@ -4,16 +4,15 @@
 
     using SimpleOrderRouting.Interfaces.Order;
     using SimpleOrderRouting.Interfaces.SmartOrderRouting;
-    using SimpleOrderRouting.Interfaces.SmartOrderRouting.Investor;
 
     /// <summary>
     /// External API for the Smart Order Routing service. Aggregates all instruction events.
     /// </summary>
-    public class SmartOrderRoutingRawInprocPort : ISmartOrderRoutingRawInprocPort
+    public class SmartOrderRoutingRawInprocAdapter
     {
         private readonly ISmartOrderRoutingEntryPoint smartOrderRoutingEntryPoint;
 
-        public SmartOrderRoutingRawInprocPort(ISmartOrderRoutingEntryPoint smartOrderRoutingEntryPoint)
+        public SmartOrderRoutingRawInprocAdapter(ISmartOrderRoutingEntryPoint smartOrderRoutingEntryPoint)
         {
             this.smartOrderRoutingEntryPoint = smartOrderRoutingEntryPoint;
         }

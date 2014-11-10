@@ -28,7 +28,7 @@ namespace SimpleOrderRouting.Tests
 
     public class HarnessTests
     {
-        [Fact]
+        //[Fact]
         public void ShouldReturnALatency()
         {
             var runner = new SorTestHarness();

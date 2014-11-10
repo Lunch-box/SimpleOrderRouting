@@ -43,6 +43,8 @@ namespace SimpleOrderRouting.Journey1
 
         private Dictionary<IMarket, IMarket> markets;
 
+        private IDictionary<InvestorInstructionIdentifierDto, Action<OrderExecutedEventArgs>> executionCallbacks = new Dictionary<InvestorInstructionIdentifierDto, Action<OrderExecutedEventArgs>>();
+
         public SmartOrderRoutingEngine(IProvideMarkets provideMarkets, ICanRouteOrders canRouteOrders, ICanReceiveMarketData canReceiveMarketData)
         {
             this.provideMarkets = provideMarkets;
@@ -58,12 +60,15 @@ namespace SimpleOrderRouting.Journey1
             return new InvestorInstructionIdentifierDto();
         }
 
-        public void Route(InvestorInstruction investorInstruction)
+        public void Route(InvestorInstructionDto investorInstructionDto)
         {
             // 1. Digest Investment instructions
             // 2. Prepare order book (solver)
             // 3. Send and monitor
             // 4. Feedback investor
+
+            var investorInstruction = this.CreateInvestorInstruction(investorInstructionDto.UniqueIdentifier, null, investorInstructionDto.Way, investorInstructionDto.Quantity, investorInstructionDto.Price, investorInstructionDto.AllowPartialExecution, investorInstructionDto.GoodTill);
+
             var executionState = new InstructionExecutionContext(investorInstruction);
 
             this.RouteImpl(investorInstruction, executionState);
@@ -79,6 +84,8 @@ namespace SimpleOrderRouting.Journey1
             EventHandler<DealExecutedEventArgs> handler = (executedOrder, args) => instructionExecutionContext.Executed(args.Quantity);
             EventHandler<OrderFailedEventArgs> failHandler = (s, failure) => this.SendOrderFailed(investorInstruction, failure, instructionExecutionContext);
 
+            investorInstruction.Executed += investorInstruction_Executed;
+
             orderBasket.OrderExecuted += handler;
             orderBasket.OrderFailed += failHandler;
 
@@ -86,6 +93,11 @@ namespace SimpleOrderRouting.Journey1
 
             orderBasket.OrderExecuted -= handler;
             orderBasket.OrderFailed -= failHandler;
+        }
+
+        void investorInstruction_Executed(object sender, OrderExecutedEventArgs e)
+        {
+            //TODO: 
         }
 
         private void SendOrderFailed(InvestorInstruction investorInstruction, OrderFailedEventArgs reason, InstructionExecutionContext instructionExecutionContext)
@@ -105,9 +117,16 @@ namespace SimpleOrderRouting.Journey1
             }
         }
 
-        public InvestorInstruction CreateInvestorInstruction(InvestorInstructionIdentifierDto instructionIdentifierDto, InstrumentIdentifier instrumentIdentifier, Way way, int quantity, decimal price, bool allowPartialExecution = false, DateTime? goodTill = null)
+        private InvestorInstruction CreateInvestorInstruction(InvestorInstructionIdentifierDto instructionIdentifierDto, InstrumentIdentifier instrumentIdentifier, Way way, int quantity, decimal price, bool allowPartialExecution = false, DateTime? goodTill = null)
         {
             return new InvestorInstruction(instructionIdentifierDto, way, quantity, price, allowPartialExecution, goodTill);
+        }
+
+        public void Subscribe(InvestorInstructionIdentifierDto investorInstructionIdentifierDto, Action<OrderExecutedEventArgs> executedCallback, Action<string> failureCallback)
+        {
+            // TODO: thread-safe it
+            this.executionCallbacks[investorInstructionIdentifierDto] = executedCallback;
+            // TODO: regirst failure
         }
     }
 }

@@ -1,5 +1,24 @@
 # SOR Backlog
 
+Reminder: 
+
+Refactoring intéressant mais qui montre qu'on a un peu du code spaghetti avec nos events et nos abstractions
+
+On voulait encapsuler l'instruction de l'investisseur dans notre domain -> ça nous aurait fait bouger les événements de celle-ci sur le SOR unique -> cela aurait forcé tout le monde à tout recevoir tout le temps et filter (bof) -> On est parti sur une API dans laquelle on enregistre nos call backs
+
+Pour l'instant (baby steps), on a introduit une méthode Subscribe, mais ce sera probablement à faire au niveau de la méthode Route(id, success, failure)
+
+see. Railway programming (http://fsharpforfunandprofit.com/posts/recipe-part2/)
+
+Question pour les experts du domain: 
++ Should all investors be aware of the other investors instruction notifications?
+  - if yes: should we provide it by default or as an option?
+
+Note: on a fait disparaitre le concept d'instrument au passage (au lieu de le laisser null) -> dommage
+
+- - -
+
+
 1. Migrate Market into another project as ExternalMarket
 
 1. To introduce IMarket/Market for indomain use
@@ -13,6 +32,7 @@
 1. To create our acceptance test harness (i.e. a console application generating a report after each runs session)
 
 
+- - -
 
 ## Remarks
 + Null object pattern instead of nulls

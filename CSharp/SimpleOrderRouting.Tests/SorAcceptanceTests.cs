@@ -59,13 +59,14 @@ namespace SimpleOrderRouting.Tests
             IProvideMarkets provideMarkets = new MarketProvider(marketsInvolved);
             var sor = new SmartOrderRoutingEngine(provideMarkets, canRouteOrders, canReceiveMarketData);
 
-            var investorInstruction = sor.CreateInvestorInstruction(new InvestorInstructionIdentifierDto(), new InstrumentIdentifier("EURUSD"), Way.Buy, quantity: 125, price: 100M);
+            var investorInstructionDto = new InvestorInstructionDto(new InvestorInstructionIdentifierDto(), Way.Buy, quantity: 125, price: 100M);
 
             OrderExecutedEventArgs orderExecutedEventArgs = null;
-            investorInstruction.Executed += (sender, args) => { orderExecutedEventArgs = args; };
+            sor.Subscribe(investorInstructionDto.UniqueIdentifier, (args) => { orderExecutedEventArgs = args; }, null);
+                //investorInstruction.Executed += (sender, args) => { orderExecutedEventArgs = args; };
             
             // orderRequest.Route(); ?
-            sor.Route(investorInstruction);
+            sor.Route(investorInstructionDto);
 
             // TODO :introduce autoreset event instead
             Check.That(orderExecutedEventArgs).HasFieldsWithSameValues(new { Way = Way.Buy, Quantity = 125, Price = 100M });
@@ -90,15 +91,14 @@ namespace SimpleOrderRouting.Tests
 
             var sor = CreateSmartOrderRoutingEngine(new[] { marketA, marketB });
 
-            var investorInstruction = sor.CreateInvestorInstruction(new InvestorInstructionIdentifierDto(), new InstrumentIdentifier("EURUSD"), Way.Buy, quantity: 125, price: 100M, allowPartialExecution: false);
+            var investorInstruction = new InvestorInstructionDto(new InvestorInstructionIdentifierDto(), Way.Buy, quantity: 125, price: 100M, allowPartialExecution: false);
 
             // Subscribes to the instruction's events
             OrderExecutedEventArgs orderExecutedEventArgs = null;
-            investorInstruction.Executed += (sender, args) => { orderExecutedEventArgs = args; };
-
             string failureReason = null;
-            investorInstruction.Failed += (sender, args) => { failureReason = args; };
-            
+
+            sor.Subscribe(new InvestorInstructionIdentifierDto(), (args) => { orderExecutedEventArgs = args; }, (args) => { failureReason = args; });
+
             // orderRequest.Route(); ?
             sor.Route(investorInstruction);
 
@@ -125,7 +125,7 @@ namespace SimpleOrderRouting.Tests
                              };
 
             var sor = CreateSmartOrderRoutingEngine(new[] { rejectingMarket });
-            var investorInstruction = sor.CreateInvestorInstruction(new InvestorInstructionIdentifierDto(), new InstrumentIdentifier("EURUSD"), Way.Buy, quantity: 50, price: 100M, goodTill: DateTime.Now.AddMinutes(5));
+            var investorInstruction = new InvestorInstructionDto(new InvestorInstructionIdentifierDto(), Way.Buy, quantity: 50, price: 100M, goodTill: DateTime.Now.AddMinutes(5));
             sor.Route(investorInstruction);
 
             Check.That(rejectingMarket.TimesSent).IsEqualTo(3);
@@ -151,14 +151,13 @@ namespace SimpleOrderRouting.Tests
 
             var sor = CreateSmartOrderRoutingEngine(new[] { marketA, rejectMarket });
 
-            var investorInstruction = sor.CreateInvestorInstruction(new InvestorInstructionIdentifierDto(), new InstrumentIdentifier("EURUSD"), Way.Buy, quantity: 50, price: 100M, goodTill: DateTime.Now.AddMinutes(5));
+            var investorInstruction = new InvestorInstructionDto(new InvestorInstructionIdentifierDto(), Way.Buy, quantity: 50, price: 100M, goodTill: DateTime.Now.AddMinutes(5));
 
             // Subscribes to the instruction's events
             OrderExecutedEventArgs orderExecutedEventArgs = null;
-            investorInstruction.Executed += (sender, args) => { orderExecutedEventArgs = args; };
-
             string failureReason = null;
-            investorInstruction.Failed += (sender, args) => { failureReason = args; };
+            
+            sor.Subscribe(investorInstruction.UniqueIdentifier, (args) => { orderExecutedEventArgs = args; }, (args) => { failureReason = args; });
 
             // orderRequest.Route(); ?
             sor.Route(investorInstruction);
@@ -186,10 +185,11 @@ namespace SimpleOrderRouting.Tests
 
             var sor = CreateSmartOrderRoutingEngine(new[] { marketA, marketB });
 
-            var investorInstruction = sor.CreateInvestorInstruction(new InvestorInstructionIdentifierDto(), new InstrumentIdentifier("EURUSD"), Way.Buy, quantity: 125, price: 100M);
+            var investorInstruction = new InvestorInstructionDto(new InvestorInstructionIdentifierDto(), /*new InstrumentIdentifier("EURUSD"),*/ Way.Buy, quantity: 125, price: 100M);
 
             OrderExecutedEventArgs orderExecutedEventArgs = null;
-            investorInstruction.Executed += (sender, args) => { orderExecutedEventArgs = args; };
+
+            sor.Subscribe(investorInstruction.UniqueIdentifier, (args) => { orderExecutedEventArgs = args; }, null);
 
             // orderRequest.Route(); ?
             sor.Route(investorInstruction);
@@ -218,12 +218,12 @@ namespace SimpleOrderRouting.Tests
 
             var sor = CreateSmartOrderRoutingEngine(new[] { marketA, marketB });
 
-            var investorInstruction = sor.CreateInvestorInstruction(new InvestorInstructionIdentifierDto(), new InstrumentIdentifier("EURUSD"), Way.Buy, quantity: 75, price: 100M);
+            var investorInstruction = new InvestorInstructionDto(new InvestorInstructionIdentifierDto(), Way.Buy, quantity: 75, price: 100M);
 
             OrderExecutedEventArgs orderExecutedEventArgs = null;
-            investorInstruction.Executed += (sender, args) => { orderExecutedEventArgs = args; };
 
-            // orderRequest.Route(); ?
+            sor.Subscribe(investorInstruction.UniqueIdentifier, (args) => { orderExecutedEventArgs = args; }, null);
+
             sor.Route(investorInstruction);
 
             Check.That(orderExecutedEventArgs).HasFieldsWithSameValues(new { Way = Way.Buy, Quantity = 75, Price = 100M });

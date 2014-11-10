@@ -2,18 +2,17 @@ namespace SimpleOrderRouting.Journey1
 {
     using System;
 
-    using SimpleOrderRouting.Interfaces.Order;
     using SimpleOrderRouting.Interfaces.SmartOrderRouting;
 
     /// <summary>
-    /// 
+    /// Provide an integration point for all investor side use cases.
     /// </summary>
     public interface ISmartOrderRoutingEntryPoint
     {
         InvestorInstructionIdentifierDto RequestUniqueIdentifier();
 
-        void Route(InvestorInstruction investorInstruction);
+        void Subscribe(InvestorInstructionIdentifierDto investorInstructionIdentifierDto, Action<OrderExecutedEventArgs> executedCallback, Action<string> failureCallback);
 
-        InvestorInstruction CreateInvestorInstruction(InvestorInstructionIdentifierDto instructionIdentifierDto, InstrumentIdentifier instrumentIdentifier, Way way, int quantity, decimal price, bool allowPartialExecution = false, DateTime? goodTill = null);
+        void Route(InvestorInstructionDto investorInstructionDto);
     }
 }

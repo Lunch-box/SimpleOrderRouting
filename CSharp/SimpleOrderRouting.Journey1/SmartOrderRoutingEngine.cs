@@ -44,6 +44,7 @@ namespace SimpleOrderRouting.Journey1
         private Dictionary<IMarket, IMarket> markets;
 
         private IDictionary<InvestorInstructionIdentifierDto, Action<OrderExecutedEventArgs>> executionCallbacks = new Dictionary<InvestorInstructionIdentifierDto, Action<OrderExecutedEventArgs>>();
+        private IDictionary<InvestorInstructionIdentifierDto, Action<string>> failureCallbacks = new Dictionary<InvestorInstructionIdentifierDto, Action<string>>();
 
         public SmartOrderRoutingEngine(IProvideMarkets provideMarkets, ICanRouteOrders canRouteOrders, ICanReceiveMarketData canReceiveMarketData)
         {
@@ -84,7 +85,7 @@ namespace SimpleOrderRouting.Journey1
             EventHandler<DealExecutedEventArgs> handler = (executedOrder, args) => instructionExecutionContext.Executed(args.Quantity);
             EventHandler<OrderFailedEventArgs> failHandler = (s, failure) => this.SendOrderFailed(investorInstruction, failure, instructionExecutionContext);
 
-            investorInstruction.Executed += investorInstruction_Executed;
+            investorInstruction.Executed += (sender, e) => this.investorInstruction_Executed(sender, e);
 
             orderBasket.OrderExecuted += handler;
             orderBasket.OrderFailed += failHandler;
@@ -97,7 +98,12 @@ namespace SimpleOrderRouting.Journey1
 
         void investorInstruction_Executed(object sender, OrderExecutedEventArgs e)
         {
-            //TODO: 
+            var investorInstruction = sender as InvestorInstruction;
+            Action<OrderExecutedEventArgs> successCallback;
+            if (this.executionCallbacks.TryGetValue(investorInstruction.IdentifierDto, out successCallback))
+            {
+                successCallback(e);
+            }
         }
 
         private void SendOrderFailed(InvestorInstruction investorInstruction, OrderFailedEventArgs reason, InstructionExecutionContext instructionExecutionContext)
@@ -113,7 +119,11 @@ namespace SimpleOrderRouting.Journey1
             }
             else
             {
-                investorInstruction.NotifyOrderFailure(reason.Reason);
+                Action<string> failureCallback;
+                if (this.failureCallbacks.TryGetValue(investorInstruction.IdentifierDto, out failureCallback))
+                {
+                    failureCallback(reason.Reason);
+                }
             }
         }
 
@@ -126,6 +136,7 @@ namespace SimpleOrderRouting.Journey1
         {
             // TODO: thread-safe it
             this.executionCallbacks[investorInstructionIdentifierDto] = executedCallback;
+            this.failureCallbacks[investorInstructionIdentifierDto] = failureCallback;
             // TODO: regirst failure
         }
     }

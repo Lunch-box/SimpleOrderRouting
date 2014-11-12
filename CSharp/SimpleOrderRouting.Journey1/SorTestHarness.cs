@@ -44,11 +44,11 @@ namespace SimpleOrderRouting.Journey1
             var identifier = sor.RequestUniqueIdentifier();
 
             // instantiate the service
-            var service = new SmartOrderRoutingRawInprocAdapter(sor);
+            var adapter = new SmartOrderRoutingRawInprocAdapter(sor);
 
             // initialize our engine
-            service.InstructionUpdated += ServiceOnInstructionUpdated;
-            this.instructionIdentifier = service.RequestUniqueIdentifier();
+            adapter.InstructionUpdated += ServiceOnInstructionUpdated;
+            this.instructionIdentifier = adapter.RequestUniqueIdentifier();
 
             // build demo order
             this.investorInstructionDto = new InvestorInstructionDto(identifier, Way.Buy, 10, 100M, true, null);
@@ -57,7 +57,11 @@ namespace SimpleOrderRouting.Journey1
 
             // sends the instruction
             stopWatch.Start();
-            service.Send(investorInstructionDto);
+            // Subscribes to the instruction's events
+            OrderExecutedEventArgs orderExecutedEventArgs = null;
+            string failureReason = null;
+            sor.Subscribe(investorInstructionDto.UniqueIdentifier, (args) => { orderExecutedEventArgs = args; }, (args) => { failureReason = args; });
+            sor.Route(investorInstructionDto);
 
             // wait for the exit condition
             lock (this.synchro)

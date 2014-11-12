@@ -97,7 +97,7 @@ namespace SimpleOrderRouting.Tests
             OrderExecutedEventArgs orderExecutedEventArgs = null;
             string failureReason = null;
 
-            sor.Subscribe(new InvestorInstructionIdentifierDto(), (args) => { orderExecutedEventArgs = args; }, (args) => { failureReason = args; });
+            sor.Subscribe(investorInstruction.UniqueIdentifier, (args) => { orderExecutedEventArgs = args; }, (args) => { failureReason = args; });
 
             // orderRequest.Route(); ?
             sor.Route(investorInstruction);

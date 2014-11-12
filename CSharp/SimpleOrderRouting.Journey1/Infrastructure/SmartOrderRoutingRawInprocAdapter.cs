@@ -24,17 +24,6 @@
 
         public event EventHandler<InvestorInstructionUpdatedDto> InstructionUpdated;
 
-        public void Send(InvestorInstructionDto instruction)
-        {
-            var internalInstruction = new InvestorInstructionDto(instruction.UniqueIdentifier, instruction.Way, instruction.Quantity, instruction.Price, instruction.AllowPartialExecution, instruction.GoodTill);
-
-            smartOrderRoutingEntryPoint.Subscribe(new InvestorInstructionIdentifierDto(), this.internalInstruction_Executed, this.internalInstruction_Failed);
-            
-            this.smartOrderRoutingEntryPoint.Route(internalInstruction);
-
-            // TODO: unsubscribe
-        }
-
         private void internalInstruction_Failed(string e)
         {
             var onInstructionUpdated = this.InstructionUpdated;

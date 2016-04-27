@@ -23,11 +23,11 @@ namespace SimpleOrderRouting.Tests
     using System;
 
     using NFluent;
-    using Journey1;
-    using SimpleOrderRouting.Interfaces;
-    using SimpleOrderRouting.Interfaces.Order;
-    using SimpleOrderRouting.Interfaces.SmartOrderRouting;
-    using SimpleOrderRouting.Journey1.TestHelpers;
+    using SimpleOrderRouting.Infra;
+
+    using SimpleOrderRouting.Domain;
+    using SimpleOrderRouting.Domain.SmartOrderRouting;
+    using SimpleOrderRouting.Infra.TestHelpers;
 
     using Xunit;
 

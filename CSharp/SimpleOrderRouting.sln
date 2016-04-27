@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleOrderRouting.Journey1", "SimpleOrderRouting.Journey1\SimpleOrderRouting.Journey1.csproj", "{00DD3731-E815-4770-BE17-4F17BFEC4171}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleOrderRouting.Infra", "SimpleOrderRouting.Infra\SimpleOrderRouting.Infra.csproj", "{00DD3731-E815-4770-BE17-4F17BFEC4171}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AE7BEF9F-3190-4A0C-AF57-F9B3E844FC01}"
 	ProjectSection(SolutionItems) = preProject
@@ -21,7 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{F7A88D
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleOrderRouting.Interfaces", "SimpleOrderRouting.Interfaces\SimpleOrderRouting.Interfaces.csproj", "{4F66C7D2-8CBD-4280-9A2D-6555E276C6A7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleOrderRouting.Domain", "SimpleOrderRouting.Domain\SimpleOrderRouting.Domain.csproj", "{4F66C7D2-8CBD-4280-9A2D-6555E276C6A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="HarnessTests.cs" company="LunchBox corp">
+// <copyright file="MarketOrder.cs" company="LunchBox corp">
 //     Copyright 2014 The Lunch-Box mob: 
 //           Ozgur DEVELIOGLU (@Zgurrr)
 //           Cyrille  DUPUYDAUBY (@Cyrdup)
@@ -18,24 +18,58 @@
 //     limitations under the License.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-namespace SimpleOrderRouting.Tests
+namespace SimpleOrderRouting.Infra
 {
-    using NFluent;
+    using System;
 
-    using SimpleOrderRouting.Infra;
+    using SimpleOrderRouting.Domain.SmartOrderRouting;
 
-    using Xunit;
-
-    public class HarnessTests
+    public class MarketOrder : IOrder
     {
-        [Fact]
-        public void ShouldReturnALatency()
-        {
-            var runner = new SorTestHarness();
-            runner.Run();
+        private readonly Way buy;
 
-            Check.That<double>(runner.AverageLatency).Not.IsNegative();
+        private readonly int quantity;
+
+        public MarketOrder(Market market, Way buy, int quantity)
+        {
+            this.Market = market;
+            this.buy = buy;
+            this.quantity = quantity;
         }
-         
+
+        public event EventHandler<DealExecutedEventArgs> OrderExecuted;
+
+        public event EventHandler<OrderFailedEventArgs> OrderFailed;
+
+        public Market Market { get; private set; }
+
+        public Way Way
+        {
+            get
+            {
+                return this.buy;
+            }
+        }
+
+        public int Quantity
+        {
+            get
+            {
+                return this.quantity;
+            }
+        }
+
+        public bool AllowPartialExecution
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public void Send()
+        {
+            this.Market.Send(this);
+        }
     }
 }

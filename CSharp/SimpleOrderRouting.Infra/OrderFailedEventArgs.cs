@@ -1,5 +1,5 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="HarnessTests.cs" company="LunchBox corp">
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="OrderFailedEventArgs.cs" company="LunchBox corp">
 //     Copyright 2014 The Lunch-Box mob: 
 //           Ozgur DEVELIOGLU (@Zgurrr)
 //           Cyrille  DUPUYDAUBY (@Cyrdup)
@@ -18,24 +18,18 @@
 //     limitations under the License.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-namespace SimpleOrderRouting.Tests
+namespace SimpleOrderRouting.Infra
 {
-    using NFluent;
-
-    using SimpleOrderRouting.Infra;
-
-    using Xunit;
-
-    public class HarnessTests
+    public class OrderFailedEventArgs
     {
-        [Fact]
-        public void ShouldReturnALatency()
+        public OrderFailedEventArgs(Market market, string reason)
         {
-            var runner = new SorTestHarness();
-            runner.Run();
-
-            Check.That<double>(runner.AverageLatency).Not.IsNegative();
+            this.Reason = reason;
+            this.Market = market;
         }
-         
+
+        public Market Market { get; private set; }
+
+        public string Reason { get; private set; }
     }
 }

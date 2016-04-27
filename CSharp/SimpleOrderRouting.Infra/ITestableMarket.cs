@@ -1,5 +1,5 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="HarnessTests.cs" company="LunchBox corp">
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ITestableMarket.cs" company="LunchBox corp">
 //     Copyright 2014 The Lunch-Box mob: 
 //           Ozgur DEVELIOGLU (@Zgurrr)
 //           Cyrille  DUPUYDAUBY (@Cyrdup)
@@ -18,24 +18,10 @@
 //     limitations under the License.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-namespace SimpleOrderRouting.Tests
+namespace SimpleOrderRouting.Infra
 {
-    using NFluent;
-
-    using SimpleOrderRouting.Infra;
-
-    using Xunit;
-
-    public class HarnessTests
+    public interface ITestableMarket
     {
-        [Fact]
-        public void ShouldReturnALatency()
-        {
-            var runner = new SorTestHarness();
-            runner.Run();
-
-            Check.That<double>(runner.AverageLatency).Not.IsNegative();
-        }
-         
+        int TimesSent { get; }
     }
 }

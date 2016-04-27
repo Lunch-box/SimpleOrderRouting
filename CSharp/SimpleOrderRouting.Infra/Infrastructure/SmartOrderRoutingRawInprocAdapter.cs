@@ -2,6 +2,7 @@
 {
     using System;
 
+    using SimpleOrderRouting.Domain;
     using SimpleOrderRouting.Domain.SmartOrderRouting;
 
     /// <summary>

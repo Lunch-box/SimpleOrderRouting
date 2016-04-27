@@ -13,13 +13,11 @@
 //    limitations under the License.
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
-namespace SimpleOrderRouting.Infra
+namespace SimpleOrderRouting.Domain
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
-    using SimpleOrderRouting.Domain;
 
     /// <summary>
     /// Transforms an <see cref="InvestorInstruction"/> into an <see cref="OrderBasket"/> that 
@@ -87,7 +85,7 @@ namespace SimpleOrderRouting.Infra
 
         private IEnumerable<MarketInfo> GetValidMarkets(decimal requestedPrice)
         {
-            var allMarkets = marketSnapshotProvider.GetSnapshot();
+            var allMarkets = this.marketSnapshotProvider.GetSnapshot();
             return allMarkets.Markets.Where(m => m.OrdersFailureCount < MaxSupportedFailuresPerMarket && requestedPrice >= m.Market.SellPrice);
         }
 

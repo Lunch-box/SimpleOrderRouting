@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="OrderExecutedEventArgs.cs" company="LunchBox corp">
+// <copyright file="DealExecutedEventArgs.cs" company="LunchBox corp">
 //    Copyright 2014 The Lunch-Box mob: Ozgur DEVELIOGLU (@Zgurrr), Cyrille  DUPUYDAUBY 
 //    (@Cyrdup), Tomasz JASKULA (@tjaskula), Thomas PIERRAIN (@tpierrain)
 //    Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,26 +13,23 @@
 //    limitations under the License.
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
-namespace SimpleOrderRouting.Infra
+namespace SimpleOrderRouting.Domain
 {
-    using SimpleOrderRouting.Domain.SmartOrderRouting;
+    using System;
 
     /// <summary>
-    /// Event data for OrderExecuted event.
+    /// Event data for DealExecuted event.
     /// </summary>
-    public class OrderExecutedEventArgs
+    public class DealExecutedEventArgs : EventArgs
     {
-        public OrderExecutedEventArgs(Way way, int quantity, decimal price)
+        public DealExecutedEventArgs(decimal price, int quantity)
         {
-            this.Quantity = quantity;
             this.Price = price;
-            this.Way = way;
+            this.Quantity = quantity;
         }
-
-        public int Quantity { get; private set; }
 
         public decimal Price { get; private set; }
 
-        public Way Way { get; private set; }
+        public int Quantity { get; private set; }
     }
 }

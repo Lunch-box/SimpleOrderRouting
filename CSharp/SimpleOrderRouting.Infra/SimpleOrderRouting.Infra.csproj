@@ -39,25 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DealExecutedEventArgs.cs" />
     <Compile Include="Infrastructure\SmartOrderRoutingRawInprocAdapter.cs" />
-    <Compile Include="InstructionExecutionContext.cs" />
-    <Compile Include="IInvestorInstructionSolver.cs" />
-    <Compile Include="IOrder.cs" />
-    <Compile Include="ISmartOrderRoutingEntryPoint.cs" />
-    <Compile Include="ITestableMarket.cs" />
-    <Compile Include="LimitOrder.cs" />
-    <Compile Include="Market.cs" />
-    <Compile Include="MarketInfo.cs" />
-    <Compile Include="MarketOrder.cs" />
-    <Compile Include="MarketSnapshot.cs" />
-    <Compile Include="MarketSnapshotProvider.cs" />
-    <Compile Include="MarketSweepSolver.cs" />
-    <Compile Include="OrderDescription.cs" />
-    <Compile Include="OrderBasket.cs" />
-    <Compile Include="OrderExecutedEventArgs.cs" />
-    <Compile Include="InvestorInstruction.cs" />
-    <Compile Include="OrderFailedEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SmartOrderRoutingEngine.cs" />
     <Compile Include="SorTestHarness.cs" />

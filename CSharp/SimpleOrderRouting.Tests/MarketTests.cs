@@ -22,6 +22,7 @@ namespace SimpleOrderRouting.Tests
 {
     using NFluent;
 
+    using SimpleOrderRouting.Domain;
     using SimpleOrderRouting.Infra;
 
     using SimpleOrderRouting.Domain.SmartOrderRouting;

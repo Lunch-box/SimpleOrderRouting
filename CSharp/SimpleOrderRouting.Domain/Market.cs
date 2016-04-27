@@ -18,11 +18,10 @@
 //     limitations under the License.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-namespace SimpleOrderRouting.Infra
+namespace SimpleOrderRouting.Domain
 {
     using System;
 
-    using SimpleOrderRouting.Domain;
     using SimpleOrderRouting.Domain.SmartOrderRouting;
 
     public class Market : ITestableMarket, IMarket

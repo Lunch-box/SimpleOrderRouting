@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="OrderDescription.cs" company="LunchBox corp">
+// <copyright file="IOrder.cs" company="LunchBox corp">
 //    Copyright 2014 The Lunch-Box mob: Ozgur DEVELIOGLU (@Zgurrr), Cyrille  DUPUYDAUBY 
 //    (@Cyrdup), Tomasz JASKULA (@tjaskula), Thomas PIERRAIN (@tpierrain)
 //    Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,29 +13,27 @@
 //    limitations under the License.
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
-namespace SimpleOrderRouting.Infra
+namespace SimpleOrderRouting.Domain
 {
+    using System;
+
     using SimpleOrderRouting.Domain.SmartOrderRouting;
 
-    public struct OrderDescription
+    public interface IOrder
     {
-        public Market TargetMarket;
+        event EventHandler<DealExecutedEventArgs> OrderExecuted;
 
-        public Way OrderWay;
+        // TODO: Maybe not necessary if we change the Send() signature to inlcude the notification.
+        event EventHandler<OrderFailedEventArgs> OrderFailed;
 
-        public int Quantity;
+        Way Way { get; }
 
-        public decimal OrderPrice;
+        int Quantity { get; }
 
-        public bool AllowPartial;
+        bool AllowPartialExecution { get; }
 
-        public OrderDescription(Market targetMarket, Way orderWay, int quantity, decimal orderPrice, bool allowPartial)
-        {
-            this.TargetMarket = targetMarket;
-            this.OrderWay = orderWay;
-            this.Quantity = quantity;
-            this.OrderPrice = orderPrice;
-            this.AllowPartial = allowPartial;
-        }
+        Market Market { get; }
+
+        void Send();
     }
 }

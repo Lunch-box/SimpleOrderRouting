@@ -23,6 +23,7 @@ namespace SimpleOrderRouting.Infra
     using System.Diagnostics;
     using System.Threading;
 
+    using SimpleOrderRouting.Domain;
     using SimpleOrderRouting.Domain.SmartOrderRouting;
     using SimpleOrderRouting.Infra;
     using SimpleOrderRouting.Infra.TestHelpers;

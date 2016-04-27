@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MarketSnapshot.cs" company="LunchBox corp">
+// <copyright file="ITestableMarket.cs" company="LunchBox corp">
 //     Copyright 2014 The Lunch-Box mob: 
 //           Ozgur DEVELIOGLU (@Zgurrr)
 //           Cyrille  DUPUYDAUBY (@Cyrdup)
@@ -18,18 +18,10 @@
 //     limitations under the License.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-namespace SimpleOrderRouting.Infra
+namespace SimpleOrderRouting.Domain
 {
-    using System.Collections.Generic;
-
-    public class MarketSnapshot
+    public interface ITestableMarket
     {
-        public MarketSnapshot(IList<MarketInfo> markets)
-        {
-            this.Markets = markets;
-        }
-
-        public IList<MarketInfo> Markets { get; set; }
-
+        int TimesSent { get; }
     }
 }

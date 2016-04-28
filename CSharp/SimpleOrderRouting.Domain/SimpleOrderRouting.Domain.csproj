@@ -43,6 +43,7 @@
     <Compile Include="ICanReceiveMarketData.cs" />
     <Compile Include="ICanRouteOrders.cs" />
     <Compile Include="IInvestorInstructionSolver.cs" />
+    <Compile Include="IMarket.cs" />
     <Compile Include="InstructionExecutionContext.cs" />
     <Compile Include="InvestorInstruction.cs" />
     <Compile Include="IOrder.cs" />
@@ -51,6 +52,7 @@
     <Compile Include="ITestableMarket.cs" />
     <Compile Include="LimitOrder.cs" />
     <Compile Include="Market.cs" />
+    <Compile Include="MarketDataUpdate.cs" />
     <Compile Include="MarketInfo.cs" />
     <Compile Include="MarketOrder.cs" />
     <Compile Include="MarketSnapshot.cs" />

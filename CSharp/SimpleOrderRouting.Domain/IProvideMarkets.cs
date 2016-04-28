@@ -6,11 +6,4 @@ namespace SimpleOrderRouting.Domain
     {
         IEnumerable<IMarket> GetAvailableMarkets();
     }
-
-    public interface IMarket
-    {
-        int SellQuantity { get; }
-
-        decimal SellPrice { get; }
-    }
 }

@@ -38,11 +38,11 @@ namespace SimpleOrderRouting.Domain
             }
         }
 
-        private void InstrumentMarketDataUpdated(object sender, MarketDataUpdateDto marketDataUpdateDto)
+        private void InstrumentMarketDataUpdated(object sender, MarketDataUpdate marketDataUpdate)
         {
-            var marketInfo = this._lastMarketUpdates[marketDataUpdateDto.Market];
-            marketInfo.Market.SellPrice = marketDataUpdateDto.Price;
-            marketInfo.Market.SellQuantity = marketDataUpdateDto.Quantity;
+            var marketInfo = this._lastMarketUpdates[marketDataUpdate.Market];
+            marketInfo.Market.SellPrice = marketDataUpdate.Price;
+            marketInfo.Market.SellQuantity = marketDataUpdate.Quantity;
         }
 
         public MarketSnapshot GetSnapshot()

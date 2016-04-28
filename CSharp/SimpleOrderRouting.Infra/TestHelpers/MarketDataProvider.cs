@@ -15,7 +15,7 @@ namespace SimpleOrderRouting.Infra.TestHelpers
             this.marketsInvolved = marketsInvolved;
         }
 
-        public event EventHandler<MarketDataUpdateDto> InstrumentMarketDataUpdated;
+        public event EventHandler<MarketDataUpdate> InstrumentMarketDataUpdated;
 
         public void Subscribe(IMarket market)
         {
@@ -24,7 +24,7 @@ namespace SimpleOrderRouting.Infra.TestHelpers
             var onInstrumentMarketDataUpdated = this.InstrumentMarketDataUpdated;
             if (onInstrumentMarketDataUpdated != null)
             {
-                onInstrumentMarketDataUpdated(this, new MarketDataUpdateDto(market, internalMarket.SellPrice, internalMarket.SellQuantity));
+                onInstrumentMarketDataUpdated(this, new MarketDataUpdate(market, internalMarket.SellPrice, internalMarket.SellQuantity));
             }
         }
     }

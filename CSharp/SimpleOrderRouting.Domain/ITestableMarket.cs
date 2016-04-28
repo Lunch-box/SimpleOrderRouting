@@ -23,7 +23,5 @@ namespace SimpleOrderRouting.Domain
     public interface ITestableMarket : IMarket
     {
         int TimesSent { get; }
-
-        decimal SellPrice { get; set; }
     }
 }

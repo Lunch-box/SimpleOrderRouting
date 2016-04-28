@@ -1,4 +1,4 @@
-namespace SimpleOrderRouting.Domain.SmartOrderRouting
+namespace SimpleOrderRouting.Infra
 {
     public enum InvestorInstructionStatus
     {

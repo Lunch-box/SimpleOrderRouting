@@ -25,7 +25,6 @@ namespace SimpleOrderRouting.Infra
 
     using SimpleOrderRouting.Domain;
     using SimpleOrderRouting.Domain.SmartOrderRouting;
-    using SimpleOrderRouting.Infra;
     using SimpleOrderRouting.Infra.TestHelpers;
 
     public class SorTestHarness
@@ -40,16 +39,20 @@ namespace SimpleOrderRouting.Infra
 
         public void Run()
         {
-            // initialize the context
-            var sor = BuildSor();
-            var identifier = sor.RequestUniqueIdentifier();
+            // Build our hexagon (3 steps)
 
-            // instantiate the service
-            var adapter = new SmartOrderRoutingRawInprocAdapter(sor);
+            // 1. Builds the runtime dependencies needed for our domain to work with (through DIP)
+            var markets = BuildMarketVenues();
+            
+            // 2. Instantiates our domain entry point with it
+            var sor = new SmartOrderRoutingEngine(new MarketProvider(markets), null, new MarketDataProvider(markets));
 
-            // initialize our engine
-            adapter.InstructionUpdated += ServiceOnInstructionUpdated;
-            this.instructionIdentifier = adapter.RequestUniqueIdentifier();
+            // 3. Instantiates the adapter(s) we need to interact with our domain
+            var instructionsAdapter = new InvestorInstructionsAdapter(sor);
+
+            instructionsAdapter.InstructionUpdated += ServiceOnInstructionUpdated;
+            var identifier = InvestorInstructionIdentifierFactory.RequestUniqueIdentifier();
+            this.instructionIdentifier = identifier; //adapter.RequestUniqueIdentifier();
 
             // build demo order
             this.investorInstructionDto = new InvestorInstructionDto(identifier, Way.Buy, 10, 100M, true, null);
@@ -61,8 +64,8 @@ namespace SimpleOrderRouting.Infra
             // Subscribes to the instruction's events
             OrderExecutedEventArgs orderExecutedEventArgs = null;
             string failureReason = null;
-            sor.Subscribe(investorInstructionDto.UniqueIdentifier, (args) => { orderExecutedEventArgs = args; }, (args) => { failureReason = args; });
-            sor.Route(investorInstructionDto);
+            instructionsAdapter.Subscribe(investorInstructionDto.UniqueIdentifier, (args) => { orderExecutedEventArgs = args; }, (args) => { failureReason = args; });
+            instructionsAdapter.Route(investorInstructionDto);
 
             // wait for the exit condition
             lock (this.synchro)
@@ -84,7 +87,7 @@ namespace SimpleOrderRouting.Infra
 
         private void ServiceOnInstructionUpdated(object sender, InvestorInstructionUpdatedDto investorInstructionUpdatedDto)
         {
-            if (investorInstructionUpdatedDto.IdentifierDto == instructionIdentifier)
+            if (investorInstructionUpdatedDto.IdentifierDto == this.instructionIdentifier)
             {
                 if (investorInstructionUpdatedDto.Status == InvestorInstructionStatus.PartiallyExecuted)
                 {
@@ -98,12 +101,12 @@ namespace SimpleOrderRouting.Infra
             }
         }
 
-        private static SmartOrderRoutingEngine BuildSor()
+        private static Market[] BuildMarketVenues()
         {
             var marketA = new Market
                               {
                                   SellQuantity = 150,
-                                  SellPrice = 100M,     
+                                  SellPrice = 100M,
                               };
 
             var marketB = new Market
@@ -113,8 +116,7 @@ namespace SimpleOrderRouting.Infra
                               };
 
             var markets = new[] { marketA, marketB };
-            var sor = new SmartOrderRoutingEngine(new MarketProvider(markets), null, new MarketDataProvider(markets));
-            return sor;
+            return markets;
         }
 
         public double AverageLatency { get; set; }

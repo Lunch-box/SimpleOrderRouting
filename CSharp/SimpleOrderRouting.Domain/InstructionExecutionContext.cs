@@ -25,7 +25,7 @@ namespace SimpleOrderRouting.Domain
     using SimpleOrderRouting.Domain.SmartOrderRouting;
 
     /// <summary>
-    /// 1 to 1 relationship with an <see cref="InvestorInstruction"/>.  Keeps the current state of the instruction execution.
+    /// 1 to 1 relationship with an <see cref="SimpleOrderRouting.Infra.InvestorInstruction"/>.  Keeps the current state of the instruction execution.
     /// </summary>
     public class InstructionExecutionContext
     {

@@ -1,4 +1,4 @@
-namespace SimpleOrderRouting.Domain.SmartOrderRouting
+namespace SimpleOrderRouting.Infra
 {
     using System;
 

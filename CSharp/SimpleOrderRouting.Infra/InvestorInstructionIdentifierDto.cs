@@ -1,4 +1,4 @@
-namespace SimpleOrderRouting.Domain.SmartOrderRouting
+namespace SimpleOrderRouting.Infra
 {
     using System.Threading;
 
@@ -6,7 +6,7 @@ namespace SimpleOrderRouting.Domain.SmartOrderRouting
     {
         protected bool Equals(InvestorInstructionIdentifierDto other)
         {
-            return this.value == other.value;
+            return this.Value == other.Value;
         }
 
         public override bool Equals(object obj)
@@ -28,7 +28,7 @@ namespace SimpleOrderRouting.Domain.SmartOrderRouting
 
         public override int GetHashCode()
         {
-            return this.value.GetHashCode();
+            return this.Value.GetHashCode();
         }
 
         public static bool operator ==(InvestorInstructionIdentifierDto left, InvestorInstructionIdentifierDto right)
@@ -43,11 +43,11 @@ namespace SimpleOrderRouting.Domain.SmartOrderRouting
 
         private static long nextValue;
 
-        private long value;
+        public long Value { get; private set; }
 
         public InvestorInstructionIdentifierDto()
         {
-            this.value =  Interlocked.Increment(ref nextValue);
+            this.Value =  Interlocked.Increment(ref nextValue);
         }
     }
 }

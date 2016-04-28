@@ -20,7 +20,7 @@ namespace SimpleOrderRouting.Domain
     using System.Linq;
 
     /// <summary>
-    /// Transforms an <see cref="InvestorInstruction"/> into an <see cref="OrderBasket"/> that 
+    /// Transforms an <see cref="SimpleOrderRouting.Infra.InvestorInstruction"/> into an <see cref="OrderBasket"/> that 
     /// will allow us to route <see cref="LimitOrder"/> following a weight average strategy on 
     /// the relevant markets.
     /// </summary>
@@ -42,12 +42,12 @@ namespace SimpleOrderRouting.Domain
         }
 
         /// <summary>
-        /// Build the description of the orders needed to fulfill an <see cref="InvestorInstruction" /> which
+        /// Build the description of the orders needed to fulfill an <see cref="SimpleOrderRouting.Infra.InvestorInstruction" /> which
         /// is aggregated within an <see cref="InstructionExecutionContext" /> instance.
         /// </summary>
-        /// <param name="instructionExecutionContext">The <see cref="InstructionExecutionContext" /> instance that aggregates the <see cref="InvestorInstruction" />.</param>
+        /// <param name="instructionExecutionContext">The <see cref="InstructionExecutionContext" /> instance that aggregates the <see cref="SimpleOrderRouting.Infra.InvestorInstruction" />.</param>
         /// <returns>
-        /// An <see cref="OrderBasket" /> containing all the orders to be routed in order to fulfill the initial <see cref="InvestorInstruction" />.
+        /// An <see cref="OrderBasket" /> containing all the orders to be routed in order to fulfill the initial <see cref="SimpleOrderRouting.Infra.InvestorInstruction" />.
         /// </returns>
         public OrderBasket Solve(InstructionExecutionContext instructionExecutionContext)
         {

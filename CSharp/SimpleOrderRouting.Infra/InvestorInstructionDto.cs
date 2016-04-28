@@ -1,6 +1,8 @@
-namespace SimpleOrderRouting.Domain.SmartOrderRouting
+namespace SimpleOrderRouting.Infra
 {
     using System;
+
+    using SimpleOrderRouting.Domain.SmartOrderRouting;
 
     public class InvestorInstructionDto
     {

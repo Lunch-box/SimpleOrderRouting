@@ -27,13 +27,28 @@ namespace SimpleOrderRouting.Domain
     /// <summary>
     /// Trading instruction given to the SOR on the investor-side.
     /// </summary>
-    public class InvestorInstruction : InvestorInstructionDto
+    public class InvestorInstruction
     {
-        public InvestorInstruction(InvestorInstructionIdentifierDto identifierDto, Way way, int quantity, decimal price, bool allowPartialExecution, DateTime? goodTill)
-            : base(identifierDto, way, quantity, price, allowPartialExecution, goodTill)
+        public InvestorInstruction(long investorInstructionIdentifier, Way way, int quantity, decimal price, bool allowPartialExecution, DateTime? goodTill)
         {
-            this.IdentifierDto = identifierDto;
+            this.Way = way;
+            this.Quantity = quantity;
+            this.Price = price;
+            this.AllowPartialExecution = allowPartialExecution;
+            this.GoodTill = goodTill;
+        
+            this.InvestorInstructionIdentifier = investorInstructionIdentifier;
         }
+
+        public DateTime? GoodTill { get; private set; }
+
+        public bool AllowPartialExecution { get; private set; }
+
+        public decimal Price { get; private set; }
+
+        public int Quantity { get; private set; }
+
+        public Way Way { get; private set; }
 
         /// <summary>
         /// Occurs when the <see cref="InvestorInstruction"/> is fully executed.
@@ -45,7 +60,7 @@ namespace SimpleOrderRouting.Domain
         /// </summary>
         public event EventHandler<string> Failed;
 
-        public InvestorInstructionIdentifierDto IdentifierDto { get; private set; }
+        public long InvestorInstructionIdentifier { get; private set; }
 
         /// <summary>
         /// Just a naive implementation to make the test pass. 

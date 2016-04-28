@@ -56,23 +56,25 @@ namespace SimpleOrderRouting.Infra
             this.marketSnapshotProvider = new MarketSnapshotProvider(availableMarkets, canReceiveMarketData);
         }
 
-        public InvestorInstructionIdentifierDto RequestUniqueIdentifier()
-        {
-            return new InvestorInstructionIdentifierDto();
-        }
 
-        public void Route(InvestorInstructionDto investorInstructionDto)
+        public void Route(InvestorInstruction investorInstruction)
         {
-            // 1. Digest Investment instructions
             // 2. Prepare order book (solver)
             // 3. Send and monitor
             // 4. Feedback investor
 
-            var investorInstruction = this.CreateInvestorInstruction(investorInstructionDto.UniqueIdentifier, null, investorInstructionDto.Way, investorInstructionDto.Quantity, investorInstructionDto.Price, investorInstructionDto.AllowPartialExecution, investorInstructionDto.GoodTill);
-
             var executionState = new InstructionExecutionContext(investorInstruction);
 
             this.RouteImpl(investorInstruction, executionState);
+        }
+        
+        [Obsolete("Engine should not know infra code like DTO objects!")]
+        public void Route(InvestorInstructionDto investorInstructionDto)
+        {
+            // 1. Digest Investment instructions
+            
+            var investorInstruction = this.CreateInvestorInstruction(investorInstructionDto.UniqueIdentifier, null, investorInstructionDto.Way, investorInstructionDto.Quantity, investorInstructionDto.Price, investorInstructionDto.AllowPartialExecution, investorInstructionDto.GoodTill);
+            this.Route(investorInstruction);
         }
 
         //// TODO: remove investor instruction as arg here?
@@ -100,7 +102,7 @@ namespace SimpleOrderRouting.Infra
         {
             var investorInstruction = sender as InvestorInstruction;
             Action<OrderExecutedEventArgs> successCallback;
-            if (this.executionCallbacks.TryGetValue(investorInstruction.IdentifierDto, out successCallback))
+            if (this.executionCallbacks.TryGetValue(investorInstruction.InvestorInstructionIdentifier, out successCallback))
             {
                 successCallback(e);
             }
@@ -120,16 +122,17 @@ namespace SimpleOrderRouting.Infra
             else
             {
                 Action<string> failureCallback;
-                if (this.failureCallbacks.TryGetValue(investorInstruction.IdentifierDto, out failureCallback))
+                if (this.failureCallbacks.TryGetValue(investorInstruction.InvestorInstructionIdentifier, out failureCallback))
                 {
                     failureCallback(reason.Reason);
                 }
             }
         }
 
+        [Obsolete("To be removed")]
         private InvestorInstruction CreateInvestorInstruction(InvestorInstructionIdentifierDto instructionIdentifierDto, InstrumentIdentifier instrumentIdentifier, Way way, int quantity, decimal price, bool allowPartialExecution = false, DateTime? goodTill = null)
         {
-            return new InvestorInstruction(instructionIdentifierDto, way, quantity, price, allowPartialExecution, goodTill);
+            return new InvestorInstruction(instructionIdentifierDto.Value, way, quantity, price, allowPartialExecution, goodTill);
         }
 
         public void Subscribe(InvestorInstructionIdentifierDto investorInstructionIdentifierDto, Action<OrderExecutedEventArgs> executedCallback, Action<string> failureCallback)

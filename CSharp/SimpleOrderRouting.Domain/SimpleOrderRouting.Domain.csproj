@@ -47,7 +47,6 @@
     <Compile Include="InvestorInstruction.cs" />
     <Compile Include="IOrder.cs" />
     <Compile Include="IProvideMarkets.cs" />
-    <Compile Include="ISmartOrderRoutingEntryPoint.cs" />
     <Compile Include="ITestableMarket.cs" />
     <Compile Include="LimitOrder.cs" />
     <Compile Include="Market.cs" />
@@ -61,11 +60,6 @@
     <Compile Include="OrderExecutedEventArgs.cs" />
     <Compile Include="OrderFailedEventArgs.cs" />
     <Compile Include="Order\InstrumentIdentifier.cs" />
-    <Compile Include="SmartOrderRouting\IInvestorService.cs" />
-    <Compile Include="SmartOrderRouting\InvestorInstructionDto.cs" />
-    <Compile Include="SmartOrderRouting\InvestorInstructionIdentifierDto.cs" />
-    <Compile Include="SmartOrderRouting\InvestorInstructionStatus.cs" />
-    <Compile Include="SmartOrderRouting\InvestorInstructionUpdatedDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SmartOrderRouting\Way.cs" />
   </ItemGroup>

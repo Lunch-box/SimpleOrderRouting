@@ -16,16 +16,16 @@
 namespace SimpleOrderRouting.Domain
 {
     /// <summary>
-    /// Transforms an <see cref="InvestorInstruction"/> into an <see cref="OrderBasket"/>.
+    /// Transforms an <see cref="SimpleOrderRouting.Infra.InvestorInstruction"/> into an <see cref="OrderBasket"/>.
     /// </summary>
     public interface IInvestorInstructionSolver
     {
         /// <summary>
-        /// Build the description of the orders needed to fulfill an <see cref="InvestorInstruction"/> which 
+        /// Build the description of the orders needed to fulfill an <see cref="SimpleOrderRouting.Infra.InvestorInstruction"/> which 
         /// is aggregated within an <see cref="InstructionExecutionContext"/> instance.
         /// </summary>
-        /// <param name="instructionExecutionContext">The <see cref="InstructionExecutionContext"/> instance that aggregates the <see cref="InvestorInstruction"/>.</param>
-        /// <returns>An <see cref="OrderBasket"/> containing all the orders to be routed in order to fulfill the initial <see cref="InvestorInstruction"/>.</returns>
+        /// <param name="instructionExecutionContext">The <see cref="InstructionExecutionContext"/> instance that aggregates the <see cref="SimpleOrderRouting.Infra.InvestorInstruction"/>.</param>
+        /// <returns>An <see cref="OrderBasket"/> containing all the orders to be routed in order to fulfill the initial <see cref="SimpleOrderRouting.Infra.InvestorInstruction"/>.</returns>
         OrderBasket Solve(InstructionExecutionContext instructionExecutionContext);
     }
 }

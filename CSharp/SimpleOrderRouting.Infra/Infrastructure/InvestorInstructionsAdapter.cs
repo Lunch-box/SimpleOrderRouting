@@ -33,8 +33,10 @@
             return new InvestorInstruction(instructionIdentifierDto.Value, way, quantity, price, allowPartialExecution, goodTill);
         }
 
-        public void Subscribe(InvestorInstructionIdentifierDto investorInstructionIdentifierDto, Action<OrderExecutedEventArgs> executedCallback, Action<string> failureCallback)
+        public void Subscribe(InvestorInstructionDto investorInstructionDto, Action<OrderExecutedEventArgs> executedCallback, Action<string> failureCallback)
         {
+            // Maps the DTO model to the domain one
+            //var investorIntruction = new InvestorInstruction(investorInstructionIdentifierDto.Value, );
             // TODO: thread-safe it
             //this.sor.Subscribe();
             //this.executionCallbacks[investorInstructionIdentifierDto] = executedCallback;

@@ -18,7 +18,7 @@
 //     limitations under the License.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-namespace SimpleOrderRouting.Infra
+namespace SimpleOrderRouting.Tests
 {
     using System.Collections.Generic;
     using System.Diagnostics;
@@ -26,13 +26,14 @@ namespace SimpleOrderRouting.Infra
 
     using SimpleOrderRouting.Domain;
     using SimpleOrderRouting.Domain.SmartOrderRouting;
+    using SimpleOrderRouting.Infra;
     using SimpleOrderRouting.Infra.TestHelpers;
 
     public class SorTestHarness
     {
         private InvestorInstructionDto investorInstructionDto;
 
-        private object synchro = new object();
+        private readonly object synchro = new object();
 
         private bool done = false;
 
@@ -51,7 +52,7 @@ namespace SimpleOrderRouting.Infra
             // 3. Instantiates the adapter(s) we need to interact with our domain
             var instructionsAdapter = new InvestorInstructionsAdapter(sor);
 
-            instructionsAdapter.InstructionUpdated += ServiceOnInstructionUpdated;
+            instructionsAdapter.InstructionUpdated += this.ServiceOnInstructionUpdated;
             var identifier = InvestorInstructionIdentifierFactory.RequestUniqueIdentifier();
             this.instructionIdentifier = identifier; //adapter.RequestUniqueIdentifier();
 
@@ -65,8 +66,8 @@ namespace SimpleOrderRouting.Infra
             // Subscribes to the instruction's events
             OrderExecutedEventArgs orderExecutedEventArgs = null;
             string failureReason = null;
-            instructionsAdapter.Subscribe(investorInstructionDto.UniqueIdentifier, (args) => { orderExecutedEventArgs = args; }, (args) => { failureReason = args; });
-            instructionsAdapter.Route(investorInstructionDto);
+            instructionsAdapter.Subscribe(this.investorInstructionDto, (args) => { orderExecutedEventArgs = args; }, (args) => { failureReason = args; });
+            instructionsAdapter.Route(this.investorInstructionDto);
 
             // wait for the exit condition
             lock (this.synchro)

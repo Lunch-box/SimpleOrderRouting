@@ -29,7 +29,7 @@ namespace SimpleOrderRouting.Domain
     /// </summary>
     public class InvestorInstruction
     {
-        public InvestorInstruction(long investorInstructionIdentifier, Way way, int quantity, decimal price, bool allowPartialExecution, DateTime? goodTill)
+        public InvestorInstruction(long investorInstructionIdentifier, Way way, int quantity, decimal price, bool allowPartialExecution = false, DateTime? goodTill = null)
         {
             this.Way = way;
             this.Quantity = quantity;

@@ -135,12 +135,12 @@ namespace SimpleOrderRouting.Infra
             return new InvestorInstruction(instructionIdentifierDto.Value, way, quantity, price, allowPartialExecution, goodTill);
         }
 
-        public void Subscribe(InvestorInstructionIdentifierDto investorInstructionIdentifierDto, Action<OrderExecutedEventArgs> executedCallback, Action<string> failureCallback)
+        public void Subscribe(InvestorInstruction investorInstruction, Action<OrderExecutedEventArgs> executedCallback, Action<string> failureCallback)
         {
             // TODO: thread-safe it
-            this.executionCallbacks[investorInstructionIdentifierDto] = executedCallback;
-            this.failureCallbacks[investorInstructionIdentifierDto] = failureCallback;
-            // TODO: regirst failure
+            //this.executionCallbacks[investorInstructionIdentifierDto] = executedCallback;
+            //this.failureCallbacks[investorInstructionIdentifierDto] = failureCallback;
+            //// TODO: regirst failure
         }
     }
 }

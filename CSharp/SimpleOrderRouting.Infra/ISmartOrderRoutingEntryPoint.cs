@@ -9,8 +9,8 @@ namespace SimpleOrderRouting.Infra
     /// </summary>
     public interface ISmartOrderRoutingEntryPoint
     {
-        void Subscribe(InvestorInstructionIdentifierDto investorInstructionIdentifierDto, Action<OrderExecutedEventArgs> executedCallback, Action<string> failureCallback);
+        void Subscribe(InvestorInstruction investorInstruction, Action<OrderExecutedEventArgs> executedCallback, Action<string> failureCallback);
 
-        void Route(InvestorInstructionDto investorInstructionDto);
+        void Route(InvestorInstruction investorInstruction);
     }
 }

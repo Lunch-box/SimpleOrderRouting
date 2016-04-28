@@ -1,8 +1,6 @@
-namespace SimpleOrderRouting.Infra
+namespace SimpleOrderRouting.Domain
 {
     using System;
-
-    using SimpleOrderRouting.Domain;
 
     /// <summary>
     /// Provide an integration point for all investor side use cases.

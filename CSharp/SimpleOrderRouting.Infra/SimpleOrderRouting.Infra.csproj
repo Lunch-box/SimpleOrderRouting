@@ -46,9 +46,7 @@
     <Compile Include="InvestorInstructionIdentifierFactory.cs" />
     <Compile Include="InvestorInstructionStatus.cs" />
     <Compile Include="InvestorInstructionUpdatedDto.cs" />
-    <Compile Include="ISmartOrderRoutingEntryPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SmartOrderRoutingEngine.cs" />
     <Compile Include="TestHelpers\ExternalMarket.cs" />
     <Compile Include="TestHelpers\MarketDataProvider.cs" />
     <Compile Include="TestHelpers\MarketProvider.cs" />

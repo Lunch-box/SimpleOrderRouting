@@ -125,7 +125,7 @@ namespace SimpleOrderRouting.Tests
                              };
 
             var sor = CreateSmartOrderRoutingEngine(new[] { rejectingMarket });
-            var investorInstruction = new InvestorInstructionDto(new InvestorInstructionIdentifierDto(), Way.Buy, quantity: 50, price: 100M, goodTill: DateTime.Now.AddMinutes(5));
+            var investorInstruction = new InvestorInstruction(new InvestorInstructionIdentifierDto().Value, Way.Buy, quantity: 50, price: 100M, goodTill: DateTime.Now.AddMinutes(5));
             sor.Route(investorInstruction);
 
             Check.That(rejectingMarket.TimesSent).IsEqualTo(3);

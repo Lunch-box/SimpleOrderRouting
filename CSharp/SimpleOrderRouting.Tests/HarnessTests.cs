@@ -21,15 +21,12 @@
 namespace SimpleOrderRouting.Tests
 {
     using NFluent;
-
-    using SimpleOrderRouting.Infra;
-
     using Xunit;
 
     public class HarnessTests
     {
         [Fact]
-        public void ShouldReturnALatency()
+        public void Should_return_a_latency()
         {
             var runner = new SorTestHarness();
             runner.Run();

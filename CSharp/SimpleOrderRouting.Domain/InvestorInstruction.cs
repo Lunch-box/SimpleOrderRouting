@@ -51,6 +51,16 @@ namespace SimpleOrderRouting.Domain
         public int Quantity { get; private set; }
 
         public Way Way { get; private set; }
+        
+        public static bool operator ==(InvestorInstruction left, InvestorInstruction right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(InvestorInstruction left, InvestorInstruction right)
+        {
+            return !Equals(left, right);
+        }
 
         protected bool Equals(InvestorInstruction other)
         {
@@ -86,16 +96,6 @@ namespace SimpleOrderRouting.Domain
                 hashCode = (hashCode * 397) ^ (int)this.Way;
                 return hashCode;
             }
-        }
-
-        public static bool operator ==(InvestorInstruction left, InvestorInstruction right)
-        {
-            return Equals(left, right);
-        }
-
-        public static bool operator !=(InvestorInstruction left, InvestorInstruction right)
-        {
-            return !Equals(left, right);
         }
 
         /// <summary>

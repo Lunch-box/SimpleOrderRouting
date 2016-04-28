@@ -36,7 +36,7 @@ namespace SimpleOrderRouting.Tests
         #region Public Methods and Operators
 
         [Fact]
-        public void ShouldExecuteInstructionWhenThereIsEnoughLiquidityOnOneMarket()
+        public void Should_execute_instruction_when_there_is_enough_liquidity_on_one_Market()
         {
             // Given market A: 150 @ $100, market B: 55 @ $101 
             // When Investor wants to buy 125 stocks @ $100 Then SOR can execute at the requested price
@@ -73,7 +73,7 @@ namespace SimpleOrderRouting.Tests
         }
 
         [Fact]
-        public void ShouldFaileWhenOrderExceedsAllMarketCapacityAndPartialExecutionNotAllowed()
+        public void Should_failed_when_Order_exceeds_all_Market_capacity_and_partial_execution_not_allowed()
         {
             // Given market A: 150 @ $100, market B: 55 @ $101 
             // When Investor wants to buy 125 stocks @ $100 Then SOR can execute at the requested price
@@ -115,7 +115,7 @@ namespace SimpleOrderRouting.Tests
 
 
         [Fact]
-        public void ShouldStopSendingOrdersToAMarketAfter3Rejects()
+        public void Should_stop_sending_Orders_to_a_Market_after_3_rejects()
         {
             var rejectingMarket = new Market
                              {
@@ -132,7 +132,7 @@ namespace SimpleOrderRouting.Tests
         }
 
         [Fact]
-        public void ShouldSucceededWhenLiquidityISAvailableEvenIfOneMarketRejects()
+        public void Should_succeeded_when_liquidity_is_available_even_if_one_Market_rejects()
         {
             // Given market A: 150 @ $100, market B: 55 @ $101 
             // When Investor wants to buy 125 stocks @ $100 Then SOR can execute at the requested price
@@ -167,7 +167,7 @@ namespace SimpleOrderRouting.Tests
         }
 
         [Fact]
-        public void ShouldExecuteInstructionWhenThereIsEnoughLiquidityOnTheMarkets()
+        public void Should_execute_Instruction_when_there_is_enough_liquidity_on_the_Markets()
         {
             // Given market A: 100 @ $100, market B: 55 @ $100 
             // When Investor wants to buy 125 stocks @ $100 Then SOR can execute at the requested price
@@ -198,7 +198,7 @@ namespace SimpleOrderRouting.Tests
         }
 
         [Fact]
-        public void ShouldExecuteOrdersOnWeightedAverageOfAvailableQuantities()
+        public void Should_execute_Orders_on_weighted_average_of_available_quantities()
         {
             // 25 premier ; 75 % sur le second marché
             // Given market A: 100 @ $100, market B: 50 @ $100 

@@ -45,13 +45,16 @@ namespace SimpleOrderRouting.Tests
 
             // 1. Builds the runtime dependencies needed for our domain to work with (through DIP)
             var markets = BuildMarketVenues();
+            var marketDataProvider = new MarketDataProvider(markets);
+            var marketProvider = new MarketProvider(markets);
             
-            // 2. Instantiates our domain entry point with it
-            var sor = new SmartOrderRoutingEngine(new MarketProvider(markets), null, new MarketDataProvider(markets));
+            // 2. Instantiates our domain entry point with its runtime dependencies
+            var sor = new SmartOrderRoutingEngine(marketProvider, null, marketDataProvider);
 
-            // 3. Instantiates the adapter(s) we need to interact with our domain
+            // 3. Instantiates the adapter(s) we will use to interact with our domain
             var instructionsAdapter = new InvestorInstructionsAdapter(sor);
 
+            // Prepare the adapter to do some work
             instructionsAdapter.InstructionUpdated += this.ServiceOnInstructionUpdated;
             var identifier = InvestorInstructionIdentifierFactory.RequestUniqueIdentifier();
             this.instructionIdentifier = identifier; //adapter.RequestUniqueIdentifier();

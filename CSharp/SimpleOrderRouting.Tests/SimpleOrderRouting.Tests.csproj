@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HarnessTests.cs" />
+    <Compile Include="InvestorInstructionDtoTests.cs" />
     <Compile Include="InvestorInstructionTests.cs" />
     <Compile Include="MarketTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

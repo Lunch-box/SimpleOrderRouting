@@ -46,6 +46,50 @@ namespace SimpleOrderRouting.Infra
 
         public DateTime? GoodTill { get; private set; }
 
-        public string InstrumentIdentifier { get; private set; }
+        protected bool Equals(InvestorInstructionDto other)
+        {
+            return Equals(this.UniqueIdentifier, other.UniqueIdentifier) && this.Way == other.Way && this.Quantity == other.Quantity && this.Price == other.Price && this.AllowPartialExecution == other.AllowPartialExecution && this.GoodTill.Equals(other.GoodTill);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+            return Equals((InvestorInstructionDto)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = (this.UniqueIdentifier != null ? this.UniqueIdentifier.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (int)this.Way;
+                hashCode = (hashCode * 397) ^ this.Quantity;
+                hashCode = (hashCode * 397) ^ this.Price.GetHashCode();
+                hashCode = (hashCode * 397) ^ this.AllowPartialExecution.GetHashCode();
+                hashCode = (hashCode * 397) ^ this.GoodTill.GetHashCode();
+                return hashCode;
+            }
+        }
+
+        public static bool operator ==(InvestorInstructionDto left, InvestorInstructionDto right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(InvestorInstructionDto left, InvestorInstructionDto right)
+        {
+            return !Equals(left, right);
+        }
     }
 }

@@ -20,6 +20,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace SimpleOrderRouting.Infra
 {
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Threading;
 
@@ -101,7 +102,7 @@ namespace SimpleOrderRouting.Infra
             }
         }
 
-        private static Market[] BuildMarketVenues()
+        private static IEnumerable<IMarket> BuildMarketVenues()
         {
             var marketA = new Market
                               {

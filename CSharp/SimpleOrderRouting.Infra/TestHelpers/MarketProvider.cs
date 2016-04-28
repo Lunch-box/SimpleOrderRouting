@@ -6,9 +6,9 @@ namespace SimpleOrderRouting.Infra.TestHelpers
 
     public class MarketProvider : IProvideMarkets
     {
-        private readonly Market[] markets;
+        private readonly IEnumerable<IMarket> markets;
 
-        public MarketProvider(Market[] markets)
+        public MarketProvider(IEnumerable<IMarket> markets)
         {
             this.markets = markets;
         }

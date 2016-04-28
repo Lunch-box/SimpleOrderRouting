@@ -40,6 +40,8 @@ namespace SimpleOrderRouting.Domain
             this.InvestorInstructionIdentifier = investorInstructionIdentifier;
         }
 
+        public long InvestorInstructionIdentifier { get; private set; }
+
         public DateTime? GoodTill { get; private set; }
 
         public bool AllowPartialExecution { get; private set; }
@@ -50,6 +52,52 @@ namespace SimpleOrderRouting.Domain
 
         public Way Way { get; private set; }
 
+        protected bool Equals(InvestorInstruction other)
+        {
+            return this.InvestorInstructionIdentifier == other.InvestorInstructionIdentifier && this.GoodTill.Equals(other.GoodTill) && this.AllowPartialExecution == other.AllowPartialExecution && this.Price == other.Price && this.Quantity == other.Quantity && this.Way == other.Way;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+            return Equals((InvestorInstruction)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = this.InvestorInstructionIdentifier.GetHashCode();
+                hashCode = (hashCode * 397) ^ this.GoodTill.GetHashCode();
+                hashCode = (hashCode * 397) ^ this.AllowPartialExecution.GetHashCode();
+                hashCode = (hashCode * 397) ^ this.Price.GetHashCode();
+                hashCode = (hashCode * 397) ^ this.Quantity;
+                hashCode = (hashCode * 397) ^ (int)this.Way;
+                return hashCode;
+            }
+        }
+
+        public static bool operator ==(InvestorInstruction left, InvestorInstruction right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(InvestorInstruction left, InvestorInstruction right)
+        {
+            return !Equals(left, right);
+        }
+
         /// <summary>
         /// Occurs when the <see cref="InvestorInstruction"/> is fully executed.
         /// </summary>
@@ -59,8 +107,6 @@ namespace SimpleOrderRouting.Domain
         /// Occurs when the <see cref="InvestorInstruction"/> has failed.
         /// </summary>
         public event EventHandler<string> Failed;
-
-        public long InvestorInstructionIdentifier { get; private set; }
 
         /// <summary>
         /// Just a naive implementation to make the test pass. 

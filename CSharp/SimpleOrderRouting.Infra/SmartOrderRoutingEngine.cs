@@ -102,10 +102,10 @@ namespace SimpleOrderRouting.Infra
         {
             var investorInstruction = sender as InvestorInstruction;
             Action<OrderExecutedEventArgs> successCallback;
-            if (this.executionCallbacks.TryGetValue(investorInstruction.InvestorInstructionIdentifier, out successCallback))
-            {
-                successCallback(e);
-            }
+            //if (this.executionCallbacks.TryGetValue(investorInstruction.InvestorInstructionIdentifier, out successCallback))
+            //{
+            //    successCallback(e);
+            //}
         }
 
         private void SendOrderFailed(InvestorInstruction investorInstruction, OrderFailedEventArgs reason, InstructionExecutionContext instructionExecutionContext)
@@ -121,11 +121,11 @@ namespace SimpleOrderRouting.Infra
             }
             else
             {
-                Action<string> failureCallback;
-                if (this.failureCallbacks.TryGetValue(investorInstruction.InvestorInstructionIdentifier, out failureCallback))
-                {
-                    failureCallback(reason.Reason);
-                }
+                //Action<string> failureCallback;
+                //if (this.failureCallbacks.TryGetValue(investorInstruction.InvestorInstructionIdentifier, out failureCallback))
+                //{
+                //    failureCallback(reason.Reason);
+                //}
             }
         }
 

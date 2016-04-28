@@ -36,9 +36,10 @@
         public void Subscribe(InvestorInstructionIdentifierDto investorInstructionIdentifierDto, Action<OrderExecutedEventArgs> executedCallback, Action<string> failureCallback)
         {
             // TODO: thread-safe it
-            this.executionCallbacks[investorInstructionIdentifierDto] = executedCallback;
-            this.failureCallbacks[investorInstructionIdentifierDto] = failureCallback;
-            // TODO: regirst failure
+            //this.sor.Subscribe();
+            //this.executionCallbacks[investorInstructionIdentifierDto] = executedCallback;
+            //this.failureCallbacks[investorInstructionIdentifierDto] = failureCallback;
+            //// TODO: regirst failure
         }
 
         private void internalInstruction_Failed(string e)
@@ -49,7 +50,7 @@
                 // TODO: retrieve investor instruction
                 InvestorInstruction instruction = null;
                 //var instruction = (InvestorInstruction)sender;
-                onInstructionUpdated(this, new InvestorInstructionUpdatedDto(instruction.InvestorInstructionIdentifier, InvestorInstructionStatus.Failed));
+                //onInstructionUpdated(this, new InvestorInstructionUpdatedDto(instruction.InvestorInstructionIdentifier, InvestorInstructionStatus.Failed));
             }
         }
 
@@ -61,7 +62,7 @@
                 // TODO: retrieve investor instruction
                 InvestorInstruction instruction = null;
                 //var instruction = (InvestorInstruction)sender;
-                onInstructionUpdated(this, new InvestorInstructionUpdatedDto(instruction.InvestorInstructionIdentifier, InvestorInstructionStatus.Executed));
+                //onInstructionUpdated(this, new InvestorInstructionUpdatedDto(instruction.InvestorInstructionIdentifier, InvestorInstructionStatus.Executed));
             }
         }
     }

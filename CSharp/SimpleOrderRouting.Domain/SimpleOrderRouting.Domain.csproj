@@ -58,7 +58,7 @@
     <Compile Include="Markets\Orders\MarketOrder.cs" />
     <Compile Include="Markets\MarketSnapshot.cs" />
     <Compile Include="Markets\MarketSnapshotProvider.cs" />
-    <Compile Include="Strategies\MarketSweepSolver.cs" />
+    <Compile Include="SolvingStrategies\MarketSweepSolver.cs" />
     <Compile Include="Markets\Orders\OrderBasket.cs" />
     <Compile Include="Markets\Orders\OrderDescription.cs" />
     <Compile Include="Markets\Orders\OrderExecutedEventArgs.cs" />

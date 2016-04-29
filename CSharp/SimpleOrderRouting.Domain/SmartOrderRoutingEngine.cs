@@ -27,7 +27,7 @@ namespace SimpleOrderRouting
     using SimpleOrderRouting.Investors;
     using SimpleOrderRouting.Markets;
     using SimpleOrderRouting.Markets.Orders;
-    using SimpleOrderRouting.Strategies;
+    using SimpleOrderRouting.SolvingStrategies;
 
     /// <summary>
     /// Provides access to the various services offered by the external markets.

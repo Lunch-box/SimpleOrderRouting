@@ -13,7 +13,7 @@
 //    limitations under the License.
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
-namespace SimpleOrderRouting.Strategies
+namespace SimpleOrderRouting.SolvingStrategies
 {
     using System;
     using System.Collections.Generic;
@@ -24,7 +24,7 @@ namespace SimpleOrderRouting.Strategies
     using SimpleOrderRouting.Markets.Orders;
 
     /// <summary>
-    /// Transforms an <see cref="SimpleOrderRouting.Infra.InvestorInstruction"/> into an <see cref="OrderBasket"/> that 
+    /// Transforms an <see cref="InvestorInstruction"/> into an <see cref="OrderBasket"/> that 
     /// will allow us to route <see cref="LimitOrder"/> following a weight average strategy on 
     /// the relevant markets.
     /// </summary>

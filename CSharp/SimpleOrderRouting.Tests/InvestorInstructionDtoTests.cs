@@ -6,6 +6,7 @@
     using NFluent;
 
     using SimpleOrderRouting.Infra;
+    using SimpleOrderRouting.Investors;
 
     using Xunit;
 

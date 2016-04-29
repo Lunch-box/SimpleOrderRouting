@@ -1,8 +1,10 @@
-namespace SimpleOrderRouting.Infra.TestHelpers
+namespace SimpleOrderRouting.Tests.TestHelpers
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
+    using SimpleOrderRouting.Markets.Feeds;
 
     public class MarketDataProvider : ICanReceiveMarketData
     {

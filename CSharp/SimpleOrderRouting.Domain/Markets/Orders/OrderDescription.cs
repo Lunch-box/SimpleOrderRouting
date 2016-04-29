@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DealExecutedEventArgs.cs" company="LunchBox corp">
+// <copyright file="OrderDescription.cs" company="LunchBox corp">
 //    Copyright 2014 The Lunch-Box mob: Ozgur DEVELIOGLU (@Zgurrr), Cyrille  DUPUYDAUBY 
 //    (@Cyrdup), Tomasz JASKULA (@tjaskula), Thomas PIERRAIN (@tpierrain)
 //    Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,23 +13,27 @@
 //    limitations under the License.
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
-namespace SimpleOrderRouting
+namespace SimpleOrderRouting.Markets.Orders
 {
-    using System;
-
-    /// <summary>
-    /// Event data for DealExecuted event.
-    /// </summary>
-    public class DealExecutedEventArgs : EventArgs
+    public struct OrderDescription
     {
-        public DealExecutedEventArgs(decimal price, int quantity)
+        public Market TargetMarket;
+
+        public Way OrderWay;
+
+        public int Quantity;
+
+        public decimal OrderPrice;
+
+        public bool AllowPartial;
+
+        public OrderDescription(Market targetMarket, Way orderWay, int quantity, decimal orderPrice, bool allowPartial)
         {
-            this.Price = price;
+            this.TargetMarket = targetMarket;
+            this.OrderWay = orderWay;
             this.Quantity = quantity;
+            this.OrderPrice = orderPrice;
+            this.AllowPartial = allowPartial;
         }
-
-        public decimal Price { get; private set; }
-
-        public int Quantity { get; private set; }
     }
 }

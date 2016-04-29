@@ -18,10 +18,12 @@
 //     limitations under the License.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-namespace SimpleOrderRouting
+namespace SimpleOrderRouting.Markets
 {
     using System.Collections.Generic;
     using System.Linq;
+
+    using SimpleOrderRouting.Markets.Feeds;
 
     public class MarketSnapshotProvider
     {

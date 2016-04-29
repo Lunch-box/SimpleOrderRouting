@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MarketSnapshot.cs" company="LunchBox corp">
+// <copyright file="OrderFailedEventArgs.cs" company="LunchBox corp">
 //     Copyright 2014 The Lunch-Box mob: 
 //           Ozgur DEVELIOGLU (@Zgurrr)
 //           Cyrille  DUPUYDAUBY (@Cyrdup)
@@ -18,18 +18,18 @@
 //     limitations under the License.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-namespace SimpleOrderRouting
+namespace SimpleOrderRouting.Markets.Orders
 {
-    using System.Collections.Generic;
-
-    public class MarketSnapshot
+    public class OrderFailedEventArgs
     {
-        public MarketSnapshot(IList<MarketInfo> markets)
+        public OrderFailedEventArgs(Market market, string reason)
         {
-            this.Markets = markets;
+            this.Reason = reason;
+            this.Market = market;
         }
 
-        public IList<MarketInfo> Markets { get; set; }
+        public Market Market { get; private set; }
 
+        public string Reason { get; private set; }
     }
 }

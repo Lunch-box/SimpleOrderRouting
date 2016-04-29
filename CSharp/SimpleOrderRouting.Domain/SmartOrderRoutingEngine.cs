@@ -24,6 +24,11 @@ namespace SimpleOrderRouting
     using System.Collections.Generic;
     using System.Linq;
 
+    using SimpleOrderRouting.Investors;
+    using SimpleOrderRouting.Markets;
+    using SimpleOrderRouting.Markets.Orders;
+    using SimpleOrderRouting.Strategies;
+
     /// <summary>
     /// Provides access to the various services offered by the external markets.
     /// Manages incoming InvestorInstructions and monitor their lifecycle.
@@ -54,9 +59,6 @@ namespace SimpleOrderRouting
 
         public void Route(InvestorInstruction investorInstruction)
         {
-            // 2. Prepare order book (solver)
-            // 3. Send and monitor
-            // 4. Feedback investor
             var executionState = new InstructionExecutionContext(investorInstruction);
 
             this.RouteImpl(investorInstruction, executionState);
@@ -65,10 +67,14 @@ namespace SimpleOrderRouting
         //// TODO: remove investor instruction as arg here?
         private void RouteImpl(InvestorInstruction investorInstruction, InstructionExecutionContext instructionExecutionContext)
         {
+            // 2. Prepare order book (solver)
             var solver = new MarketSweepSolver(this.marketSnapshotProvider);
 
+            // 3. Send and monitor
             var orderBasket = solver.Solve(instructionExecutionContext);
-            
+
+            // TODO: possible race condition between Solve and the event part?
+            // 4. Feedback investor
             EventHandler<DealExecutedEventArgs> handler = (executedOrder, args) => instructionExecutionContext.Executed(args.Quantity);
             EventHandler<OrderFailedEventArgs> failHandler = (s, failure) => this.SendOrderFailed(investorInstruction, failure, instructionExecutionContext);
 

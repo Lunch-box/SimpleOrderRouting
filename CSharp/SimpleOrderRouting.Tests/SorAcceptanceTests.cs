@@ -24,7 +24,10 @@ namespace SimpleOrderRouting.Tests
 
     using NFluent;
     using SimpleOrderRouting.Infra;
-    using SimpleOrderRouting.Infra.TestHelpers;
+    using SimpleOrderRouting.Investors;
+    using SimpleOrderRouting.Markets;
+    using SimpleOrderRouting.Markets.Orders;
+    using SimpleOrderRouting.Tests.TestHelpers;
 
     using Xunit;
 

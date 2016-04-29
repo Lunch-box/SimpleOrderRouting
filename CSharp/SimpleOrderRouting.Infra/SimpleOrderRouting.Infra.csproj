@@ -44,12 +44,8 @@
     <Compile Include="InvestorInstructionDto.cs" />
     <Compile Include="InvestorInstructionIdentifierDto.cs" />
     <Compile Include="InvestorInstructionIdentifierFactory.cs" />
-    <Compile Include="InvestorInstructionStatus.cs" />
     <Compile Include="InvestorInstructionUpdatedDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestHelpers\ExternalMarket.cs" />
-    <Compile Include="TestHelpers\MarketDataProvider.cs" />
-    <Compile Include="TestHelpers\MarketProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Settings.StyleCop" />

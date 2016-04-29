@@ -23,6 +23,8 @@ namespace SimpleOrderRouting.Infra
 {
     using System;
 
+    using SimpleOrderRouting.Investors;
+
     /// <summary>
     /// Data transfer Object 
     /// </summary>

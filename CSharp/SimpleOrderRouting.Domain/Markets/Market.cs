@@ -18,9 +18,11 @@
 //     limitations under the License.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-namespace SimpleOrderRouting
+namespace SimpleOrderRouting.Markets
 {
     using System;
+
+    using SimpleOrderRouting.Markets.Orders;
 
     public class Market : ITestableMarket, IMarket
     {

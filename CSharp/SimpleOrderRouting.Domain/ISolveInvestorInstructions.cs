@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="OrderExecutedEventArgs.cs" company="LunchBox corp">
+// <copyright file="ISolveInvestorInstructions.cs" company="LunchBox corp">
 //    Copyright 2014 The Lunch-Box mob: Ozgur DEVELIOGLU (@Zgurrr), Cyrille  DUPUYDAUBY 
 //    (@Cyrdup), Tomasz JASKULA (@tjaskula), Thomas PIERRAIN (@tpierrain)
 //    Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,22 +15,20 @@
 //  --------------------------------------------------------------------------------------------------------------------
 namespace SimpleOrderRouting
 {
+    using SimpleOrderRouting.Investors;
+    using SimpleOrderRouting.Markets.Orders;
+
     /// <summary>
-    /// Event data for OrderExecuted event.
+    /// Transforms an <see cref="SimpleOrderRouting.Infra.InvestorInstruction"/> into an <see cref="OrderBasket"/>.
     /// </summary>
-    public class OrderExecutedEventArgs
+    public interface ISolveInvestorInstructions
     {
-        public OrderExecutedEventArgs(Way way, int quantity, decimal price)
-        {
-            this.Quantity = quantity;
-            this.Price = price;
-            this.Way = way;
-        }
-
-        public int Quantity { get; private set; }
-
-        public decimal Price { get; private set; }
-
-        public Way Way { get; private set; }
+        /// <summary>
+        /// Build the description of the orders needed to fulfill an <see cref="SimpleOrderRouting.Infra.InvestorInstruction"/> which 
+        /// is aggregated within an <see cref="InstructionExecutionContext"/> instance.
+        /// </summary>
+        /// <param name="instructionExecutionContext">The <see cref="InstructionExecutionContext"/> instance that aggregates the <see cref="SimpleOrderRouting.Infra.InvestorInstruction"/>.</param>
+        /// <returns>An <see cref="OrderBasket"/> containing all the orders to be routed in order to fulfill the initial <see cref="SimpleOrderRouting.Infra.InvestorInstruction"/>.</returns>
+        OrderBasket Solve(InstructionExecutionContext instructionExecutionContext);
     }
 }

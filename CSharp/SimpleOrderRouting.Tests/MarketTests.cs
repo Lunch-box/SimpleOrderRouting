@@ -22,6 +22,8 @@ namespace SimpleOrderRouting.Tests
 {
     using NFluent;
 
+    using SimpleOrderRouting.Markets;
+
     using Xunit;
 
     public class MarketTests

@@ -23,7 +23,8 @@ namespace SimpleOrderRouting.Infra
 {
     using System;
 
-    using SimpleOrderRouting.Order;
+    using SimpleOrderRouting.Investors;
+    using SimpleOrderRouting.Markets.Orders;
 
     //TODO: add tests for this adapter
 

@@ -39,38 +39,36 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DealExecutedEventArgs.cs" />
+    <Compile Include="Investors\InvestorInstructionStatus.cs" />
+    <Compile Include="Markets\Orders\DealExecutedEventArgs.cs" />
     <Compile Include="ICanReceiveMarketData.cs" />
     <Compile Include="ICanRouteOrders.cs" />
-    <Compile Include="IInvestorInstructionSolver.cs" />
+    <Compile Include="ISolveInvestorInstructions.cs" />
     <Compile Include="IMarket.cs" />
-    <Compile Include="InstructionExecutionContext.cs" />
-    <Compile Include="InvestorInstruction.cs" />
+    <Compile Include="Investors\InstructionExecutionContext.cs" />
+    <Compile Include="Investors\InvestorInstruction.cs" />
     <Compile Include="IOrder.cs" />
     <Compile Include="IProvideMarkets.cs" />
     <Compile Include="ISmartOrderRoutingEntryPoint.cs" />
     <Compile Include="ITestableMarket.cs" />
-    <Compile Include="LimitOrder.cs" />
-    <Compile Include="Market.cs" />
-    <Compile Include="MarketDataUpdate.cs" />
-    <Compile Include="MarketInfo.cs" />
-    <Compile Include="MarketOrder.cs" />
-    <Compile Include="MarketSnapshot.cs" />
-    <Compile Include="MarketSnapshotProvider.cs" />
-    <Compile Include="MarketSweepSolver.cs" />
-    <Compile Include="OrderBasket.cs" />
-    <Compile Include="OrderDescription.cs" />
-    <Compile Include="OrderExecutedEventArgs.cs" />
-    <Compile Include="OrderFailedEventArgs.cs" />
-    <Compile Include="Order\InstrumentIdentifier.cs" />
+    <Compile Include="Markets\Orders\LimitOrder.cs" />
+    <Compile Include="Markets\Market.cs" />
+    <Compile Include="Markets\Feeds\MarketDataUpdate.cs" />
+    <Compile Include="Markets\MarketInfo.cs" />
+    <Compile Include="Markets\Orders\MarketOrder.cs" />
+    <Compile Include="Markets\MarketSnapshot.cs" />
+    <Compile Include="Markets\MarketSnapshotProvider.cs" />
+    <Compile Include="Strategies\MarketSweepSolver.cs" />
+    <Compile Include="Markets\Orders\OrderBasket.cs" />
+    <Compile Include="Markets\Orders\OrderDescription.cs" />
+    <Compile Include="Markets\Orders\OrderExecutedEventArgs.cs" />
+    <Compile Include="Markets\Orders\OrderFailedEventArgs.cs" />
+    <Compile Include="Markets\Orders\InstrumentIdentifier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SmartOrderRoutingEngine.cs" />
     <Compile Include="Way.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Feed\" />
-    <Folder Include="SmartOrderRouting\Investor\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

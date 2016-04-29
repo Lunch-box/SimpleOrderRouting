@@ -1,6 +1,6 @@
-namespace SimpleOrderRouting
+namespace SimpleOrderRouting.Markets.Feeds
 {
-    using SimpleOrderRouting.Order;
+    using SimpleOrderRouting.Markets.Orders;
 
     public class MarketDataUpdate
     {

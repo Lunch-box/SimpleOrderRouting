@@ -25,7 +25,10 @@ namespace SimpleOrderRouting.Tests
     using System.Threading;
 
     using SimpleOrderRouting.Infra;
-    using SimpleOrderRouting.Infra.TestHelpers;
+    using SimpleOrderRouting.Investors;
+    using SimpleOrderRouting.Markets;
+    using SimpleOrderRouting.Markets.Orders;
+    using SimpleOrderRouting.Tests.TestHelpers;
 
     public class SorTestHarness
     {

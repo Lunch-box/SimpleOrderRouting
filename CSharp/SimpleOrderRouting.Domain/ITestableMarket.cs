@@ -18,6 +18,8 @@
 //     limitations under the License.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
+
+//TODO: remove this hack?
 namespace SimpleOrderRouting
 {
     public interface ITestableMarket : IMarket

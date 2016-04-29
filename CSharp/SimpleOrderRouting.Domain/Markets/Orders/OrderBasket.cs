@@ -18,7 +18,7 @@
 //     limitations under the License.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-namespace SimpleOrderRouting
+namespace SimpleOrderRouting.Markets.Orders
 {
     using System;
     using System.Collections.Generic;

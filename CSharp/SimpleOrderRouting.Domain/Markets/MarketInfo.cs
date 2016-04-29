@@ -1,5 +1,5 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MarketOrder.cs" company="LunchBox corp">
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="MarketInfo.cs" company="LunchBox corp">
 //     Copyright 2014 The Lunch-Box mob: 
 //           Ozgur DEVELIOGLU (@Zgurrr)
 //           Cyrille  DUPUYDAUBY (@Cyrdup)
@@ -18,56 +18,36 @@
 //     limitations under the License.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-namespace SimpleOrderRouting
+namespace SimpleOrderRouting.Markets
 {
-    using System;
-
-    public class MarketOrder : IOrder
+    /// <summary>
+    /// Keeps information about a given Market (e.g. # of failures, etc.).
+    /// </summary>
+    public class MarketInfo
     {
-        private readonly Way buy;
-
-        private readonly int quantity;
-
-        public MarketOrder(Market market, Way buy, int quantity)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MarketInfo"/> class.
+        /// </summary>
+        /// <param name="market">The market.</param>
+        public MarketInfo(Market market)
         {
             this.Market = market;
-            this.buy = buy;
-            this.quantity = quantity;
         }
 
-        public event EventHandler<DealExecutedEventArgs> OrderExecuted;
-
-        public event EventHandler<OrderFailedEventArgs> OrderFailed;
-
+        /// <summary>
+        /// Gets the corresponding market.
+        /// </summary>
+        /// <value>
+        /// The corresponding market.
+        /// </value>
         public Market Market { get; private set; }
 
-        public Way Way
-        {
-            get
-            {
-                return this.buy;
-            }
-        }
-
-        public int Quantity
-        {
-            get
-            {
-                return this.quantity;
-            }
-        }
-
-        public bool AllowPartialExecution
-        {
-            get
-            {
-                return false;
-            }
-        }
-
-        public void Send()
-        {
-            this.Market.Send(this);
-        }
+        /// <summary>
+        /// Gets or sets the number of failures for orders we received from this market.
+        /// </summary>
+        /// <value>
+        /// The number of failures for orders we received from this market.
+        /// </value>
+        public int OrdersFailureCount { get; set; }
     }
 }

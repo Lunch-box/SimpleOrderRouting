@@ -19,7 +19,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace SimpleOrderRouting.Infra
+namespace SimpleOrderRouting.Investors
 {
     public enum InvestorInstructionStatus
     {

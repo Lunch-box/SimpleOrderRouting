@@ -2,6 +2,9 @@ namespace SimpleOrderRouting
 {
     using System;
 
+    using SimpleOrderRouting.Investors;
+    using SimpleOrderRouting.Markets.Orders;
+
     /// <summary>
     /// Provide an integration point for all investor side use cases.
     /// </summary>

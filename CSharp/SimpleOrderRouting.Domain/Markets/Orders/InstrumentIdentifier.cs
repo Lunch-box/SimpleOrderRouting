@@ -1,4 +1,4 @@
-namespace SimpleOrderRouting.Order
+namespace SimpleOrderRouting.Markets.Orders
 {
     public class InstrumentIdentifier
     {

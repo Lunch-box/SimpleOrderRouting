@@ -17,6 +17,9 @@ namespace SimpleOrderRouting
 {
     using System;
 
+    using SimpleOrderRouting.Markets;
+    using SimpleOrderRouting.Markets.Orders;
+
     public interface IOrder
     {
         event EventHandler<DealExecutedEventArgs> OrderExecuted;

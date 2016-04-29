@@ -26,6 +26,8 @@ namespace SimpleOrderRouting.Tests
 
     using NFluent;
 
+    using SimpleOrderRouting.Investors;
+
     using Xunit;
 
     public class InvestorInstructionTests

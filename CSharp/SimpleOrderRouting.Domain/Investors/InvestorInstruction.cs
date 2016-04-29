@@ -18,9 +18,11 @@
 //     limitations under the License.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-namespace SimpleOrderRouting
+namespace SimpleOrderRouting.Investors
 {
     using System;
+
+    using SimpleOrderRouting.Markets.Orders;
 
     /// <summary>
     /// Trading instruction given to the SOR on the investor-side.

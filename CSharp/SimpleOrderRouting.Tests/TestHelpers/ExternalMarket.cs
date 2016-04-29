@@ -1,4 +1,4 @@
-namespace SimpleOrderRouting.Infra.TestHelpers
+namespace SimpleOrderRouting.Tests.TestHelpers
 {
     public class ExternalMarket : IMarket
     {

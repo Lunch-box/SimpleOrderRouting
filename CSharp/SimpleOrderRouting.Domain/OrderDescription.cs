@@ -13,10 +13,8 @@
 //    limitations under the License.
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
-namespace SimpleOrderRouting.Domain
+namespace SimpleOrderRouting
 {
-    using SimpleOrderRouting.Domain.SmartOrderRouting;
-
     public struct OrderDescription
     {
         public Market TargetMarket;

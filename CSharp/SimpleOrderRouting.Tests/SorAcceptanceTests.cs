@@ -24,9 +24,6 @@ namespace SimpleOrderRouting.Tests
 
     using NFluent;
     using SimpleOrderRouting.Infra;
-
-    using SimpleOrderRouting.Domain;
-    using SimpleOrderRouting.Domain.SmartOrderRouting;
     using SimpleOrderRouting.Infra.TestHelpers;
 
     using Xunit;

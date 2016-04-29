@@ -18,11 +18,9 @@
 //     limitations under the License.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-namespace SimpleOrderRouting.Domain
+namespace SimpleOrderRouting
 {
     using System;
-
-    using SimpleOrderRouting.Domain.SmartOrderRouting;
 
     public class LimitOrder : IOrder
     {

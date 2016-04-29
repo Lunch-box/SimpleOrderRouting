@@ -18,13 +18,11 @@
 //     limitations under the License.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-namespace SimpleOrderRouting.Domain
+namespace SimpleOrderRouting
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
-    using SimpleOrderRouting.Domain.SmartOrderRouting;
 
     /// <summary>
     /// Aggregates multiple <see cref="IOrder"/> instances.

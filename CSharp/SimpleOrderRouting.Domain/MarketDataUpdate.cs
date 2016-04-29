@@ -1,6 +1,6 @@
-namespace SimpleOrderRouting.Domain
+namespace SimpleOrderRouting
 {
-    using SimpleOrderRouting.Domain.Order;
+    using SimpleOrderRouting.Order;
 
     public class MarketDataUpdate
     {

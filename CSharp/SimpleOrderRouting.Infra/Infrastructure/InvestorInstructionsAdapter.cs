@@ -23,9 +23,8 @@ namespace SimpleOrderRouting.Infra
 {
     using System;
 
-    using SimpleOrderRouting.Domain;
-    using SimpleOrderRouting.Domain.Order;
-    using SimpleOrderRouting.Domain.SmartOrderRouting;
+    using SimpleOrderRouting.Order;
+
     //TODO: add tests for this adapter
 
     /// <summary>

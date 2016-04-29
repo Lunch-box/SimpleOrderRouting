@@ -1,4 +1,4 @@
-namespace SimpleOrderRouting.Domain
+namespace SimpleOrderRouting
 {
     public interface IMarket
     {

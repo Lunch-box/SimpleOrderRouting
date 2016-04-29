@@ -2,8 +2,6 @@ namespace SimpleOrderRouting.Infra.TestHelpers
 {
     using System.Collections.Generic;
 
-    using SimpleOrderRouting.Domain;
-
     public class MarketProvider : IProvideMarkets
     {
         private readonly IEnumerable<IMarket> markets;

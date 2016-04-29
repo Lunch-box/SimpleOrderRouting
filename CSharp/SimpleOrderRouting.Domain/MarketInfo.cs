@@ -18,7 +18,7 @@
 //     limitations under the License.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-namespace SimpleOrderRouting.Domain
+namespace SimpleOrderRouting
 {
     /// <summary>
     /// Keeps information about a given Market (e.g. # of failures, etc.).

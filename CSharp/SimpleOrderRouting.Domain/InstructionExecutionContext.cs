@@ -18,11 +18,9 @@
 //     limitations under the License.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-namespace SimpleOrderRouting.Domain
+namespace SimpleOrderRouting
 {
     using System;
-
-    using SimpleOrderRouting.Domain.SmartOrderRouting;
 
     /// <summary>
     /// 1 to 1 relationship with an <see cref="SimpleOrderRouting.Infra.InvestorInstruction"/>.  Keeps the current state of the instruction execution.

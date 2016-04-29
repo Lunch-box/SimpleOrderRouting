@@ -4,8 +4,6 @@ namespace SimpleOrderRouting.Infra.TestHelpers
     using System.Collections.Generic;
     using System.Linq;
 
-    using SimpleOrderRouting.Domain;
-
     public class MarketDataProvider : ICanReceiveMarketData
     {
         private readonly IEnumerable<IMarket> marketsInvolved;

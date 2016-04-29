@@ -18,11 +18,9 @@
 //     limitations under the License.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-namespace SimpleOrderRouting.Domain
+namespace SimpleOrderRouting
 {
     using System;
-
-    using SimpleOrderRouting.Domain.SmartOrderRouting;
 
     /// <summary>
     /// Trading instruction given to the SOR on the investor-side.
@@ -81,7 +79,7 @@ namespace SimpleOrderRouting.Domain
             {
                 return false;
             }
-            return Equals((InvestorInstruction)obj);
+            return this.Equals((InvestorInstruction)obj);
         }
 
         public override int GetHashCode()

@@ -1,4 +1,4 @@
-namespace SimpleOrderRouting.Domain.Order
+namespace SimpleOrderRouting.Order
 {
     public class InstrumentIdentifier
     {

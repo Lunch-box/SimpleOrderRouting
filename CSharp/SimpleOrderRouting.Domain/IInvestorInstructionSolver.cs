@@ -13,7 +13,7 @@
 //    limitations under the License.
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
-namespace SimpleOrderRouting.Domain
+namespace SimpleOrderRouting
 {
     /// <summary>
     /// Transforms an <see cref="SimpleOrderRouting.Infra.InvestorInstruction"/> into an <see cref="OrderBasket"/>.

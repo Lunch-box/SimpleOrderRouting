@@ -13,7 +13,7 @@
 //    limitations under the License.
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
-namespace SimpleOrderRouting.Domain.SmartOrderRouting
+namespace SimpleOrderRouting
 {
     /// <summary>
     /// Sell or Buy way for Orders.

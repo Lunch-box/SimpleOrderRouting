@@ -23,8 +23,6 @@ namespace SimpleOrderRouting.Infra
 {
     using System;
 
-    using SimpleOrderRouting.Domain.SmartOrderRouting;
-
     public class InvestorInstructionDto
     {
         public InvestorInstructionDto(InvestorInstructionIdentifierDto uniqueIdentifier, Way way, int quantity, decimal price, bool allowPartialExecution = false, DateTime? goodTill = null)

@@ -15,6 +15,7 @@ namespace SimpleOrderRouting.Infra
             
         public MarketGatewaysAdapter(MarketGateway[] marketGateways)
         {
+            
             throw new NotImplementedException();
         }
 

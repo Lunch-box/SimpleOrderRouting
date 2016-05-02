@@ -23,6 +23,9 @@ namespace SimpleOrderRouting.Tests
     using System;
 
     using NFluent;
+
+    using OtherTeam.StandardizedMarketGatewayAPI;
+
     using SimpleOrderRouting.Infra;
     using SimpleOrderRouting.Investors;
     using SimpleOrderRouting.Markets;
@@ -40,24 +43,16 @@ namespace SimpleOrderRouting.Tests
         {
             // Given market A: 150 @ $100, market B: 55 @ $101 
             // When Investor wants to buy 125 stocks @ $100 Then SOR can execute at the requested price
-            var marketA = new Market
-            {
-                                  SellQuantity = 150,
-                                  SellPrice = 100M
-                              };
-            
-            var marketB = new Market
-            {
-                                  SellQuantity = 55,
-                                  SellPrice = 101M
-                              };
+            var marketA = new MarketGateway("Euronext", 150, 100M);
+
+            var marketB = new MarketGateway("LSE", 55, 101M);
 
             var marketsInvolved = new[] { marketA, marketB };
 
-            ICanRouteOrders canRouteOrders = null;//new OrderRoutingService(marketsInvolved);
-            ICanReceiveMarketData canReceiveMarketData = new MarketDataProvider(marketsInvolved);
-            IProvideMarkets provideMarkets = new MarketProvider(marketsInvolved);
-            var sor = new SmartOrderRoutingEngine(provideMarkets, canRouteOrders, canReceiveMarketData);
+            // TODO: plug the proper market adapter implementation
+            var marketGatewaysAdapter = new MarketGatewaysAdapter(marketsInvolved);
+
+            var sor = new SmartOrderRoutingEngine(marketGatewaysAdapter, marketGatewaysAdapter, marketGatewaysAdapter);
 
             var investorInstruction = new InvestorInstruction(new InvestorInstructionIdentifierDto().Value, Way.Buy, quantity: 125, price: 100M);
 
@@ -112,7 +107,6 @@ namespace SimpleOrderRouting.Tests
             var routingEngine = new SmartOrderRoutingEngine(new MarketProvider(markets), null, new MarketDataProvider(markets));
             return routingEngine;
         }
-
 
         [Fact]
         public void Should_stop_sending_Orders_to_a_Market_after_3_rejects()

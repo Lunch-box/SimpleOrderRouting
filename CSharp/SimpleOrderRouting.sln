@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{F7A88D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleOrderRouting.Domain", "SimpleOrderRouting.Domain\SimpleOrderRouting.Domain.csproj", "{4F66C7D2-8CBD-4280-9A2D-6555E276C6A7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OtherTeam.StandardizedMarketGatewayAPI", "OtherTeam.StandardizedMarketGatewayAPI\OtherTeam.StandardizedMarketGatewayAPI.csproj", "{FE2D8118-AFD3-4005-A6D5-C1D240DAD3E4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{4F66C7D2-8CBD-4280-9A2D-6555E276C6A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F66C7D2-8CBD-4280-9A2D-6555E276C6A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F66C7D2-8CBD-4280-9A2D-6555E276C6A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE2D8118-AFD3-4005-A6D5-C1D240DAD3E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE2D8118-AFD3-4005-A6D5-C1D240DAD3E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE2D8118-AFD3-4005-A6D5-C1D240DAD3E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE2D8118-AFD3-4005-A6D5-C1D240DAD3E4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

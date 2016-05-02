@@ -66,6 +66,10 @@
     <None Include="Settings.StyleCop" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\OtherTeam.StandardizedMarketGatewayAPI\OtherTeam.StandardizedMarketGatewayAPI.csproj">
+      <Project>{fe2d8118-afd3-4005-a6d5-c1d240dad3e4}</Project>
+      <Name>OtherTeam.StandardizedMarketGatewayAPI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SimpleOrderRouting.Domain\SimpleOrderRouting.Domain.csproj">
       <Project>{4F66C7D2-8CBD-4280-9A2D-6555E276C6A7}</Project>
       <Name>SimpleOrderRouting.Domain</Name>

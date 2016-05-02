@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{00DD3731-E815-4770-BE17-4F17BFEC4171}</ProjectGuid>
+    <ProjectGuid>{FE2D8118-AFD3-4005-A6D5-C1D240DAD3E4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SimpleOrderRouting.Infra</RootNamespace>
-    <AssemblyName>SimpleOrderRouting.Infra</AssemblyName>
+    <RootNamespace>OtherTeam.StandardizedMarketGatewayAPI</RootNamespace>
+    <AssemblyName>OtherTeam.StandardizedMarketGatewayAPI</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -39,27 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IInvestorService.cs" />
-    <Compile Include="InvestorInstructionsAdapter.cs" />
-    <Compile Include="InvestorInstructionDto.cs" />
-    <Compile Include="InvestorInstructionIdentifierDto.cs" />
-    <Compile Include="InvestorInstructionIdentifierFactory.cs" />
-    <Compile Include="InvestorInstructionUpdatedDto.cs" />
-    <Compile Include="MarketGatewaysAdapter.cs" />
+    <Compile Include="MarketGateway.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Settings.StyleCop" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\OtherTeam.StandardizedMarketGatewayAPI\OtherTeam.StandardizedMarketGatewayAPI.csproj">
-      <Project>{fe2d8118-afd3-4005-a6d5-c1d240dad3e4}</Project>
-      <Name>OtherTeam.StandardizedMarketGatewayAPI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SimpleOrderRouting.Domain\SimpleOrderRouting.Domain.csproj">
-      <Project>{4F66C7D2-8CBD-4280-9A2D-6555E276C6A7}</Project>
-      <Name>SimpleOrderRouting.Domain</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

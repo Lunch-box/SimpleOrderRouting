@@ -39,7 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MarketGateway.cs" />
+    <Compile Include="ApiMarketGateway.cs" />
+    <Compile Include="ApiMarketOrder.cs" />
+    <Compile Include="ApiMarketWay.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

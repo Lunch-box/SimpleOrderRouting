@@ -71,17 +71,18 @@ namespace SimpleOrderRouting.Markets.Orders
             var failures = new List<OrderFailedEventArgs>(this.ordersDescriptions.Count);
             foreach (var orderDescription in this.ordersDescriptions)
             {
-                var market = orderDescription.TargetMarket;
-                var limitOrder = market.CreateLimitOrder(orderDescription.OrderWay, orderDescription.OrderPrice, orderDescription.Quantity, orderDescription.AllowPartial);
+                var market = orderDescription.TargetMarketName;
+                // TODO: use IcanRouteOrder here instead
+                //var limitOrder = market.CreateLimitOrder(orderDescription.OrderWay, orderDescription.OrderPrice, orderDescription.Quantity, orderDescription.AllowPartial);
 
-                limitOrder.OrderExecuted += (o, e) => this.OnOrderExecuted(e);
-                EventHandler<OrderFailedEventArgs> limitOrderOnOrderFailed = (sender, reason) => failures.Add(reason);
-                limitOrder.OrderFailed += limitOrderOnOrderFailed;
+                //limitOrder.OrderExecuted += (o, e) => this.OnOrderExecuted(e);
+                //EventHandler<OrderFailedEventArgs> limitOrderOnOrderFailed = (sender, reason) => failures.Add(reason);
+                //limitOrder.OrderFailed += limitOrderOnOrderFailed;
 
-                limitOrder.Send();
+                //limitOrder.Send();
 
-                limitOrder.OrderExecuted -= (sender, e) => this.OnOrderExecuted(e);
-                limitOrder.OrderFailed -= limitOrderOnOrderFailed;
+                //limitOrder.OrderExecuted -= (sender, e) => this.OnOrderExecuted(e);
+                //limitOrder.OrderFailed -= limitOrderOnOrderFailed;
             }
 
             if (failures.Count > 0)

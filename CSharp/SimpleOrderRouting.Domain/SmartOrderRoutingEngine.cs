@@ -67,14 +67,15 @@ namespace SimpleOrderRouting
         //// TODO: remove investor instruction as arg here?
         private void RouteImpl(InvestorInstruction investorInstruction, InstructionExecutionContext instructionExecutionContext)
         {
-            // 2. Prepare order book (solver)
+            // 1. Prepare order book (solver)
             var solver = new MarketSweepSolver(this.marketSnapshotProvider);
-
-            // 3. Send and monitor
             var orderBasket = solver.Solve(instructionExecutionContext);
 
+            // 2. Route the order book
+            this.canRouteOrders.Route(orderBasket);
+
             // TODO: possible race condition between Solve and the event part?
-            // 4. Feedback investor
+            // 4. Feedback the investor
             EventHandler<DealExecutedEventArgs> handler = (executedOrder, args) => instructionExecutionContext.Executed(args.Quantity);
             EventHandler<OrderFailedEventArgs> failHandler = (s, failure) => this.SendOrderFailed(investorInstruction, failure, instructionExecutionContext);
 

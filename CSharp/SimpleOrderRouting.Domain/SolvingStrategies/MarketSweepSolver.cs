@@ -80,7 +80,7 @@ namespace SimpleOrderRouting.SolvingStrategies
 
                 if (quantityToExecute > 0)
                 {
-                    ordersDescription.Add(new OrderDescription(marketInfo.Market, instructionExecutionContext.Way, quantityToExecute, requestedPrice, instructionExecutionContext.AllowPartialExecution));
+                    ordersDescription.Add(new OrderDescription(marketInfo.Market.Name, instructionExecutionContext.Way, quantityToExecute, requestedPrice, instructionExecutionContext.AllowPartialExecution));
                 }
             }
 

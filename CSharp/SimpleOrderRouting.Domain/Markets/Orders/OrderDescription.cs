@@ -17,7 +17,7 @@ namespace SimpleOrderRouting.Markets.Orders
 {
     public struct OrderDescription
     {
-        public Market TargetMarket;
+        public string TargetMarketName;
 
         public Way OrderWay;
 
@@ -27,9 +27,9 @@ namespace SimpleOrderRouting.Markets.Orders
 
         public bool AllowPartial;
 
-        public OrderDescription(Market targetMarket, Way orderWay, int quantity, decimal orderPrice, bool allowPartial)
+        public OrderDescription(string targetMarketName, Way orderWay, int quantity, decimal orderPrice, bool allowPartial)
         {
-            this.TargetMarket = targetMarket;
+            this.TargetMarketName = targetMarketName;
             this.OrderWay = orderWay;
             this.Quantity = quantity;
             this.OrderPrice = orderPrice;

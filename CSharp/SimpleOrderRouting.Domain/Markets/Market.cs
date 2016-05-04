@@ -24,7 +24,7 @@ namespace SimpleOrderRouting.Markets
 
     using SimpleOrderRouting.Markets.Orders;
 
-    public class Market : ITestableMarket, IMarket
+    public class Market : ITestableMarket
     {
         public event EventHandler<DealExecutedEventArgs> OrderExecuted;
 
@@ -37,6 +37,9 @@ namespace SimpleOrderRouting.Markets
         public Predicate<IOrder> OrderPredicate { get; set; }
 
         public int TimesSent { get; private set; }
+
+        // TODO: remove that temporary patch
+        public string Name { get; private set; }
 
         public IOrder CreateMarketOrder(Way buy, int quantity)
         {
@@ -80,6 +83,10 @@ namespace SimpleOrderRouting.Markets
 
                     this.RaiseOrderExecuted(order, executedQuantity);
 
+                    break;
+
+                default :
+                    throw new NotImplementedException();
                     break;
             }
         }

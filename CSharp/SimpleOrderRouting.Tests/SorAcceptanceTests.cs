@@ -43,9 +43,9 @@ namespace SimpleOrderRouting.Tests
         {
             // Given market A: 150 @ $100, market B: 55 @ $101 
             // When Investor wants to buy 125 stocks @ $100 Then SOR can execute at the requested price
-            var marketA = new MarketGateway("Euronext", 150, 100M);
+            var marketA = new ApiMarketGateway("Euronext", 150, 100M);
 
-            var marketB = new MarketGateway("LSE", 55, 101M);
+            var marketB = new ApiMarketGateway("LSE", 55, 101M);
 
             var marketsInvolved = new[] { marketA, marketB };
 

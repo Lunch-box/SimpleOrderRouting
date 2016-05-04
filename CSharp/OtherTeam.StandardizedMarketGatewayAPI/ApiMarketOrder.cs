@@ -6,6 +6,14 @@ namespace OtherTeam.StandardizedMarketGatewayAPI
 
         public ApiMarketWay Way { get; private set; }
 
+        public bool AllowPartialExecution
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public ApiMarketOrder(ApiMarketWay way, int quantity)
         {
             this.Quantity = quantity;

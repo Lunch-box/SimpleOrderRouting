@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiDealExecutedEventArgs.cs" />
     <Compile Include="ApiMarketGateway.cs" />
     <Compile Include="ApiMarketOrder.cs" />
     <Compile Include="ApiMarketWay.cs" />

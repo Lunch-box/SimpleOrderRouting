@@ -20,6 +20,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace SimpleOrderRouting.Markets
 {
+    using System;
+
     /// <summary>
     /// Keeps information about a given Market (e.g. # of failures, etc.).
     /// </summary>
@@ -29,10 +31,30 @@ namespace SimpleOrderRouting.Markets
         /// Initializes a new instance of the <see cref="MarketInfo"/> class.
         /// </summary>
         /// <param name="market">The market.</param>
+        [Obsolete("Do not use this constructor anymore.")]
         public MarketInfo(Market market)
         {
             this.Market = market;
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MarketInfo"/> class.
+        /// </summary>
+        /// <param name="marketName">Name of the market.</param>
+        /// <param name="sellQuantity">The sell quantity.</param>
+        /// <param name="sellPrice">The sell price.</param>
+        public MarketInfo(string marketName, int sellQuantity, decimal sellPrice)
+        {
+            this.MarketName = marketName;
+            this.SellQuantity = sellQuantity;
+            this.SellPrice = sellPrice;
+        }
+
+        public string MarketName { get; private set; }
+
+        public int SellQuantity { get; private set; }
+
+        public decimal SellPrice { get; private set; }
 
         /// <summary>
         /// Gets the corresponding market.
@@ -40,6 +62,7 @@ namespace SimpleOrderRouting.Markets
         /// <value>
         /// The corresponding market.
         /// </value>
+        [Obsolete("Use the MarketName property instead.")]
         public Market Market { get; private set; }
 
         /// <summary>

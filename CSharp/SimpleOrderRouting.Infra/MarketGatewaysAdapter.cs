@@ -2,6 +2,7 @@ namespace SimpleOrderRouting.Infra
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using OtherTeam.StandardizedMarketGatewayAPI;
 
@@ -19,11 +20,15 @@ namespace SimpleOrderRouting.Infra
             
         public MarketGatewaysAdapter(ApiMarketGateway[] apiMarketGateways)
         {
+            this.gateways = new Dictionary<string, ApiMarketGateway>();
+        
             foreach (var marketGateway in apiMarketGateways)
             {
-                this.gateways[marketGateway.Name] = marketGateway;
+                this.gateways[marketGateway.MarketName] = marketGateway;
             }
         }
+
+        #region ICanReceiveMarketData
 
         public event EventHandler<MarketDataUpdate> InstrumentMarketDataUpdated;
 
@@ -32,10 +37,32 @@ namespace SimpleOrderRouting.Infra
             throw new NotImplementedException();
         }
 
+        public void Subscribe(string marketName)
+        {
+            var internalMarket = this.gateways.First(m => m.Key == marketName).Value;
+
+            var onInstrumentMarketDataUpdated = this.InstrumentMarketDataUpdated;
+            if (onInstrumentMarketDataUpdated != null)
+            {
+                onInstrumentMarketDataUpdated(this, new MarketDataUpdate(marketName, internalMarket.SellPrice, internalMarket.SellQuantity));
+            };
+        }
+
+        #endregion
+
+        #region IProvideMarkets
+
         public IEnumerable<IMarket> GetAvailableMarkets()
         {
             throw new NotImplementedException();
         }
+
+        public IEnumerable<string> GetAvailableMarketNames()
+        {
+            return this.gateways.Keys;
+        }
+
+        #endregion
 
         #region ICanRouteOrders
 

@@ -20,6 +20,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace SimpleOrderRouting.Markets
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -27,8 +28,21 @@ namespace SimpleOrderRouting.Markets
 
     public class MarketSnapshotProvider
     {
+        private readonly Dictionary<string, MarketInfo> lastMarketUpdates = new Dictionary<string, MarketInfo>();
         private readonly Dictionary<IMarket, MarketInfo> _lastMarketUpdates = new Dictionary<IMarket, MarketInfo>();
 
+        public MarketSnapshotProvider(IEnumerable<string> marketNames, ICanReceiveMarketData canReceiveMarketData)
+        {
+            canReceiveMarketData.InstrumentMarketDataUpdated += this.InstrumentMarketDataUpdated;
+            foreach (var marketName in marketNames)
+            {
+                // TODO : Get rid of the hack (casting to concrete class)
+                //this.lastMarketUpdates[marketName] = new MarketInfo(marketName, );
+                canReceiveMarketData.Subscribe(marketName);
+            }
+        }
+
+        [Obsolete("Use the constructor with market as string instead.")]
         public MarketSnapshotProvider(IEnumerable<IMarket> marketsToWatch, ICanReceiveMarketData canReceiveMarketData)
         {
             canReceiveMarketData.InstrumentMarketDataUpdated += this.InstrumentMarketDataUpdated;
@@ -42,9 +56,7 @@ namespace SimpleOrderRouting.Markets
 
         private void InstrumentMarketDataUpdated(object sender, MarketDataUpdate marketDataUpdate)
         {
-            var marketInfo = this._lastMarketUpdates[marketDataUpdate.Market];
-            marketInfo.Market.SellPrice = marketDataUpdate.Price;
-            marketInfo.Market.SellQuantity = marketDataUpdate.Quantity;
+            this.lastMarketUpdates[marketDataUpdate.MarketName] = new MarketInfo(marketDataUpdate.MarketName, marketDataUpdate.Quantity, marketDataUpdate.Price);
         }
 
         public MarketSnapshot GetSnapshot()

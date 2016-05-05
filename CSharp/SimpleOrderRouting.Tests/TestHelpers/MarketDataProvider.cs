@@ -10,6 +10,14 @@ namespace SimpleOrderRouting.Tests.TestHelpers
     {
         private readonly IEnumerable<IMarket> marketsInvolved;
 
+        private readonly IEnumerable<string> involvedMarketNames;
+
+        public MarketDataProvider(IEnumerable<string> involvedMarketNames)
+        {
+            this.involvedMarketNames = involvedMarketNames;
+        }
+
+        [Obsolete("Use the string version instead.")]
         public MarketDataProvider(IEnumerable<IMarket> marketsInvolved)
         {
             this.marketsInvolved = marketsInvolved;
@@ -26,6 +34,17 @@ namespace SimpleOrderRouting.Tests.TestHelpers
             {
                 onInstrumentMarketDataUpdated(this, new MarketDataUpdate(market, internalMarket.SellPrice, internalMarket.SellQuantity));
             }
+        }
+
+        public void Subscribe(string marketName)
+        {
+            var internalMarket = this.involvedMarketNames.First(m => m == marketName);
+
+            //var onInstrumentMarketDataUpdated = this.InstrumentMarketDataUpdated;
+            //if (onInstrumentMarketDataUpdated != null)
+            //{
+            //    onInstrumentMarketDataUpdated(this, new MarketDataUpdate(marketName, internalMarket.SellPrice, internalMarket.SellQuantity));
+            //}
         }
     }
 }

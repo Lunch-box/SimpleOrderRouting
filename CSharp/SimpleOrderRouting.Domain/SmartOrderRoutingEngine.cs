@@ -42,8 +42,6 @@ namespace SimpleOrderRouting
 
         private MarketSnapshotProvider marketSnapshotProvider;
 
-        private Dictionary<IMarket, IMarket> markets;
-
         private IDictionary<InvestorInstruction, Action<OrderExecutedEventArgs>> executionCallbacks = new Dictionary<InvestorInstruction, Action<OrderExecutedEventArgs>>();
         private IDictionary<InvestorInstruction, Action<string>> failureCallbacks = new Dictionary<InvestorInstruction, Action<string>>();
 
@@ -52,8 +50,7 @@ namespace SimpleOrderRouting
             this.provideMarkets = provideMarkets;
             this.canRouteOrders = canRouteOrders;
             this.canReceiveMarketData = canReceiveMarketData;
-            var availableMarkets = provideMarkets.GetAvailableMarkets();
-            this.markets = availableMarkets.ToDictionary(market => market, market => market);
+            var availableMarkets = provideMarkets.GetAvailableMarketNames();
             this.marketSnapshotProvider = new MarketSnapshotProvider(availableMarkets, canReceiveMarketData);
         }
 

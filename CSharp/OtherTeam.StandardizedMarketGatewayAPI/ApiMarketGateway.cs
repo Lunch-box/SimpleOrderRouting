@@ -4,9 +4,9 @@ namespace OtherTeam.StandardizedMarketGatewayAPI
 
     public class ApiMarketGateway
     {
-        public ApiMarketGateway(string name, int sellQuantity, decimal sellPrice)
+        public ApiMarketGateway(string marketName, int sellQuantity, decimal sellPrice)
         {
-            this.Name = name;
+            this.MarketName = marketName;
             this.SellQuantity = sellQuantity;
             this.SellPrice = sellPrice;
         }
@@ -15,7 +15,7 @@ namespace OtherTeam.StandardizedMarketGatewayAPI
 
         public event EventHandler<string> OrderFailed;
 
-        public string Name { get; private set; }
+        public string MarketName { get; private set; }
 
         public int SellQuantity { get; private set; }
 

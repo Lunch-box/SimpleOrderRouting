@@ -13,6 +13,7 @@ namespace OtherTeam.StandardizedMarketGatewayAPI
 
         public event EventHandler<ApiDealExecutedEventArgs> OrderExecuted;
 
+        // TODO: set a proper event handler instead of this string
         public event EventHandler<string> OrderFailed;
 
         public string MarketName { get; private set; }
@@ -23,51 +24,45 @@ namespace OtherTeam.StandardizedMarketGatewayAPI
 
         public int TimesSent { get; private set; }
 
-        public Predicate<ApiMarketOrder> OrderPredicate { get; set; }
+        public Predicate<ApiOrder> OrderPredicate { get; set; }
 
         public ApiMarketOrder CreateMarketOrder(ApiMarketWay way, int quantity)
         {
             return new ApiMarketOrder(way, quantity);
         }
 
-        public void Send(ApiMarketOrder order)
+        public ApiLimitOrder CreateLimitOrder(ApiMarketWay apiMarketWay, int quantity, decimal price, bool allowPartial)
+        {
+            return new ApiLimitOrder(apiMarketWay, quantity, price, allowPartial);
+        }
+
+        public void Send(ApiMarketOrder marketOrder)
         {
             this.TimesSent++;
 
-            if (this.OrderPredicate != null && this.OrderPredicate(order) == false)
+            if (this.OrderPredicate != null && this.OrderPredicate(marketOrder) == false)
             {
-                this.RaiseOrderFailed(order, "Predicate failed.");
+                this.RaiseOrderFailed(marketOrder, "Predicate failed.");
                 return;
             }
 
-            switch (order.Way)
+            switch (marketOrder.Way)
             {
                 case ApiMarketWay.Buy:
                     // TODO: restore that sh# and migrate Market tests to ApiMarketGatewatTests
-                    //if (order is LimitOrder)
-                    //{
-                    // TODO: use polymorphism here instead
-                    //    var limitOrder = order as LimitOrder;
-                    //    if (limitOrder.Price > this.SellPrice)
-                    //    {
-                    //        this.RaiseOrderFailed(order, "Invalid price");
-                    //        return;
-                    //    }
-                    //}
-
-                    if (order.Quantity > this.SellQuantity)
+                    if (marketOrder.Quantity > this.SellQuantity)
                     {
-                        if (!order.AllowPartialExecution)
+                        if (!marketOrder.AllowPartialExecution)
                         {
-                            this.RaiseOrderFailed(order, "Excessive quantity!");
+                            this.RaiseOrderFailed(marketOrder, "Excessive quantity!");
                             return;
                         }
                     }
 
-                    var executedQuantity = Math.Min(order.Quantity, this.SellQuantity);
+                    var executedQuantity = Math.Min(marketOrder.Quantity, this.SellQuantity);
                     this.SellQuantity -= executedQuantity;
 
-                    this.RaiseOrderExecuted(order, executedQuantity);
+                    this.RaiseOrderExecuted(marketOrder, executedQuantity);
 
                     break;
 
@@ -77,7 +72,47 @@ namespace OtherTeam.StandardizedMarketGatewayAPI
             }
         }
 
-        private void RaiseOrderExecuted(ApiMarketOrder order, int executedQuantity)
+        public void Send(ApiLimitOrder limitOrder)
+        {
+            this.TimesSent++;
+
+            if (this.OrderPredicate != null && this.OrderPredicate(limitOrder) == false)
+            {
+                this.RaiseOrderFailed(limitOrder, "Predicate failed.");
+                return;
+            }
+
+            switch (limitOrder.Way)
+            {
+                case ApiMarketWay.Buy:
+                    if (limitOrder.Price > this.SellPrice)
+                    {
+                        this.RaiseOrderFailed(limitOrder, "Invalid price");
+                        return;
+                    }
+
+                    if (limitOrder.Quantity > this.SellQuantity)
+                    {
+                        if (!limitOrder.AllowPartialExecution)
+                        {
+                            this.RaiseOrderFailed(limitOrder, "Excessive quantity!");
+                            return;
+                        }
+                    }
+
+                    var executedQuantity = Math.Min(limitOrder.Quantity, this.SellQuantity);
+                    this.SellQuantity -= executedQuantity;
+
+                    this.RaiseOrderExecuted(limitOrder, executedQuantity);
+
+                    break;
+
+                default:
+                    throw new NotImplementedException();
+                    break;
+            }
+        }
+        private void RaiseOrderExecuted(ApiOrder order, int executedQuantity)
         {
             var onOrderExecuted = this.OrderExecuted;
             if (onOrderExecuted != null)
@@ -86,7 +121,7 @@ namespace OtherTeam.StandardizedMarketGatewayAPI
             }
         }
 
-        private void RaiseOrderFailed(ApiMarketOrder order, string reason)
+        private void RaiseOrderFailed(ApiOrder order, string reason)
         {
             var onOrderFailed = this.OrderFailed;
             if (onOrderFailed != null)
@@ -95,5 +130,6 @@ namespace OtherTeam.StandardizedMarketGatewayAPI
             }
         }
 
+        
     }
 }

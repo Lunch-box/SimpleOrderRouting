@@ -29,7 +29,6 @@ namespace SimpleOrderRouting.Markets
     public class MarketSnapshotProvider
     {
         private readonly Dictionary<string, MarketInfo> lastMarketUpdates = new Dictionary<string, MarketInfo>();
-        private readonly Dictionary<IMarket, MarketInfo> _lastMarketUpdates = new Dictionary<IMarket, MarketInfo>();
 
         public MarketSnapshotProvider(IEnumerable<string> marketNames, ICanReceiveMarketData canReceiveMarketData)
         {
@@ -42,16 +41,16 @@ namespace SimpleOrderRouting.Markets
             }
         }
 
-        [Obsolete("Use the constructor with market as string instead.")]
+        [Obsolete("Use the constructor with marketName as string instead.")]
         public MarketSnapshotProvider(IEnumerable<IMarket> marketsToWatch, ICanReceiveMarketData canReceiveMarketData)
         {
-            canReceiveMarketData.InstrumentMarketDataUpdated += this.InstrumentMarketDataUpdated;
-            foreach (var market in marketsToWatch)
-            {
-                // TODO : Get rid of the hack (casting to concrete class)
-                this._lastMarketUpdates[market] = new MarketInfo((Market)market);
-                canReceiveMarketData.Subscribe(market);
-            }
+            //canReceiveMarketData.InstrumentMarketDataUpdated += this.InstrumentMarketDataUpdated;
+            //foreach (var marketName in marketsToWatch)
+            //{
+            //    // TODO : Get rid of the hack (casting to concrete class)
+            //    this._lastMarketUpdates[marketName] = new MarketInfo((Market)marketName);
+            //    canReceiveMarketData.Subscribe(marketName);
+            //}
         }
 
         private void InstrumentMarketDataUpdated(object sender, MarketDataUpdate marketDataUpdate)
@@ -61,13 +60,13 @@ namespace SimpleOrderRouting.Markets
 
         public MarketSnapshot GetSnapshot()
         {
-            return new MarketSnapshot(this._lastMarketUpdates.Values.ToList());
+            return new MarketSnapshot(this.lastMarketUpdates.Values.ToList());
         }
 
-        public void MarketFailed(Market market)
+        public void MarketFailed(string marketName)
         {
             // TODO: refactor this so the method accepts IMarket instead
-            this._lastMarketUpdates.First(m => m.Value.Market == market).Value.OrdersFailureCount++;
+            // this.lastMarketUpdates.First(m => m.Value.MarketName == marketName).Value.OrdersFailureCount++;
         }
     }
 }

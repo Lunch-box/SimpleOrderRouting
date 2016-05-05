@@ -30,16 +30,6 @@ namespace SimpleOrderRouting.Markets
         /// <summary>
         /// Initializes a new instance of the <see cref="MarketInfo"/> class.
         /// </summary>
-        /// <param name="market">The market.</param>
-        [Obsolete("Do not use this constructor anymore.")]
-        public MarketInfo(Market market)
-        {
-            this.Market = market;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MarketInfo"/> class.
-        /// </summary>
         /// <param name="marketName">Name of the market.</param>
         /// <param name="sellQuantity">The sell quantity.</param>
         /// <param name="sellPrice">The sell price.</param>
@@ -55,15 +45,6 @@ namespace SimpleOrderRouting.Markets
         public int SellQuantity { get; private set; }
 
         public decimal SellPrice { get; private set; }
-
-        /// <summary>
-        /// Gets the corresponding market.
-        /// </summary>
-        /// <value>
-        /// The corresponding market.
-        /// </value>
-        [Obsolete("Use the MarketName property instead.")]
-        public Market Market { get; private set; }
 
         /// <summary>
         /// Gets or sets the number of failures for orders we received from this market.

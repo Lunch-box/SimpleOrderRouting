@@ -58,16 +58,17 @@ namespace SimpleOrderRouting.Tests
 
             OrderExecutedEventArgs orderExecutedEventArgs = null;
             sor.Subscribe(investorInstruction, (args) => { orderExecutedEventArgs = args; }, null);
-                //investorInstruction.Executed += (sender, args) => { orderExecutedEventArgs = args; };
+            investorInstruction.Executed += (sender, args) => { orderExecutedEventArgs = args; };
             
             // orderRequest.Route(); ?
             sor.Route(investorInstruction);
 
             // TODO :introduce autoreset event instead
+            Check.That(orderExecutedEventArgs).IsNotNull();
             Check.That(orderExecutedEventArgs).HasFieldsWithSameValues(new { Way = Way.Buy, Quantity = 125, Price = 100M });
         }
 
-        [Fact]
+                [Fact]
         public void Should_failed_when_Order_exceeds_all_Market_capacity_and_partial_execution_not_allowed()
         {
             // Given market A: 150 @ $100, market B: 55 @ $101 

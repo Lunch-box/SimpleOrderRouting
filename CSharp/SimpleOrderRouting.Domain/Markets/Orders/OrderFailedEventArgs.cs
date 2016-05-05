@@ -20,16 +20,18 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace SimpleOrderRouting.Markets.Orders
 {
+    using System;
+
     public class OrderFailedEventArgs
     {
-        public OrderFailedEventArgs(Market market, string reason)
+        public OrderFailedEventArgs(string marketName, string reason)
         {
             this.Reason = reason;
-            this.Market = market;
+            this.MarketName = marketName;
         }
 
-        public Market Market { get; private set; }
-
+        public string MarketName { get; private set; }
+        
         public string Reason { get; private set; }
     }
 }

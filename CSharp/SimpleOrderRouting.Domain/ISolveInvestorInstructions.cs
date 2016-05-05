@@ -23,12 +23,16 @@ namespace SimpleOrderRouting
     /// </summary>
     public interface ISolveInvestorInstructions
     {
+        // TODO: remove the reference to ICanRouteOrder (currently requested for the OrderBasket creation;-(
         /// <summary>
-        /// Build the description of the orders needed to fulfill an <see cref="SimpleOrderRouting.Infra.InvestorInstruction"/> which 
-        /// is aggregated within an <see cref="InstructionExecutionContext"/> instance.
+        /// Build the description of the orders needed to fulfill an <see cref="SimpleOrderRouting.Infra.InvestorInstruction" /> which
+        /// is aggregated within an <see cref="InstructionExecutionContext" /> instance.
         /// </summary>
-        /// <param name="instructionExecutionContext">The <see cref="InstructionExecutionContext"/> instance that aggregates the <see cref="SimpleOrderRouting.Infra.InvestorInstruction"/>.</param>
-        /// <returns>An <see cref="OrderBasket"/> containing all the orders to be routed in order to fulfill the initial <see cref="SimpleOrderRouting.Infra.InvestorInstruction"/>.</returns>
-        OrderBasket Solve(InstructionExecutionContext instructionExecutionContext);
+        /// <param name="instructionExecutionContext">The <see cref="InstructionExecutionContext" /> instance that aggregates the <see cref="SimpleOrderRouting.Infra.InvestorInstruction" />.</param>
+        /// <param name="canRouteOrders">The can route orders (temp hack that should be removed afterwards).</param>
+        /// <returns>
+        /// An <see cref="OrderBasket" /> containing all the orders to be routed in order to fulfill the initial <see cref="SimpleOrderRouting.Infra.InvestorInstruction" />.
+        /// </returns>
+        OrderBasket Solve(InstructionExecutionContext instructionExecutionContext, ICanRouteOrders canRouteOrders);
     }
 }

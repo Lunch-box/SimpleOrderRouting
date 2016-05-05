@@ -32,9 +32,12 @@ namespace SimpleOrderRouting.Markets.Orders
     {
         private readonly List<OrderDescription> ordersDescriptions;
 
-        public OrderBasket(List<OrderDescription> ordersDescriptions)
+        private readonly ICanRouteOrders canRouteOrders;
+
+        public OrderBasket(List<OrderDescription> ordersDescriptions, ICanRouteOrders canRouteOrders)
         {
             this.ordersDescriptions = ordersDescriptions;
+            this.canRouteOrders = canRouteOrders;
 
             if (ordersDescriptions.Count > 0)
             {
@@ -71,18 +74,18 @@ namespace SimpleOrderRouting.Markets.Orders
             var failures = new List<OrderFailedEventArgs>(this.ordersDescriptions.Count);
             foreach (var orderDescription in this.ordersDescriptions)
             {
-                var market = orderDescription.TargetMarketName;
-                // TODO: use IcanRouteOrder here instead
-                //var limitOrder = market.CreateLimitOrder(orderDescription.OrderWay, orderDescription.OrderPrice, orderDescription.Quantity, orderDescription.AllowPartial);
+                // TODO: refactor this to prevent this domain object to rely too much on ICanRouterOrders things...
+                var limitOrder = this.canRouteOrders.CreateLimitOrder(orderDescription);
+                //var limitOrder = this.canRouteOrders.CreateLimitOrder(orderDescription.OrderWay, orderDescription.OrderPrice, orderDescription.Quantity, orderDescription.AllowPartial);
 
-                //limitOrder.OrderExecuted += (o, e) => this.OnOrderExecuted(e);
-                //EventHandler<OrderFailedEventArgs> limitOrderOnOrderFailed = (sender, reason) => failures.Add(reason);
-                //limitOrder.OrderFailed += limitOrderOnOrderFailed;
+                limitOrder.OrderExecuted += (o, e) => this.OnOrderExecuted(e);
+                EventHandler<OrderFailedEventArgs> limitOrderOnOrderFailed = (sender, reason) => failures.Add(reason);
+                limitOrder.OrderFailed += limitOrderOnOrderFailed;
 
-                //limitOrder.Send();
+                limitOrder.Send();
 
-                //limitOrder.OrderExecuted -= (sender, e) => this.OnOrderExecuted(e);
-                //limitOrder.OrderFailed -= limitOrderOnOrderFailed;
+                limitOrder.OrderExecuted -= (sender, e) => this.OnOrderExecuted(e);
+                limitOrder.OrderFailed -= limitOrderOnOrderFailed;
             }
 
             if (failures.Count > 0)

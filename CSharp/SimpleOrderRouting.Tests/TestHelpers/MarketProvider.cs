@@ -27,7 +27,7 @@ namespace SimpleOrderRouting.Tests.TestHelpers
 
         public IEnumerable<IMarket> GetAvailableMarkets()
         {
-            // TODO : here we should have a translation between externa context and out Markets domain object.
+            // TODO : here we should have a translation between externa context and out MarketInfos domain object.
             return this.markets;
         }
     }

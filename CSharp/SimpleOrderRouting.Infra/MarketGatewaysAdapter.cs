@@ -9,6 +9,8 @@ namespace SimpleOrderRouting.Infra
     using SimpleOrderRouting.Markets.Feeds;
     using SimpleOrderRouting.Markets.Orders;
 
+    using ApiDealExecutedEventArgs = OtherTeam.StandardizedMarketGatewayAPI.ApiDealExecutedEventArgs;
+
     public class MarketGatewaysAdapter : ICanRouteOrders, ICanReceiveMarketData, IProvideMarkets
     {
         private Dictionary<string, ApiMarketGateway> gateways;
@@ -25,7 +27,44 @@ namespace SimpleOrderRouting.Infra
             foreach (var marketGateway in apiMarketGateways)
             {
                 this.gateways[marketGateway.MarketName] = marketGateway;
+                marketGateway.OrderExecuted += MarketGatewayOnOrderExecuted;
+                marketGateway.OrderFailed += MarketGatewayOnOrderFailed;
             }
+        }
+
+        public event EventHandler<DealExecutedEventArgs> OrderExecuted;
+
+        public event EventHandler<OrderFailedEventArgs> OrderFailed;
+
+        protected virtual void RaiseOrderExecuted(DealExecutedEventArgs args)
+        {
+            if (this.OrderExecuted != null)
+            {
+                this.OrderExecuted(this, args);
+            }
+        }
+
+        protected virtual void RaiseOrderFailed(OrderFailedEventArgs args)
+        {
+            if (this.OrderFailed != null)
+            {
+                this.OrderFailed(this, args);
+            }
+        }
+
+        private void MarketGatewayOnOrderFailed(object sender, string reason)
+        {
+            // Adapts the external API format to the SOR domain format
+            var marketName = "TODO";
+            var dealExecutedEventArgs = new OrderFailedEventArgs(marketName, reason);
+            this.RaiseOrderFailed(dealExecutedEventArgs);
+        }
+
+        private void MarketGatewayOnOrderExecuted(object sender, ApiDealExecutedEventArgs externalApiExecutionArgs)
+        {
+            // Adapts the external API format to the SOR domain format
+            var dealExecutedEventArgs = new DealExecutedEventArgs(externalApiExecutionArgs.Price, externalApiExecutionArgs.Quantity);
+            this.RaiseOrderExecuted(dealExecutedEventArgs);
         }
 
         #region ICanReceiveMarketData
@@ -68,7 +107,7 @@ namespace SimpleOrderRouting.Infra
 
         public IOrder CreateMarketOrder(OrderDescription orderDescription)
         {
-            // adapt from the SOR model to the external market gateway one
+            // Adapts from the SOR model to the external market gateway one
             var marketGateway = this.gateways[orderDescription.TargetMarketName];
 
             ApiMarketWay apiMarketWay = (orderDescription.OrderWay == Way.Sell) ? ApiMarketWay.Sell : ApiMarketWay.Buy;
@@ -79,12 +118,22 @@ namespace SimpleOrderRouting.Infra
 
         public IOrder CreateLimitOrder(OrderDescription orderDescription)
         {
-            throw new NotImplementedException();
+            var marketGateway = this.gateways[orderDescription.TargetMarketName];
+            ApiMarketWay apiMarketWay = (orderDescription.OrderWay == Way.Sell) ? ApiMarketWay.Sell : ApiMarketWay.Buy;
+            ApiLimitOrder apiLimitOrder = marketGateway.CreateLimitOrder(apiMarketWay, orderDescription.Quantity, orderDescription.OrderPrice, orderDescription.AllowPartial);
+
+            return new LimitOrderAdapter(marketGateway, apiLimitOrder);
+        }
+
+        public void Route(OrderBasket basketOrder)
+        {
+            basketOrder.Send();
         }
 
         public void Route(IOrder order)
         {
-            throw new NotImplementedException();
+            // Note: the previously created IOrder is already an adapter from the SOR model to the external market gateway format
+            order.Send();
         }
 
         #endregion

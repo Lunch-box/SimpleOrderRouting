@@ -1,12 +1,8 @@
 namespace OtherTeam.StandardizedMarketGatewayAPI
 {
-    public class ApiMarketOrder
+    public class ApiMarketOrder : ApiOrder
     {
-        public int Quantity { get; private set; }
-
-        public ApiMarketWay Way { get; private set; }
-
-        public bool AllowPartialExecution
+        public new bool AllowPartialExecution
         {
             get
             {
@@ -18,11 +14,6 @@ namespace OtherTeam.StandardizedMarketGatewayAPI
         {
             this.Quantity = quantity;
             this.Way = way;
-        }
-
-        void Send()
-        {
-            
         }
     }
 }

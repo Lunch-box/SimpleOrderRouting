@@ -49,6 +49,7 @@ namespace SimpleOrderRouting
         {
             this.provideMarkets = provideMarkets;
             this.canRouteOrders = canRouteOrders;
+            
             this.canReceiveMarketData = canReceiveMarketData;
             var availableMarkets = provideMarkets.GetAvailableMarketNames();
             this.marketSnapshotProvider = new MarketSnapshotProvider(availableMarkets, canReceiveMarketData);
@@ -66,25 +67,32 @@ namespace SimpleOrderRouting
         {
             // 1. Prepare order book (solver)
             var solver = new MarketSweepSolver(this.marketSnapshotProvider);
-            var orderBasket = solver.Solve(instructionExecutionContext);
+            var orderBasket = solver.Solve(instructionExecutionContext, this.canRouteOrders);
 
             // 2. Route the order book
+            EventHandler<DealExecutedEventArgs> handler = (sender, args) => instructionExecutionContext.Executed(args.Quantity);
+            EventHandler<OrderFailedEventArgs> failHandler = (sender, failure) => this.SendOrderFailed(investorInstruction, failure, instructionExecutionContext);
+
+            this.canRouteOrders.OrderExecuted += handler;
+            this.canRouteOrders.OrderFailed += failHandler;
+
             this.canRouteOrders.Route(orderBasket);
 
             // TODO: possible race condition between Solve and the event part?
             // 4. Feedback the investor
-            EventHandler<DealExecutedEventArgs> handler = (executedOrder, args) => instructionExecutionContext.Executed(args.Quantity);
-            EventHandler<OrderFailedEventArgs> failHandler = (s, failure) => this.SendOrderFailed(investorInstruction, failure, instructionExecutionContext);
+            
+            //investorInstruction.Executed += (sender, e) => this.investorInstruction_Executed(sender, e);
 
-            investorInstruction.Executed += (sender, e) => this.investorInstruction_Executed(sender, e);
+            //orderBasket.OrderExecuted += handler;
+            //orderBasket.OrderFailed += failHandler;
 
-            orderBasket.OrderExecuted += handler;
-            orderBasket.OrderFailed += failHandler;
+            //orderBasket.Send();
 
-            orderBasket.Send();
+            //orderBasket.OrderExecuted -= handler;
+            //orderBasket.OrderFailed -= failHandler;
 
-            orderBasket.OrderExecuted -= handler;
-            orderBasket.OrderFailed -= failHandler;
+            this.canRouteOrders.OrderExecuted -= handler;
+            this.canRouteOrders.OrderFailed -= failHandler;
         }
 
         void investorInstruction_Executed(object sender, OrderExecutedEventArgs e)
@@ -99,7 +107,7 @@ namespace SimpleOrderRouting
 
         private void SendOrderFailed(InvestorInstruction investorInstruction, OrderFailedEventArgs reason, InstructionExecutionContext instructionExecutionContext)
         {
-            this.marketSnapshotProvider.MarketFailed(reason.Market);
+            this.marketSnapshotProvider.MarketFailed(reason.MarketName);
 
             if (investorInstruction.GoodTill != null && 
                 investorInstruction.GoodTill > DateTime.Now && 

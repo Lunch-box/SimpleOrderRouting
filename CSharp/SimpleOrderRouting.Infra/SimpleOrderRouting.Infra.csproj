@@ -45,8 +45,10 @@
     <Compile Include="InvestorInstructionIdentifierDto.cs" />
     <Compile Include="InvestorInstructionIdentifierFactory.cs" />
     <Compile Include="InvestorInstructionUpdatedDto.cs" />
+    <Compile Include="LimitOrderAdapter.cs" />
     <Compile Include="MarketGatewaysAdapter.cs" />
     <Compile Include="MarketOrderAdapter.cs" />
+    <Compile Include="OrderAdapter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -62,7 +62,7 @@ namespace SimpleOrderRouting.Markets.Orders
             var onOrderFailed = this.OrderFailed;
             if (onOrderFailed != null)
             {
-                onOrderFailed(this, new OrderFailedEventArgs(this.Market, s));
+                onOrderFailed(this, new OrderFailedEventArgs(this.Market.Name, s));
             }
         }
 

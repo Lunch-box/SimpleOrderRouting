@@ -24,12 +24,12 @@ namespace SimpleOrderRouting.Markets
 
     public class MarketSnapshot
     {
-        public MarketSnapshot(IList<MarketInfo> markets)
+        public MarketSnapshot(IList<MarketInfo> marketInfos)
         {
-            this.Markets = markets;
+            this.MarketInfos = marketInfos;
         }
 
-        public IList<MarketInfo> Markets { get; set; }
+        public IList<MarketInfo> MarketInfos { get; private set; }
 
     }
 }

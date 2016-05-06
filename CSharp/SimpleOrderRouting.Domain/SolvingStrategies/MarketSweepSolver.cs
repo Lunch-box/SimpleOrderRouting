@@ -54,20 +54,26 @@ namespace SimpleOrderRouting.SolvingStrategies
         /// </returns>
         public OrderBasket Solve(InstructionExecutionContext instructionExecutionContext, ICanRouteOrders canRouteOrders)
         {
-            var ordersDescription = new List<OrderDescription>();
-
             // Checks liquidities available to weighted average for execution
             int remainingQuantityToBeExecuted = instructionExecutionContext.RemainingQuantityToBeExecuted;
-
-            var requestedPrice = instructionExecutionContext.Price;
-
+            decimal requestedPrice = instructionExecutionContext.Price;
+            
             var validMarkets = this.GetValidMarkets(requestedPrice);
-            var availableQuantityOnMarkets = this.ComputeAvailableQuantityForThisPrice(validMarkets);
+            int availableQuantityOnMarkets = this.ComputeAvailableQuantityForThisPrice(validMarkets);
 
             if (availableQuantityOnMarkets == 0)
             {
                 return new OrderBasket(new List<OrderDescription>(), canRouteOrders);    
             }
+
+            var ordersDescription = GenerateOrdersDescription(instructionExecutionContext, remainingQuantityToBeExecuted, validMarkets, requestedPrice, availableQuantityOnMarkets);
+
+            return new OrderBasket(ordersDescription, canRouteOrders);
+        }
+
+        private static List<OrderDescription> GenerateOrdersDescription(InstructionExecutionContext instructionExecutionContext, int remainingQuantityToBeExecuted, IEnumerable<MarketInfo> validMarkets, decimal requestedPrice, int availableQuantityOnMarkets)
+        {
+            var ordersDescription = new List<OrderDescription>();
 
             if (remainingQuantityToBeExecuted == 1)
             {
@@ -88,15 +94,14 @@ namespace SimpleOrderRouting.SolvingStrategies
                         ordersDescription.Add(new OrderDescription(marketInfo.MarketName, instructionExecutionContext.Way, quantityToExecute, requestedPrice, instructionExecutionContext.AllowPartialExecution));
                     }
                 }
-
             }
-            
+
             if (ordersDescription.Count <= 0)
             {
                 throw new InvalidOperationException(string.Format("No order description has been created while there is still {0} quantity to be executed (available quantity on the market is {1}).", remainingQuantityToBeExecuted, availableQuantityOnMarkets));
             }
 
-            return new OrderBasket(ordersDescription, canRouteOrders);
+            return ordersDescription;
         }
 
         private IEnumerable<MarketInfo> GetValidMarkets(decimal requestedPrice)

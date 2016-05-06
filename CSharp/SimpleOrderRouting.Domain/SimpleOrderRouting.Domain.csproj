@@ -40,7 +40,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Investors\InvestorInstructionStatus.cs" />
-    <Compile Include="Markets\Orders\ApiDealExecutedEventArgs.cs" />
     <Compile Include="Markets\Orders\DealExecutedEventArgs.cs" />
     <Compile Include="ICanReceiveMarketData.cs" />
     <Compile Include="ICanRouteOrders.cs" />

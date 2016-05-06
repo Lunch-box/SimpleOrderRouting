@@ -40,12 +40,8 @@ namespace SimpleOrderRouting.Tests
             // Given market A: 150 @ $100, market B: 55 @ $101 
             // When Investor wants to buy 125 stocks @ $100 Then SOR can execute at the requested MarketPrice
             var marketA = new ApiMarketGateway("Euronext", sellQuantity: 150, sellPrice: 100M);
-
             var marketB = new ApiMarketGateway("LSE", sellQuantity: 55, sellPrice: 101M);
-
-            var marketsInvolved = new[] { marketA, marketB };
-
-            var marketGatewaysAdapter = new MarketGatewaysAdapter(marketsInvolved);
+            var marketGatewaysAdapter = new MarketGatewaysAdapter(new[] { marketA, marketB });
 
             var sor = new SmartOrderRoutingEngine(marketGatewaysAdapter, marketGatewaysAdapter, marketGatewaysAdapter);
 
@@ -69,12 +65,8 @@ namespace SimpleOrderRouting.Tests
             // Given market A: 150 @ $100, market B: 55 @ $101 
             // When Investor wants to buy 125 stocks @ $100 Then SOR can execute at the requested MarketPrice
             var marketA = new ApiMarketGateway("Euronext", sellQuantity: 15, sellPrice: 100M);
-
             var marketB = new ApiMarketGateway("LSE", sellQuantity: 55, sellPrice: 101M);
-
-            var marketsInvolved = new[] { marketA, marketB };
-
-            var marketGatewaysAdapter = new MarketGatewaysAdapter(marketsInvolved);
+            var marketGatewaysAdapter = new MarketGatewaysAdapter(new[] { marketA, marketB });
 
             var sor = new SmartOrderRoutingEngine(marketGatewaysAdapter, marketGatewaysAdapter, marketGatewaysAdapter);
 
@@ -98,10 +90,7 @@ namespace SimpleOrderRouting.Tests
         public void Should_stop_sending_Orders_to_a_Market_after_3_rejects()
         {
             var rejectingMarket = new ApiMarketGateway("NYSE", sellQuantity: 100, sellPrice: 100M, orderPredicate : order => false);
-
-            var marketsInvolved = new[] { rejectingMarket };
-
-            var marketGatewaysAdapter = new MarketGatewaysAdapter(marketsInvolved);
+            var marketGatewaysAdapter = new MarketGatewaysAdapter(new[] { rejectingMarket });
 
             var sor = new SmartOrderRoutingEngine(marketGatewaysAdapter, marketGatewaysAdapter, marketGatewaysAdapter);
 
@@ -118,8 +107,7 @@ namespace SimpleOrderRouting.Tests
             // When Investor wants to buy 125 stocks @ $100 Then SOR can execute at the requested MarketPrice
             var marketA = new ApiMarketGateway("Euronext", sellQuantity: 50, sellPrice: 100M);
             var rejectingMarket = new ApiMarketGateway("CME", sellQuantity: 50, sellPrice: 100M, orderPredicate: _ => false);
-            var marketsInvolved = new[] { marketA, rejectingMarket };
-            var marketGatewaysAdapter = new MarketGatewaysAdapter(marketsInvolved);
+            var marketGatewaysAdapter = new MarketGatewaysAdapter(new[] { marketA, rejectingMarket });
 
             var sor = new SmartOrderRoutingEngine(marketGatewaysAdapter, marketGatewaysAdapter, marketGatewaysAdapter);
             
@@ -145,9 +133,7 @@ namespace SimpleOrderRouting.Tests
             // When Investor wants to buy 125 stocks @ $100 Then SOR can execute at the requested MarketPrice
             var marketA = new ApiMarketGateway("Euronext", sellQuantity: 100, sellPrice: 100M);
             var marketB = new ApiMarketGateway("LSE", sellQuantity: 55, sellPrice: 100M);
-
-            var marketsInvolved = new[] { marketA, marketB };
-            var marketGatewaysAdapter = new MarketGatewaysAdapter(marketsInvolved);
+            var marketGatewaysAdapter = new MarketGatewaysAdapter(new[] { marketA, marketB });
 
             var sor = new SmartOrderRoutingEngine(marketGatewaysAdapter, marketGatewaysAdapter, marketGatewaysAdapter);
             
@@ -171,9 +157,7 @@ namespace SimpleOrderRouting.Tests
             // And execution is: 50 stocks on MarketA and 25 stocks on MarketB
             var marketA = new ApiMarketGateway("Euronext", sellQuantity: 100, sellPrice: 100M);
             var marketB = new ApiMarketGateway("LSE", sellQuantity: 50, sellPrice: 100M);
-
-            var marketsInvolved = new[] { marketA, marketB };
-            var marketGatewaysAdapter = new MarketGatewaysAdapter(marketsInvolved);
+            var marketGatewaysAdapter = new MarketGatewaysAdapter(new[] { marketA, marketB });
 
             var sor = new SmartOrderRoutingEngine(marketGatewaysAdapter, marketGatewaysAdapter, marketGatewaysAdapter);
             

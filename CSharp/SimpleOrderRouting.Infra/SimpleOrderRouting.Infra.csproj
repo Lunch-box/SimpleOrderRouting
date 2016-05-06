@@ -39,14 +39,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="InvestorInstructionsAdapter.cs" />
-    <Compile Include="InvestorInstructionDto.cs" />
-    <Compile Include="InvestorInstructionIdentifierDto.cs" />
-    <Compile Include="InvestorInstructionUpdatedDto.cs" />
-    <Compile Include="LimitOrderAdapter.cs" />
-    <Compile Include="MarketGatewaysAdapter.cs" />
-    <Compile Include="MarketOrderAdapter.cs" />
-    <Compile Include="OrderAdapter.cs" />
+    <Compile Include="Investors\InvestorInstructionsAdapter.cs" />
+    <Compile Include="Investors\InvestorInstructionDto.cs" />
+    <Compile Include="Investors\InvestorInstructionIdentifierDto.cs" />
+    <Compile Include="Investors\InvestorInstructionUpdatedDto.cs" />
+    <Compile Include="Markets\LimitOrderAdapter.cs" />
+    <Compile Include="Markets\MarketGatewaysAdapter.cs" />
+    <Compile Include="Markets\MarketOrderAdapter.cs" />
+    <Compile Include="Markets\OrderAdapter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

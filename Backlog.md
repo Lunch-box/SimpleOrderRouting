@@ -1,5 +1,11 @@
 # SOR Backlog
 
++ Split the MarketGatewaysAdapter into various types.
++ Adds the investor adapter within the acceptance tests.
++ Adds pic to explain the context/big picture.
+
+---
+
 Reminder: 
 
 Refactoring intéressant mais qui montre qu'on a un peu du code spaghetti avec nos events et nos abstractions

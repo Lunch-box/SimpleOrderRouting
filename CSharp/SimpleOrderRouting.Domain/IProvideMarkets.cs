@@ -1,13 +1,12 @@
 namespace SimpleOrderRouting
 {
-    using System;
     using System.Collections.Generic;
 
+    /// <summary>
+    /// Lists the names of available markets.
+    /// </summary>
     public interface IProvideMarkets
     {
-        [Obsolete("Should use the GetAvailableMarketNames() method instead.")]
-        IEnumerable<IMarket> GetAvailableMarkets();
-        
         IEnumerable<string> GetAvailableMarketNames();
     }
 }

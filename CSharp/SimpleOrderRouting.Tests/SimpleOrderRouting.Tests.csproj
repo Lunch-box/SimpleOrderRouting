@@ -50,16 +50,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HarnessTests.cs" />
-    <Compile Include="InvestorInstructionDtoTests.cs" />
+    <Compile Include="Infra\HarnessTests.cs" />
+    <Compile Include="Infra\InvestorInstructionDtoTests.cs" />
     <Compile Include="InvestorInstructionTests.cs" />
     <Compile Include="MarketSweepSolverTests.cs" />
-    <Compile Include="ApiMarketGatewayTests.cs" />
+    <Compile Include="Infra\ApiMarketGatewayTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SorAcceptanceTests.cs" />
-    <Compile Include="SorTestHarness.cs" />
-    <Compile Include="TestHelpers\MarketDataProvider.cs" />
-    <Compile Include="TestHelpers\MarketProvider.cs" />
+    <Compile Include="Infra\SorTestHarness.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

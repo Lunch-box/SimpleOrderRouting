@@ -11,6 +11,9 @@ namespace SimpleOrderRouting.Infra
 
     using ApiDealExecutedEventArgs = OtherTeam.StandardizedMarketGatewayAPI.ApiDealExecutedEventArgs;
 
+    /// <summary>
+    /// Adapter between the external Markets gateways model and the SOR one.
+    /// </summary>
     public class MarketGatewaysAdapter : ICanRouteOrders, ICanReceiveMarketData, IProvideMarkets
     {
         private Dictionary<string, ApiMarketGateway> gateways;
@@ -75,11 +78,6 @@ namespace SimpleOrderRouting.Infra
 
         public event EventHandler<MarketDataUpdatedArgs> InstrumentMarketDataUpdated;
 
-        public void Subscribe(IMarket market)
-        {
-            throw new NotImplementedException();
-        }
-
         public void Subscribe(string marketName)
         {
             var internalMarket = this.gateways.First(m => m.Key == marketName).Value;
@@ -102,12 +100,7 @@ namespace SimpleOrderRouting.Infra
         #endregion
 
         #region IProvideMarkets
-
-        public IEnumerable<IMarket> GetAvailableMarkets()
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public IEnumerable<string> GetAvailableMarketNames()
         {
             return this.gateways.Keys;

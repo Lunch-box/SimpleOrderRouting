@@ -18,11 +18,12 @@
 //     limitations under the License.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-namespace SimpleOrderRouting.Tests
+namespace SimpleOrderRouting.Tests.Infra
 {
     using NFluent;
 
     using OtherTeam.StandardizedMarketGatewayAPI;
+
     using Xunit;
 
     public class ApiMarketGatewayTests

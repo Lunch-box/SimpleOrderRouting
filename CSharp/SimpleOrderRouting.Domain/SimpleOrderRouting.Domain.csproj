@@ -45,17 +45,13 @@
     <Compile Include="ICanReceiveMarketData.cs" />
     <Compile Include="ICanRouteOrders.cs" />
     <Compile Include="ISolveInvestorInstructions.cs" />
-    <Compile Include="IMarket.cs" />
     <Compile Include="Investors\InstructionExecutionContext.cs" />
     <Compile Include="Investors\InvestorInstruction.cs" />
     <Compile Include="IOrder.cs" />
     <Compile Include="IProvideMarkets.cs" />
     <Compile Include="ISmartOrderRoutingEntryPoint.cs" />
-    <Compile Include="ITestableMarket.cs" />
-    <Compile Include="Markets\Orders\LimitOrder.cs" />
     <Compile Include="Markets\Feeds\MarketDataUpdatedArgs.cs" />
     <Compile Include="Markets\MarketInfo.cs" />
-    <Compile Include="Markets\Orders\MarketOrder.cs" />
     <Compile Include="Markets\MarketSnapshot.cs" />
     <Compile Include="Markets\MarketSnapshotProvider.cs" />
     <Compile Include="SolvingStrategies\MarketSweepSolver.cs" />

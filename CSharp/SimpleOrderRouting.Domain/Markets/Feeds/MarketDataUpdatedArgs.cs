@@ -14,8 +14,6 @@ namespace SimpleOrderRouting.Markets.Feeds
 
         public string MarketName { get; private set; }
 
-        public IMarket Market { get; private set; }
-
         // TODO : introduce the concept of various instruments
         public InstrumentIdentifier InstrumentIdentifier { get; private set; }
 

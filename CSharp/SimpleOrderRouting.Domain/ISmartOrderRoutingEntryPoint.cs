@@ -6,7 +6,7 @@ namespace SimpleOrderRouting
     using SimpleOrderRouting.Markets.Orders;
 
     /// <summary>
-    /// Provide an integration point for all investor side use cases.
+    /// Provides an integration point for all investor side use cases.
     /// </summary>
     public interface ISmartOrderRoutingEntryPoint
     {

@@ -20,12 +20,14 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace SimpleOrderRouting.Markets
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
     using SimpleOrderRouting.Markets.Feeds;
 
+    /// <summary>
+    /// Provide <see cref="MarketSnapshot"/> instances.
+    /// </summary>
     public class MarketSnapshotProvider
     {
         private readonly Dictionary<string, MarketInfo> lastMarketUpdates = new Dictionary<string, MarketInfo>();

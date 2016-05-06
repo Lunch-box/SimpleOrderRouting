@@ -20,10 +20,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace SimpleOrderRouting.Markets
 {
-    using System;
-
     /// <summary>
-    /// Keeps information about a given Market (e.g. # of failures, etc.).
+    /// Aggregates information about a given Market (e.g. # of failures, etc.).
     /// </summary>
     public class MarketInfo
     {

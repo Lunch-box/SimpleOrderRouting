@@ -22,6 +22,9 @@ namespace SimpleOrderRouting.Markets
 {
     using System.Collections.Generic;
 
+    /// <summary>
+    /// Snapshot of multiple Markets venues.
+    /// </summary>
     public class MarketSnapshot
     {
         public MarketSnapshot(IList<MarketInfo> marketInfos)

@@ -23,12 +23,11 @@ namespace SimpleOrderRouting.Tests
 {
     using System;
     using System.Collections.Generic;
-
+    
+    using Xunit;
     using NFluent;
 
     using SimpleOrderRouting.Investors;
-
-    using Xunit;
 
     public class InvestorInstructionTests
     {

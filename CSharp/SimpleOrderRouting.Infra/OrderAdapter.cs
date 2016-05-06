@@ -6,16 +6,19 @@ namespace SimpleOrderRouting.Infra
 
     using SimpleOrderRouting.Markets.Orders;
 
+    /// <summary>
+    /// Base class for the <see cref="LimitOrderAdapter"/> and the <see cref="MarketOrderAdapter"/>.
+    /// </summary>
     public abstract class OrderAdapter : IOrder
     {
-        protected ApiMarketGateway marketGateway;
+        protected readonly ApiMarketGateway MarketGateway;
 
-        protected readonly ApiOrder apiOrder;
+        private readonly ApiOrder apiOrder;
 
         protected OrderAdapter(ApiMarketGateway marketGateway, ApiOrder apiOrder)
         {
             this.apiOrder = apiOrder;
-            this.marketGateway = marketGateway;
+            this.MarketGateway = marketGateway;
         }
 
         public event EventHandler<DealExecutedEventArgs> OrderExecuted;

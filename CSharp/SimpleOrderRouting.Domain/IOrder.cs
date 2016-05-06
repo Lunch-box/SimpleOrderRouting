@@ -17,9 +17,11 @@ namespace SimpleOrderRouting
 {
     using System;
 
-    using SimpleOrderRouting.Markets;
     using SimpleOrderRouting.Markets.Orders;
 
+    /// <summary>
+    /// Orders to buy or sell a given quantity of a product.
+    /// </summary>
     public interface IOrder
     {
         event EventHandler<DealExecutedEventArgs> OrderExecuted;

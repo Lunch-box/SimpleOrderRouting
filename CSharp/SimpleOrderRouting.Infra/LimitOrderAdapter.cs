@@ -2,6 +2,9 @@ namespace SimpleOrderRouting.Infra
 {
     using OtherTeam.StandardizedMarketGatewayAPI;
 
+    /// <summary>
+    /// Adapts LimitOrder between the SOR and the external market gateway models. 
+    /// </summary>
     public class LimitOrderAdapter : OrderAdapter
     {
         private readonly ApiLimitOrder apiLimitOrder;
@@ -13,7 +16,7 @@ namespace SimpleOrderRouting.Infra
 
         public override void Send()
         {
-            this.marketGateway.Send(this.apiLimitOrder);
+            this.MarketGateway.Send(this.apiLimitOrder);
         }
     }
 }

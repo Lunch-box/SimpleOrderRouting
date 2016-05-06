@@ -20,8 +20,9 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace SimpleOrderRouting.Markets.Orders
 {
-    using System;
-
+    /// <summary>
+    /// Event data for OrderFailed event.
+    /// </summary>
     public class OrderFailedEventArgs
     {
         public OrderFailedEventArgs(string marketName, string reason)

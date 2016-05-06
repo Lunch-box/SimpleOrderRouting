@@ -2,6 +2,9 @@ namespace SimpleOrderRouting.Infra
 {
     using OtherTeam.StandardizedMarketGatewayAPI;
 
+    /// <summary>
+    /// Adapts MarketOrder between the SOR and the external market gateway models. 
+    /// </summary>
     public class MarketOrderAdapter : OrderAdapter
     {
         private readonly ApiMarketOrder apiMarketOrder;
@@ -13,7 +16,7 @@ namespace SimpleOrderRouting.Infra
 
         public override void Send()
         {
-            this.marketGateway.Send(apiMarketOrder);
+            this.MarketGateway.Send(apiMarketOrder);
         }
     }
 }

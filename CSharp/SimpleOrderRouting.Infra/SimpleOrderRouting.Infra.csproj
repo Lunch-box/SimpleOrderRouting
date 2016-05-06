@@ -39,11 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IInvestorService.cs" />
     <Compile Include="InvestorInstructionsAdapter.cs" />
     <Compile Include="InvestorInstructionDto.cs" />
     <Compile Include="InvestorInstructionIdentifierDto.cs" />
-    <Compile Include="InvestorInstructionIdentifierFactory.cs" />
     <Compile Include="InvestorInstructionUpdatedDto.cs" />
     <Compile Include="LimitOrderAdapter.cs" />
     <Compile Include="MarketGatewaysAdapter.cs" />

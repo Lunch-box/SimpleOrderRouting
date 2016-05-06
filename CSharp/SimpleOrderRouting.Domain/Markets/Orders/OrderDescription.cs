@@ -15,6 +15,9 @@
 //  --------------------------------------------------------------------------------------------------------------------
 namespace SimpleOrderRouting.Markets.Orders
 {
+    /// <summary>
+    /// Caracteristics of an Order to be passed on a market.
+    /// </summary>
     public struct OrderDescription
     {
         public string TargetMarketName;

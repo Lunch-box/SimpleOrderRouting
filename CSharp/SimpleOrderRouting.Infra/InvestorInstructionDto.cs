@@ -23,6 +23,9 @@ namespace SimpleOrderRouting.Infra
 {
     using System;
 
+    /// <summary>
+    /// Data Transfer Object for Investor Instruction.
+    /// </summary>
     public class InvestorInstructionDto
     {
         public InvestorInstructionDto(InvestorInstructionIdentifierDto uniqueIdentifier, Way way, int quantity, decimal price, bool allowPartialExecution = false, DateTime? goodTill = null)
@@ -65,9 +68,11 @@ namespace SimpleOrderRouting.Infra
 
         public DateTime? GoodTill { get; private set; }
 
-        protected bool Equals(InvestorInstructionDto other)
+        #region Unicity and Identity
+
+        private bool Equals(InvestorInstructionDto other)
         {
-            return object.Equals(this.UniqueIdentifier, other.UniqueIdentifier) && this.Way == other.Way && this.Quantity == other.Quantity && this.Price == other.Price && this.AllowPartialExecution == other.AllowPartialExecution && this.GoodTill.Equals(other.GoodTill);
+            return Equals(this.UniqueIdentifier, other.UniqueIdentifier) && this.Way == other.Way && this.Quantity == other.Quantity && this.Price == other.Price && this.AllowPartialExecution == other.AllowPartialExecution && this.GoodTill.Equals(other.GoodTill);
         }
 
         public override bool Equals(object obj)
@@ -81,12 +86,12 @@ namespace SimpleOrderRouting.Infra
             {
                 return true;
             }
-            
+
             if (obj.GetType() != this.GetType())
             {
                 return false;
             }
-            
+
             return this.Equals((InvestorInstructionDto)obj);
         }
 
@@ -113,5 +118,7 @@ namespace SimpleOrderRouting.Infra
         {
             return !Equals(left, right);
         }
+
+        #endregion
     }
 }

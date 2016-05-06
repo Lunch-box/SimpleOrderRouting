@@ -1,4 +1,4 @@
-﻿namespace SimpleOrderRouting.Tests
+﻿namespace SimpleOrderRouting.Tests.Infra
 {
     using System;
     using System.Collections.Generic;
@@ -22,7 +22,7 @@
             var allowPartialExecution = true;
             var goodTill = DateTime.Now;
 
-            var dtoIdentifier = InvestorInstructionIdentifierFactory.RequestUniqueIdentifier();
+            var dtoIdentifier = new InvestorInstructionIdentifierDto();
             var firstInstruction = new InvestorInstructionDto(dtoIdentifier, way, quantity, price, allowPartialExecution, goodTill);
             var secondIdenticalInstruction = new InvestorInstructionDto(dtoIdentifier, way, quantity, price, allowPartialExecution, goodTill);
 
@@ -37,7 +37,7 @@
         public void Should_rely_on_values_for_unicity()
         {
             var goodTill = DateTime.Now;
-            var dtoIdentifier = InvestorInstructionIdentifierFactory.RequestUniqueIdentifier();
+            var dtoIdentifier = new InvestorInstructionIdentifierDto();
 
             var instruction = new InvestorInstructionDto(dtoIdentifier, Way.Buy, 1, 1.1M, true, goodTill);
             var identicalInstruction = new InvestorInstructionDto(dtoIdentifier, Way.Buy, 1, 1.1M, true, goodTill);

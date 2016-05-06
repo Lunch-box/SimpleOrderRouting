@@ -23,9 +23,20 @@ namespace SimpleOrderRouting.Infra
 {
     using System.Threading;
 
+    /// <summary>
+    /// Unique Identifier of an Investor instruction DTO.
+    /// </summary>
     public class InvestorInstructionIdentifierDto
     {
-        protected bool Equals(InvestorInstructionIdentifierDto other)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InvestorInstructionIdentifierDto"/> class.
+        /// </summary>
+        public InvestorInstructionIdentifierDto()
+        {
+            this.Value = Interlocked.Increment(ref nextValue);
+        }
+
+        private bool Equals(InvestorInstructionIdentifierDto other)
         {
             return this.Value == other.Value;
         }
@@ -65,10 +76,5 @@ namespace SimpleOrderRouting.Infra
         private static long nextValue;
 
         public long Value { get; private set; }
-
-        public InvestorInstructionIdentifierDto()
-        {
-            this.Value = Interlocked.Increment(ref nextValue);
-        }
     }
 }

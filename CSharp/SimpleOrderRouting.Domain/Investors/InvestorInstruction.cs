@@ -112,7 +112,7 @@ namespace SimpleOrderRouting.Investors
         /// Just a naive implementation to make the test pass. 
         /// Code smell here: with the Executed event raised from outside the InvestorInstruction.
         /// </summary>
-        /// <param name="executedQuantity">The executed Quantity.</param>
+        /// <param name="executedQuantity">The executed quantity.</param>
         /// <param name="executedPrice">The executed Price.</param>
         internal virtual void NotifyOrderExecution(int executedQuantity, decimal executedPrice)
         {

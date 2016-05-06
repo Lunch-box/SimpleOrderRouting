@@ -70,8 +70,9 @@ namespace SimpleOrderRouting
             var orderBasket = solver.Solve(instructionExecutionContext, this.canRouteOrders);
 
             // 2. Route the order book
+            // TODO: add symetry here (i.e. always go via the InstructionExecutionContext
             EventHandler<DealExecutedEventArgs> handler = (sender, args) => instructionExecutionContext.Executed(args.Quantity);
-            EventHandler<OrderFailedEventArgs> failHandler = (sender, failure) => this.SendOrderFailed(investorInstruction, failure, instructionExecutionContext);
+            EventHandler<OrderFailedEventArgs> failHandler = (sender, failure) => this.OnOrderFailed(investorInstruction, failure, instructionExecutionContext);
 
             this.canRouteOrders.OrderExecuted += handler;
             this.canRouteOrders.OrderFailed += failHandler;
@@ -95,7 +96,7 @@ namespace SimpleOrderRouting
             this.canRouteOrders.OrderFailed -= failHandler;
         }
 
-        void investorInstruction_Executed(object sender, OrderExecutedEventArgs e)
+        void InvestorInstruction_Executed(object sender, OrderExecutedEventArgs e)
         {
             var investorInstruction = sender as InvestorInstruction;
             Action<OrderExecutedEventArgs> successCallback;
@@ -105,7 +106,7 @@ namespace SimpleOrderRouting
             }
         }
 
-        private void SendOrderFailed(InvestorInstruction investorInstruction, OrderFailedEventArgs reason, InstructionExecutionContext instructionExecutionContext)
+        private void OnOrderFailed(InvestorInstruction investorInstruction, OrderFailedEventArgs reason, InstructionExecutionContext instructionExecutionContext)
         {
             this.marketSnapshotProvider.MarketFailed(reason.MarketName);
 

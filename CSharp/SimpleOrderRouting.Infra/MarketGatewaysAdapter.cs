@@ -38,25 +38,26 @@ namespace SimpleOrderRouting.Infra
 
         protected virtual void RaiseOrderExecuted(DealExecutedEventArgs args)
         {
-            if (this.OrderExecuted != null)
+            var orderExecuted = this.OrderExecuted;
+            if (orderExecuted != null)
             {
-                this.OrderExecuted(this, args);
+                orderExecuted(this, args);
             }
         }
 
         protected virtual void RaiseOrderFailed(OrderFailedEventArgs args)
         {
-            if (this.OrderFailed != null)
+            var orderFailed = this.OrderFailed;
+            if (orderFailed != null)
             {
-                this.OrderFailed(this, args);
+                orderFailed(this, args);
             }
         }
 
-        private void MarketGatewayOnOrderFailed(object sender, string reason)
+        private void MarketGatewayOnOrderFailed(object sender, ApiOrderFailedEventArgs apiArgs)
         {
             // Adapts the external API format to the SOR domain format
-            var marketName = "TODO";
-            var dealExecutedEventArgs = new OrderFailedEventArgs(marketName, reason);
+            var dealExecutedEventArgs = new OrderFailedEventArgs(apiArgs.MarketName, apiArgs.FailureCause);
             this.RaiseOrderFailed(dealExecutedEventArgs);
         }
 
@@ -120,7 +121,7 @@ namespace SimpleOrderRouting.Infra
         {
             var marketGateway = this.gateways[orderDescription.TargetMarketName];
             ApiMarketWay apiMarketWay = (orderDescription.OrderWay == Way.Sell) ? ApiMarketWay.Sell : ApiMarketWay.Buy;
-            ApiLimitOrder apiLimitOrder = marketGateway.CreateLimitOrder(apiMarketWay, orderDescription.Quantity, orderDescription.OrderPrice, orderDescription.AllowPartial);
+            ApiLimitOrder apiLimitOrder = marketGateway.CreateLimitOrder(apiMarketWay, orderDescription.Quantity, orderDescription.OrderPrice, orderDescription.AllowPartialExecution);
 
             return new LimitOrderAdapter(marketGateway, apiLimitOrder);
         }

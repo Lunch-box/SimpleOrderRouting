@@ -17,6 +17,7 @@ namespace SimpleOrderRouting.SolvingStrategies
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Linq;
 
     using SimpleOrderRouting.Investors;
@@ -69,18 +70,31 @@ namespace SimpleOrderRouting.SolvingStrategies
                 return new OrderBasket(new List<OrderDescription>(), canRouteOrders);    
             }
 
-            var ratio = remainingQuantityToBeExecuted / (decimal)availableQuantityOnMarkets;
-
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            foreach (var marketInfo in validMarkets)
+            if (remainingQuantityToBeExecuted == 1)
             {
-                var convertedMarketQuantity = Math.Round(marketInfo.SellQuantity * ratio, 2, MidpointRounding.AwayFromZero);
-                var quantityToExecute = Convert.ToInt32(convertedMarketQuantity);
+                ordersDescription.Add(new OrderDescription(validMarkets.First(m => m.SellQuantity >= 1).MarketName, instructionExecutionContext.Way, remainingQuantityToBeExecuted, requestedPrice, instructionExecutionContext.AllowPartialExecution));
+            }
+            else
+            {
+                var ratio = remainingQuantityToBeExecuted / (decimal)availableQuantityOnMarkets;
 
-                if (quantityToExecute > 0)
+                // ReSharper disable once LoopCanBeConvertedToQuery
+                foreach (var marketInfo in validMarkets)
                 {
-                    ordersDescription.Add(new OrderDescription(marketInfo.MarketName, instructionExecutionContext.Way, quantityToExecute, requestedPrice, instructionExecutionContext.AllowPartialExecution));
+                    var convertedMarketQuantity = Math.Round(marketInfo.SellQuantity * ratio, 2, MidpointRounding.AwayFromZero);
+                    var quantityToExecute = Convert.ToInt32(convertedMarketQuantity);
+
+                    if (quantityToExecute > 0)
+                    {
+                        ordersDescription.Add(new OrderDescription(marketInfo.MarketName, instructionExecutionContext.Way, quantityToExecute, requestedPrice, instructionExecutionContext.AllowPartialExecution));
+                    }
                 }
+
+            }
+            
+            if (ordersDescription.Count <= 0)
+            {
+                throw new InvalidOperationException(string.Format("No order description has been created while there is still {0} quantity to be executed (available quantity on the market is {1}).", remainingQuantityToBeExecuted, availableQuantityOnMarkets));
             }
 
             return new OrderBasket(ordersDescription, canRouteOrders);

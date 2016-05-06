@@ -30,13 +30,13 @@ namespace SimpleOrderRouting.Markets.Orders
     /// </summary>
     public class OrderBasket : IOrder
     {
-        private readonly List<OrderDescription> ordersDescriptions;
+        public List<OrderDescription> OrdersDescriptions { get; private set; }
 
         private readonly ICanRouteOrders canRouteOrders;
 
         public OrderBasket(List<OrderDescription> ordersDescriptions, ICanRouteOrders canRouteOrders)
         {
-            this.ordersDescriptions = ordersDescriptions;
+            this.OrdersDescriptions = ordersDescriptions;
             this.canRouteOrders = canRouteOrders;
 
             if (ordersDescriptions.Count > 0)
@@ -45,7 +45,7 @@ namespace SimpleOrderRouting.Markets.Orders
 
                 foreach (var orderDescription in ordersDescriptions)
                 {
-                    if (orderDescription.AllowPartial)
+                    if (orderDescription.AllowPartialExecution)
                     {
                         this.AllowPartialExecution = true;
                     }
@@ -71,12 +71,12 @@ namespace SimpleOrderRouting.Markets.Orders
         // TODO: Change the IOrder interface to always include the notification.
         public void Send()
         {
-            var failures = new List<OrderFailedEventArgs>(this.ordersDescriptions.Count);
-            foreach (var orderDescription in this.ordersDescriptions)
+            var failures = new List<OrderFailedEventArgs>(this.OrdersDescriptions.Count);
+            foreach (var orderDescription in this.OrdersDescriptions)
             {
                 // TODO: refactor this to prevent this domain object to rely too much on ICanRouterOrders things...
                 var limitOrder = this.canRouteOrders.CreateLimitOrder(orderDescription);
-                //var limitOrder = this.canRouteOrders.CreateLimitOrder(orderDescription.OrderWay, orderDescription.OrderPrice, orderDescription.Quantity, orderDescription.AllowPartial);
+                //var limitOrder = this.canRouteOrders.CreateLimitOrder(orderDescription.OrderWay, orderDescription.OrderPrice, orderDescription.quantity, orderDescription.AllowPartialExecution);
 
                 limitOrder.OrderExecuted += (o, e) => this.OnOrderExecuted(e);
                 EventHandler<OrderFailedEventArgs> limitOrderOnOrderFailed = (sender, reason) => failures.Add(reason);

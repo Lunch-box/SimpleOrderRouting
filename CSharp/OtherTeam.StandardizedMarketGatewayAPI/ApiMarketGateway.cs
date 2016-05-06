@@ -4,17 +4,18 @@ namespace OtherTeam.StandardizedMarketGatewayAPI
 
     public class ApiMarketGateway
     {
-        public ApiMarketGateway(string marketName, int sellQuantity, decimal sellPrice)
+        public ApiMarketGateway(string marketName, int sellQuantity, decimal sellPrice, Predicate<ApiOrder> orderPredicate = null)
         {
             this.MarketName = marketName;
             this.SellQuantity = sellQuantity;
             this.SellPrice = sellPrice;
+            this.OrderPredicate = orderPredicate;
         }
 
         public event EventHandler<ApiDealExecutedEventArgs> OrderExecuted;
 
         // TODO: set a proper event handler instead of this string
-        public event EventHandler<string> OrderFailed;
+        public event EventHandler<ApiOrderFailedEventArgs> OrderFailed;
 
         public string MarketName { get; private set; }
 
@@ -42,7 +43,7 @@ namespace OtherTeam.StandardizedMarketGatewayAPI
 
             if (this.OrderPredicate != null && this.OrderPredicate(marketOrder) == false)
             {
-                this.RaiseOrderFailed(marketOrder, "Predicate failed.");
+                this.RaiseOrderFailed(marketOrder, new ApiOrderFailedEventArgs(this.MarketName, "Predicate failed."));
                 return;
             }
 
@@ -54,7 +55,7 @@ namespace OtherTeam.StandardizedMarketGatewayAPI
                     {
                         if (!marketOrder.AllowPartialExecution)
                         {
-                            this.RaiseOrderFailed(marketOrder, "Excessive quantity!");
+                            this.RaiseOrderFailed(marketOrder, new ApiOrderFailedEventArgs(this.MarketName, "Excessive quantity!"));
                             return;
                         }
                     }
@@ -78,7 +79,7 @@ namespace OtherTeam.StandardizedMarketGatewayAPI
 
             if (this.OrderPredicate != null && this.OrderPredicate(limitOrder) == false)
             {
-                this.RaiseOrderFailed(limitOrder, "Predicate failed.");
+                this.RaiseOrderFailed(limitOrder, new ApiOrderFailedEventArgs(this.MarketName, "Predicate failed."));
                 return;
             }
 
@@ -87,7 +88,7 @@ namespace OtherTeam.StandardizedMarketGatewayAPI
                 case ApiMarketWay.Buy:
                     if (limitOrder.Price > this.SellPrice)
                     {
-                        this.RaiseOrderFailed(limitOrder, "Invalid price");
+                        this.RaiseOrderFailed(limitOrder, new ApiOrderFailedEventArgs(this.MarketName, "Invalid price"));
                         return;
                     }
 
@@ -95,7 +96,7 @@ namespace OtherTeam.StandardizedMarketGatewayAPI
                     {
                         if (!limitOrder.AllowPartialExecution)
                         {
-                            this.RaiseOrderFailed(limitOrder, "Excessive quantity!");
+                            this.RaiseOrderFailed(limitOrder, new ApiOrderFailedEventArgs(this.MarketName, "Excessive quantity!"));
                             return;
                         }
                     }
@@ -121,12 +122,12 @@ namespace OtherTeam.StandardizedMarketGatewayAPI
             }
         }
 
-        private void RaiseOrderFailed(ApiOrder order, string reason)
+        private void RaiseOrderFailed(ApiOrder order, ApiOrderFailedEventArgs args)
         {
             var onOrderFailed = this.OrderFailed;
             if (onOrderFailed != null)
             {
-                onOrderFailed(order, reason);
+                onOrderFailed(order, args);
             }
         }
 

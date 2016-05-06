@@ -21,19 +21,25 @@ namespace SimpleOrderRouting.Markets.Orders
 
         public Way OrderWay;
 
-        public int Quantity;
+        public int Quantity { get; private set; }
 
         public decimal OrderPrice;
 
-        public bool AllowPartial;
+        public bool AllowPartialExecution;
 
-        public OrderDescription(string targetMarketName, Way orderWay, int quantity, decimal orderPrice, bool allowPartial)
+        public OrderDescription(string targetMarketName, Way orderWay, int quantity, decimal orderPrice, bool allowPartialExecution)
+            : this()
         {
             this.TargetMarketName = targetMarketName;
             this.OrderWay = orderWay;
             this.Quantity = quantity;
             this.OrderPrice = orderPrice;
-            this.AllowPartial = allowPartial;
+            this.AllowPartialExecution = allowPartialExecution;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("Order description: TargetMarketName={0} - quantity={1} - Way={2} - Price={3} - AllowPartialExecution={4}.", this.TargetMarketName, this.Quantity, this.OrderWay, this.OrderPrice, this.AllowPartialExecution);
         }
     }
 }

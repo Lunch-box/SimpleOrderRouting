@@ -41,18 +41,6 @@ namespace SimpleOrderRouting.Markets
             }
         }
 
-        [Obsolete("Use the constructor with marketName as string instead.")]
-        public MarketSnapshotProvider(IEnumerable<IMarket> marketsToWatch, ICanReceiveMarketData canReceiveMarketData)
-        {
-            //canReceiveMarketData.InstrumentMarketDataUpdated += this.InstrumentMarketDataUpdated;
-            //foreach (var marketName in marketsToWatch)
-            //{
-            //    // TODO : Get rid of the hack (casting to concrete class)
-            //    this._lastMarketUpdates[marketName] = new MarketInfo((Market)marketName);
-            //    canReceiveMarketData.Subscribe(marketName);
-            //}
-        }
-
         private void InstrumentMarketDataUpdated(object sender, MarketDataUpdate marketDataUpdate)
         {
             this.lastMarketUpdates[marketDataUpdate.MarketName] = new MarketInfo(marketDataUpdate.MarketName, marketDataUpdate.Quantity, marketDataUpdate.Price);
@@ -65,8 +53,7 @@ namespace SimpleOrderRouting.Markets
 
         public void MarketFailed(string marketName)
         {
-            // TODO: refactor this so the method accepts IMarket instead
-            // this.lastMarketUpdates.First(m => m.Value.MarketName == marketName).Value.OrdersFailureCount++;
+            this.lastMarketUpdates.First(m => m.Key == marketName).Value.OrdersFailureCount++;
         }
     }
 }

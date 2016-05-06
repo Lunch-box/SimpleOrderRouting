@@ -22,8 +22,7 @@ namespace SimpleOrderRouting.Tests
 {
     using NFluent;
 
-    using SimpleOrderRouting.Markets;
-
+    using OtherTeam.StandardizedMarketGatewayAPI;
     using Xunit;
 
     public class ApiMarketGatewayTests
@@ -31,105 +30,109 @@ namespace SimpleOrderRouting.Tests
         [Fact]
         public void MarketOrderShouldDecreaseAvailableQuantity()
         {
-            var market = new Market { SellPrice = 100M, SellQuantity = 50 };
+            var marketGateway = new ApiMarketGateway(marketName: "euronext", sellQuantity:50, sellPrice: 100M);
 
-            var order = market.CreateMarketOrder(Way.Buy, quantity: 10);
-            market.Send(order);
+            var order = marketGateway.CreateMarketOrder(ApiMarketWay.Buy, quantity: 10);
+            marketGateway.Send(order);
 
-            Check.That(market.SellQuantity).IsEqualTo(40);
+            Check.That(marketGateway.SellQuantity).IsEqualTo(40);
         }
 
         [Fact]
         public void LargeMarketOrderShouldFail()
         {
-            var market = new Market { SellPrice = 100M, SellQuantity = 50 };
+            var marketGateway = new ApiMarketGateway(marketName: "euronext", sellQuantity: 50, sellPrice: 100M);
 
-            var order = market.CreateMarketOrder(Way.Buy, quantity: 100);
+            var order = marketGateway.CreateMarketOrder(ApiMarketWay.Buy, quantity: 100);
 
             bool failed = false;
             string failureReason = null;
 
-            market.OrderFailed += (s, failure) =>
+            marketGateway.OrderFailed += (s, failedEventArgs) =>
             {
                 failed = true;
-                failureReason = failure;
+                failureReason = failedEventArgs.FailureCause;
             };
             
-            market.Send(order);
+            marketGateway.Send(order);
 
             Check.That(failed).IsTrue();
-            Check.That(failureReason).IsEqualTo("Excessive QuantityOnTheMarket!");
+            Check.That(failureReason).IsEqualTo("Excessive quantity!");
         }
 
         [Fact]
         public void MarketOrderShouldCaptureExec()
         {
-            var market = new Market { SellPrice = 100M, SellQuantity = 50 };
-            var executed = false;
-            var order = market.CreateMarketOrder(Way.Buy, quantity: 10);
+            var marketGateway = new ApiMarketGateway(marketName: "euronext", sellQuantity: 50, sellPrice: 100M);
 
-            market.OrderExecuted += (s, a) => executed = true;
-            market.Send(order);
+            var executed = false;
+            var order = marketGateway.CreateMarketOrder(ApiMarketWay.Buy, quantity: 10);
+
+            marketGateway.OrderExecuted += (s, a) => executed = true;
+            marketGateway.Send(order);
 
             Check.That(executed).IsTrue();
-            Check.That(market.SellQuantity).IsEqualTo(40);
+            Check.That(marketGateway.SellQuantity).IsEqualTo(40);
         }
 
         [Fact]
         public void LimitOrderShouldCaptureExec()
         {
-            var market = new Market { SellPrice = 100M, SellQuantity = 50 };
-            var executed = false;
-            var order = market.CreateLimitOrder(Way.Buy, price: 100M, quantity: 10, allowPartialExecution: false);
+            var marketGateway = new ApiMarketGateway(marketName: "euronext", sellQuantity: 50, sellPrice: 100M);
 
-            market.OrderExecuted += (s, a) => executed = true;
-            market.Send(order);
+            var executed = false;
+            var order = marketGateway.CreateLimitOrder(ApiMarketWay.Buy, price: 100M, quantity: 10, allowPartial: false);
+
+            marketGateway.OrderExecuted += (s, a) => executed = true;
+            marketGateway.Send(order);
 
             Check.That(executed).IsTrue();
-            Check.That(market.SellQuantity).IsEqualTo(40);
+            Check.That(marketGateway.SellQuantity).IsEqualTo(40);
         }
 
         [Fact]
         public void LimitOrderShouldFailIfPriceTooHigh()
         {
-            var market = new Market { SellPrice = 100M, SellQuantity = 50 };
+            var marketGateway = new ApiMarketGateway(marketName: "euronext", sellQuantity: 50, sellPrice: 100M);
+
             var executed = false;
             bool failed = false;
             string failureReason = null;
-            var order = market.CreateLimitOrder(Way.Buy, price: 101M, quantity: 10, allowPartialExecution: false);
+            var order = marketGateway.CreateLimitOrder(ApiMarketWay.Buy, price: 101M, quantity: 10, allowPartial: false);
 
-            market.OrderExecuted += (s, a) => executed = true;
-            market.OrderFailed += (s, failure) =>
+            marketGateway.OrderExecuted += (s, a) => executed = true;
+            marketGateway.OrderFailed += (s, failedEventArgs) =>
                                   {
                                       failed = true;
-                                      failureReason = failure;
+                                      failureReason = failedEventArgs.FailureCause;
                                   };
-            market.Send(order);
+            marketGateway.Send(order);
 
             Check.That(executed).IsFalse();
             Check.That(failed).IsTrue();
-            Check.That(failureReason).IsEqualTo("Invalid MarketPrice");
-            Check.That(market.SellQuantity).IsEqualTo(50);
+            Check.That(failureReason).IsEqualTo("Invalid price");
+            Check.That(marketGateway.SellQuantity).IsEqualTo(50);
         }
 
         [Fact]
         public void LimitOrderShouldSupportPartialExecution()
         {
-            var market = new Market { SellPrice = 100M, SellQuantity = 50 };
+            var marketGateway = new ApiMarketGateway(marketName: "euronext", sellQuantity: 50, sellPrice: 100M);
+
             var executed = false;
-            var order = market.CreateLimitOrder(Way.Buy, price: 100M, quantity: 110, allowPartialExecution: true);
+            var order = marketGateway.CreateLimitOrder(ApiMarketWay.Buy, price: 100M, quantity: 110, allowPartial: true);
 
             var execQuantity = 0;
-            market.OrderExecuted += (s, a) =>
+            marketGateway.OrderExecuted += (s, a) =>
             {
                 executed = true;
                 execQuantity = a.Quantity;
             };
-            market.Send(order);
+            marketGateway.Send(order);
 
             Check.That(execQuantity).IsEqualTo(50);
             Check.That(executed).IsTrue();
-            Check.That(market.SellQuantity).IsEqualTo(0);
+            Check.That(marketGateway.SellQuantity).IsEqualTo(0);
         }
     }
 }

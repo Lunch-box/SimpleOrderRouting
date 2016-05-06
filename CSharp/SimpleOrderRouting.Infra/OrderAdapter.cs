@@ -4,7 +4,6 @@ namespace SimpleOrderRouting.Infra
 
     using OtherTeam.StandardizedMarketGatewayAPI;
 
-    using SimpleOrderRouting.Markets;
     using SimpleOrderRouting.Markets.Orders;
 
     public abstract class OrderAdapter : IOrder
@@ -42,7 +41,5 @@ namespace SimpleOrderRouting.Infra
                 return false;
             }
         }
-
-        public Market Market { get; private set; }
     }
 }

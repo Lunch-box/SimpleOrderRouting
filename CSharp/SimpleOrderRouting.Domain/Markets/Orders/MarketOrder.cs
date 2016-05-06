@@ -28,9 +28,8 @@ namespace SimpleOrderRouting.Markets.Orders
 
         private readonly int quantity;
 
-        public MarketOrder(Market market, Way buy, int quantity)
+        public MarketOrder(Way buy, int quantity)
         {
-            this.Market = market;
             this.buy = buy;
             this.quantity = quantity;
         }
@@ -38,8 +37,6 @@ namespace SimpleOrderRouting.Markets.Orders
         public event EventHandler<DealExecutedEventArgs> OrderExecuted;
 
         public event EventHandler<OrderFailedEventArgs> OrderFailed;
-
-        public Market Market { get; private set; }
 
         public Way Way
         {
@@ -67,7 +64,6 @@ namespace SimpleOrderRouting.Markets.Orders
 
         public void Send()
         {
-            this.Market.Send(this);
         }
     }
 }

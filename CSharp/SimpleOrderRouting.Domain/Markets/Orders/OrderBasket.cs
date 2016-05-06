@@ -65,9 +65,6 @@ namespace SimpleOrderRouting.Markets.Orders
 
         public Way Way { get; private set; }
 
-        // TODO: Introduce Virtual Market?
-        public Market Market { get; private set; }
-
         // TODO: Change the IOrder interface to always include the notification.
         public void Send()
         {

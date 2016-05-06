@@ -24,9 +24,8 @@ namespace SimpleOrderRouting.Markets.Orders
 
     public class LimitOrder : IOrder
     {
-        public LimitOrder(Market market, Way way, decimal price, int quantity, bool allowPartialExecution)
+        public LimitOrder(Way way, decimal price, int quantity, bool allowPartialExecution)
         {
-            this.Market = market;
             this.AllowPartialExecution = allowPartialExecution;
             this.Way = way;
             this.Price = price;
@@ -36,8 +35,6 @@ namespace SimpleOrderRouting.Markets.Orders
         public event EventHandler<DealExecutedEventArgs> OrderExecuted;
 
         public event EventHandler<OrderFailedEventArgs> OrderFailed;
-
-        public Market Market { get; private set; }
 
         public bool AllowPartialExecution { get; private set; }
 
@@ -49,12 +46,7 @@ namespace SimpleOrderRouting.Markets.Orders
 
         public void Send()
         {
-            this.Market.OrderExecuted += this.Market_OrderExecuted;
             EventHandler<string> marketOnOrderFailed = (sender, s) => this.RaiseOrderFailed(s);
-            this.Market.OrderFailed += marketOnOrderFailed;
-            this.Market.Send(this);
-            this.Market.OrderExecuted -= this.Market_OrderExecuted;
-            this.Market.OrderFailed -= marketOnOrderFailed;
         }
 
         private void RaiseOrderFailed(string s)
@@ -62,7 +54,6 @@ namespace SimpleOrderRouting.Markets.Orders
             var onOrderFailed = this.OrderFailed;
             if (onOrderFailed != null)
             {
-                onOrderFailed(this, new OrderFailedEventArgs(this.Market.Name, s));
             }
         }
 

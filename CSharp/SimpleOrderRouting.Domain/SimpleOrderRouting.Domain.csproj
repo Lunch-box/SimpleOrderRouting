@@ -54,7 +54,7 @@
     <Compile Include="ITestableMarket.cs" />
     <Compile Include="Markets\Orders\LimitOrder.cs" />
     <Compile Include="Markets\Market.cs" />
-    <Compile Include="Markets\Feeds\MarketDataUpdate.cs" />
+    <Compile Include="Markets\Feeds\MarketDataUpdatedArgs.cs" />
     <Compile Include="Markets\MarketInfo.cs" />
     <Compile Include="Markets\Orders\MarketOrder.cs" />
     <Compile Include="Markets\MarketSnapshot.cs" />

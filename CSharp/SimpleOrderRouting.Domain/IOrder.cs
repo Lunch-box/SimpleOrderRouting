@@ -32,9 +32,6 @@ namespace SimpleOrderRouting
         int Quantity { get; }
 
         bool AllowPartialExecution { get; }
-
-        [Obsolete("To be dismantled")]
-        Market Market { get; }
         
         void Send();
     }

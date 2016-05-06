@@ -4,8 +4,6 @@
 
     using NFluent;
 
-    using NSubstitute;
-
     using OtherTeam.StandardizedMarketGatewayAPI;
 
     using SimpleOrderRouting.Infra;

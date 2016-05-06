@@ -58,7 +58,7 @@ namespace SimpleOrderRouting.SolvingStrategies
             var ordersDescription = new List<OrderDescription>();
 
             // Checks liquidities available to weighted average for execution
-            int remainingQuantityToBeExecuted = instructionExecutionContext.Quantity;
+            int remainingQuantityToBeExecuted = instructionExecutionContext.RemainingQuantityToBeExecuted;
 
             var requestedPrice = instructionExecutionContext.Price;
 

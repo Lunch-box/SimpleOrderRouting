@@ -35,13 +35,13 @@ namespace SimpleOrderRouting.Investors
         {
             this.investorInstruction = investorInstruction;
             this.initialQuantity = investorInstruction.Quantity;
-            this.Quantity = investorInstruction.Quantity;
+            this.RemainingQuantityToBeExecuted = investorInstruction.Quantity;
             this.Price = investorInstruction.Price;
             this.Way = investorInstruction.Way;
             this.AllowPartialExecution = investorInstruction.AllowPartialExecution;
         }
 
-        public int Quantity { get; private set; }
+        public int RemainingQuantityToBeExecuted { get; private set; }
 
         public decimal Price { get; private set; }
 
@@ -55,14 +55,17 @@ namespace SimpleOrderRouting.Investors
         /// <param name="quantity">The executed quantity.</param>
         public void Executed(int quantity)
         {
-            this.Quantity -= quantity;
-            if (this.Quantity == 0)
+            var previousRemainingQuantityToBeExecuted = this.RemainingQuantityToBeExecuted;
+            
+            this.RemainingQuantityToBeExecuted -= quantity;
+            
+            if (this.RemainingQuantityToBeExecuted == 0)
             {
                 this.investorInstruction.NotifyOrderExecution(this.initialQuantity, this.Price);
             }
-            else if (this.Quantity < 0)
+            else if (this.RemainingQuantityToBeExecuted < 0)
             {
-                throw new ApplicationException("Executed more than specified in the investor instruction.");
+                throw new ApplicationException(string.Format("Executed more than the investor instruction has requested. Previous remaining quantity to be executed: {0}, latest executed quantity: {1}. New remaining quantity to be executed: {2}.", previousRemainingQuantityToBeExecuted, quantity, this.RemainingQuantityToBeExecuted));
             }
         }
     }

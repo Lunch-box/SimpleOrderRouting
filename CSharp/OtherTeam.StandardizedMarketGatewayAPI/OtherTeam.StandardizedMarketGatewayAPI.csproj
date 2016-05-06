@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="ApiDealExecutedEventArgs.cs" />
     <Compile Include="ApiLimitOrder.cs" />
+    <Compile Include="ApiMarketDataUpdateEventArgs.cs" />
     <Compile Include="ApiMarketGateway.cs" />
     <Compile Include="ApiMarketOrder.cs" />
     <Compile Include="ApiMarketWay.cs" />

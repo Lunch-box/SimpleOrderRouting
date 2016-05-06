@@ -12,6 +12,8 @@ namespace OtherTeam.StandardizedMarketGatewayAPI
             this.OrderPredicate = orderPredicate;
         }
 
+        public event EventHandler<ApiMarketDataUpdateEventArgs> MarketDataUpdated;
+
         public event EventHandler<ApiDealExecutedEventArgs> OrderExecuted;
 
         // TODO: set a proper event handler instead of this string
@@ -63,6 +65,7 @@ namespace OtherTeam.StandardizedMarketGatewayAPI
                     var executedQuantity = Math.Min(marketOrder.Quantity, this.SellQuantity);
                     this.SellQuantity -= executedQuantity;
 
+                    this.RaiseMarketDataUpdated(this.SellPrice, this.SellQuantity);
                     this.RaiseOrderExecuted(marketOrder, executedQuantity);
 
                     break;
@@ -104,6 +107,7 @@ namespace OtherTeam.StandardizedMarketGatewayAPI
                     var executedQuantity = Math.Min(limitOrder.Quantity, this.SellQuantity);
                     this.SellQuantity -= executedQuantity;
 
+                    this.RaiseMarketDataUpdated(this.SellPrice, this.SellQuantity);
                     this.RaiseOrderExecuted(limitOrder, executedQuantity);
 
                     break;
@@ -113,6 +117,16 @@ namespace OtherTeam.StandardizedMarketGatewayAPI
                     break;
             }
         }
+
+        private void RaiseMarketDataUpdated(decimal newSellPrice, int newQuantityOnTheMarket)
+        {
+            var marketDataUpdated = this.MarketDataUpdated;
+            if (marketDataUpdated != null)
+            {
+                marketDataUpdated(this, new ApiMarketDataUpdateEventArgs(this.MarketName, newSellPrice, newQuantityOnTheMarket));
+            }
+        }
+
         private void RaiseOrderExecuted(ApiOrder order, int executedQuantity)
         {
             var onOrderExecuted = this.OrderExecuted;

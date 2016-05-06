@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MarketTests.cs" company="LunchBox corp">
+// <copyright file="ApiMarketGatewayTests.cs" company="LunchBox corp">
 //     Copyright 2014 The Lunch-Box mob: 
 //           Ozgur DEVELIOGLU (@Zgurrr)
 //           Cyrille  DUPUYDAUBY (@Cyrdup)
@@ -26,7 +26,7 @@ namespace SimpleOrderRouting.Tests
 
     using Xunit;
 
-    public class MarketTests
+    public class ApiMarketGatewayTests
     {
         [Fact]
         public void MarketOrderShouldDecreaseAvailableQuantity()
@@ -58,7 +58,7 @@ namespace SimpleOrderRouting.Tests
             market.Send(order);
 
             Check.That(failed).IsTrue();
-            Check.That(failureReason).IsEqualTo("Excessive quantity!");
+            Check.That(failureReason).IsEqualTo("Excessive QuantityOnTheMarket!");
         }
 
         [Fact]
@@ -108,7 +108,7 @@ namespace SimpleOrderRouting.Tests
 
             Check.That(executed).IsFalse();
             Check.That(failed).IsTrue();
-            Check.That(failureReason).IsEqualTo("Invalid price");
+            Check.That(failureReason).IsEqualTo("Invalid MarketPrice");
             Check.That(market.SellQuantity).IsEqualTo(50);
         }
 

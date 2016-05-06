@@ -59,7 +59,22 @@ namespace SimpleOrderRouting
         {
             var executionState = new InstructionExecutionContext(investorInstruction);
 
+            // Prepare to Feedback the investor
+            investorInstruction.Executed += this.InvestorInstruction_Executed;
+
+            // TODO: add symetry here (i.e. always go via the InstructionExecutionContext
+            EventHandler<DealExecutedEventArgs> handler = (sender, args) => executionState.Executed(args.Quantity);
+            EventHandler<OrderFailedEventArgs> failHandler = (sender, failure) => this.OnOrderFailed(investorInstruction, failure, executionState);
+
+            this.canRouteOrders.OrderExecuted += handler;
+            this.canRouteOrders.OrderFailed += failHandler;
+
             this.RouteImpl(investorInstruction, executionState);
+
+            // TODO: possible race condition between Solve and the event part?
+
+            this.canRouteOrders.OrderExecuted -= handler;
+            this.canRouteOrders.OrderFailed -= failHandler;
         }
 
         //// TODO: remove investor instruction as arg here?
@@ -68,32 +83,9 @@ namespace SimpleOrderRouting
             // 1. Prepare order book (solver)
             var solver = new MarketSweepSolver(this.marketSnapshotProvider);
             var orderBasket = solver.Solve(instructionExecutionContext, this.canRouteOrders);
-
-            // 2. Route the order book
-            // TODO: add symetry here (i.e. always go via the InstructionExecutionContext
-            EventHandler<DealExecutedEventArgs> handler = (sender, args) => instructionExecutionContext.Executed(args.Quantity);
-            EventHandler<OrderFailedEventArgs> failHandler = (sender, failure) => this.OnOrderFailed(investorInstruction, failure, instructionExecutionContext);
-
-            this.canRouteOrders.OrderExecuted += handler;
-            this.canRouteOrders.OrderFailed += failHandler;
-
-            this.canRouteOrders.Route(orderBasket);
-
-            // TODO: possible race condition between Solve and the event part?
-            // 4. Feedback the investor
             
-            //investorInstruction.Executed += (sender, e) => this.investorInstruction_Executed(sender, e);
-
-            //orderBasket.OrderExecuted += handler;
-            //orderBasket.OrderFailed += failHandler;
-
-            //orderBasket.Send();
-
-            //orderBasket.OrderExecuted -= handler;
-            //orderBasket.OrderFailed -= failHandler;
-
-            this.canRouteOrders.OrderExecuted -= handler;
-            this.canRouteOrders.OrderFailed -= failHandler;
+            // 2. Route the order book
+            this.canRouteOrders.Route(orderBasket);
         }
 
         void InvestorInstruction_Executed(object sender, OrderExecutedEventArgs e)
@@ -112,7 +104,7 @@ namespace SimpleOrderRouting
 
             if (investorInstruction.GoodTill != null && 
                 investorInstruction.GoodTill > DateTime.Now && 
-                instructionExecutionContext.Quantity > 0)
+                instructionExecutionContext.RemainingQuantityToBeExecuted > 0)
             {
                 // retries
                 this.RouteImpl(investorInstruction, instructionExecutionContext);

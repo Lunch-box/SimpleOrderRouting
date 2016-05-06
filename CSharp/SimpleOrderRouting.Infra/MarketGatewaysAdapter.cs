@@ -15,11 +15,6 @@ namespace SimpleOrderRouting.Infra
     {
         private Dictionary<string, ApiMarketGateway> gateways;
 
-        // legacy
-        // ICanRouteOrders canRouteOrders = null;//new OrderRoutingService(marketsInvolved);
-        //ICanReceiveMarketData canReceiveMarketData = null; //new MarketDataProvider(marketsInvolved);
-        //IProvideMarkets provideMarkets = null; //new MarketProvider(marketsInvolved);
-            
         public MarketGatewaysAdapter(ApiMarketGateway[] apiMarketGateways)
         {
             this.gateways = new Dictionary<string, ApiMarketGateway>();
@@ -27,11 +22,12 @@ namespace SimpleOrderRouting.Infra
             foreach (var marketGateway in apiMarketGateways)
             {
                 this.gateways[marketGateway.MarketName] = marketGateway;
+                marketGateway.MarketDataUpdated += MarketGatewayOnMarketDataUpdated;
                 marketGateway.OrderExecuted += MarketGatewayOnOrderExecuted;
                 marketGateway.OrderFailed += MarketGatewayOnOrderFailed;
             }
         }
-
+        
         public event EventHandler<DealExecutedEventArgs> OrderExecuted;
 
         public event EventHandler<OrderFailedEventArgs> OrderFailed;
@@ -54,11 +50,11 @@ namespace SimpleOrderRouting.Infra
             }
         }
 
-        private void MarketGatewayOnOrderFailed(object sender, ApiOrderFailedEventArgs apiArgs)
+        private void MarketGatewayOnMarketDataUpdated(object sender, ApiMarketDataUpdateEventArgs apiMarketDataUpdateEventArgs)
         {
-            // Adapts the external API format to the SOR domain format
-            var dealExecutedEventArgs = new OrderFailedEventArgs(apiArgs.MarketName, apiArgs.FailureCause);
-            this.RaiseOrderFailed(dealExecutedEventArgs);
+            // Adapts the external API feed format to the SOR domain format
+            var marketDataUpdatedArgs = new MarketDataUpdatedArgs(apiMarketDataUpdateEventArgs.OriginMarketName, apiMarketDataUpdateEventArgs.MarketPrice, apiMarketDataUpdateEventArgs.QuantityOnTheMarket);
+            this.RaiseMarketDataUpdate(marketDataUpdatedArgs);
         }
 
         private void MarketGatewayOnOrderExecuted(object sender, ApiDealExecutedEventArgs externalApiExecutionArgs)
@@ -68,9 +64,16 @@ namespace SimpleOrderRouting.Infra
             this.RaiseOrderExecuted(dealExecutedEventArgs);
         }
 
+        private void MarketGatewayOnOrderFailed(object sender, ApiOrderFailedEventArgs apiArgs)
+        {
+            // Adapts the external API format to the SOR domain format
+            var dealExecutedEventArgs = new OrderFailedEventArgs(apiArgs.MarketName, apiArgs.FailureCause);
+            this.RaiseOrderFailed(dealExecutedEventArgs);
+        }
+
         #region ICanReceiveMarketData
 
-        public event EventHandler<MarketDataUpdate> InstrumentMarketDataUpdated;
+        public event EventHandler<MarketDataUpdatedArgs> InstrumentMarketDataUpdated;
 
         public void Subscribe(IMarket market)
         {
@@ -80,12 +83,20 @@ namespace SimpleOrderRouting.Infra
         public void Subscribe(string marketName)
         {
             var internalMarket = this.gateways.First(m => m.Key == marketName).Value;
+            
+            // Raise the first event
+            var marketDataUpdatedArgs = new MarketDataUpdatedArgs(internalMarket.MarketName, internalMarket.SellPrice, internalMarket.SellQuantity);
 
+            this.RaiseMarketDataUpdate(marketDataUpdatedArgs);
+        }
+
+        private void RaiseMarketDataUpdate(MarketDataUpdatedArgs args)
+        {
             var onInstrumentMarketDataUpdated = this.InstrumentMarketDataUpdated;
             if (onInstrumentMarketDataUpdated != null)
             {
-                onInstrumentMarketDataUpdated(this, new MarketDataUpdate(marketName, internalMarket.SellPrice, internalMarket.SellQuantity));
-            };
+                onInstrumentMarketDataUpdated(this, args);
+            }
         }
 
         #endregion

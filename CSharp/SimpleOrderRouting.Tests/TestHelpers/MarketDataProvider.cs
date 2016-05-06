@@ -6,6 +6,7 @@ namespace SimpleOrderRouting.Tests.TestHelpers
 
     using SimpleOrderRouting.Markets.Feeds;
 
+    [Obsolete("Replace it with the MarketGatewayAdapter.")]
     public class MarketDataProvider : ICanReceiveMarketData
     {
         private readonly IEnumerable<IMarket> marketsInvolved;
@@ -23,18 +24,7 @@ namespace SimpleOrderRouting.Tests.TestHelpers
             this.marketsInvolved = marketsInvolved;
         }
 
-        public event EventHandler<MarketDataUpdate> InstrumentMarketDataUpdated;
-
-        public void Subscribe(IMarket market)
-        {
-            var internalMarket = this.marketsInvolved.First(m => m == market);
-            
-            var onInstrumentMarketDataUpdated = this.InstrumentMarketDataUpdated;
-            if (onInstrumentMarketDataUpdated != null)
-            {
-                onInstrumentMarketDataUpdated(this, new MarketDataUpdate(market, internalMarket.SellPrice, internalMarket.SellQuantity));
-            }
-        }
+        public event EventHandler<MarketDataUpdatedArgs> InstrumentMarketDataUpdated;
 
         public void Subscribe(string marketName)
         {
@@ -43,7 +33,7 @@ namespace SimpleOrderRouting.Tests.TestHelpers
             //var onInstrumentMarketDataUpdated = this.InstrumentMarketDataUpdated;
             //if (onInstrumentMarketDataUpdated != null)
             //{
-            //    onInstrumentMarketDataUpdated(this, new MarketDataUpdate(marketName, internalMarket.SellPrice, internalMarket.SellQuantity));
+            //    onInstrumentMarketDataUpdated(this, new MarketDataUpdatedArgs(marketName, internalMarket.SellPrice, internalMarket.SellQuantity));
             //}
         }
     }

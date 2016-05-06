@@ -54,11 +54,10 @@
     <Compile Include="InvestorInstructionDtoTests.cs" />
     <Compile Include="InvestorInstructionTests.cs" />
     <Compile Include="MarketSweepSolverTests.cs" />
-    <Compile Include="MarketTests.cs" />
+    <Compile Include="ApiMarketGatewayTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SorAcceptanceTests.cs" />
     <Compile Include="SorTestHarness.cs" />
-    <Compile Include="TestHelpers\ExternalMarket.cs" />
     <Compile Include="TestHelpers\MarketDataProvider.cs" />
     <Compile Include="TestHelpers\MarketProvider.cs" />
   </ItemGroup>

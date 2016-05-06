@@ -21,7 +21,7 @@
 namespace SimpleOrderRouting.Tests
 {
     using System;
-
+    using Xunit;
     using NFluent;
 
     using OtherTeam.StandardizedMarketGatewayAPI;
@@ -29,8 +29,6 @@ namespace SimpleOrderRouting.Tests
     using SimpleOrderRouting.Infra;
     using SimpleOrderRouting.Investors;
     using SimpleOrderRouting.Markets.Orders;
-
-    using Xunit;
 
     public class SorAcceptanceTests
     {
@@ -40,7 +38,7 @@ namespace SimpleOrderRouting.Tests
         public void Should_execute_instruction_when_there_is_enough_liquidity_on_one_Market()
         {
             // Given market A: 150 @ $100, market B: 55 @ $101 
-            // When Investor wants to buy 125 stocks @ $100 Then SOR can execute at the requested price
+            // When Investor wants to buy 125 stocks @ $100 Then SOR can execute at the requested MarketPrice
             var marketA = new ApiMarketGateway("Euronext", sellQuantity: 150, sellPrice: 100M);
 
             var marketB = new ApiMarketGateway("LSE", sellQuantity: 55, sellPrice: 101M);
@@ -69,7 +67,7 @@ namespace SimpleOrderRouting.Tests
         public void Should_failed_when_Order_exceeds_all_Market_capacity_and_partial_execution_not_allowed()
         {
             // Given market A: 150 @ $100, market B: 55 @ $101 
-            // When Investor wants to buy 125 stocks @ $100 Then SOR can execute at the requested price
+            // When Investor wants to buy 125 stocks @ $100 Then SOR can execute at the requested MarketPrice
             var marketA = new ApiMarketGateway("Euronext", sellQuantity: 15, sellPrice: 100M);
 
             var marketB = new ApiMarketGateway("LSE", sellQuantity: 55, sellPrice: 101M);
@@ -91,7 +89,7 @@ namespace SimpleOrderRouting.Tests
             // orderRequest.Route(); ?
             sor.Route(investorInstruction);
 
-            // Couldn't execute because order with excessive quantity
+            // Couldn't execute because order with excessive QuantityOnTheMarket
             Check.That(failureReason).IsNotNull().And.IsEqualIgnoringCase("Excessive quantity!");
             Check.That(orderExecutedEventArgs).IsNull();
         }
@@ -117,13 +115,10 @@ namespace SimpleOrderRouting.Tests
         public void Should_succeeded_when_liquidity_is_available_even_if_one_Market_rejects()
         {
             // Given market A: 150 @ $100, market B: 55 @ $101 
-            // When Investor wants to buy 125 stocks @ $100 Then SOR can execute at the requested price
+            // When Investor wants to buy 125 stocks @ $100 Then SOR can execute at the requested MarketPrice
             var marketA = new ApiMarketGateway("Euronext", sellQuantity: 50, sellPrice: 100M);
-
             var rejectingMarket = new ApiMarketGateway("CME", sellQuantity: 50, sellPrice: 100M, orderPredicate: _ => false);
-
             var marketsInvolved = new[] { marketA, rejectingMarket };
-
             var marketGatewaysAdapter = new MarketGatewaysAdapter(marketsInvolved);
 
             var sor = new SmartOrderRoutingEngine(marketGatewaysAdapter, marketGatewaysAdapter, marketGatewaysAdapter);
@@ -147,7 +142,7 @@ namespace SimpleOrderRouting.Tests
         public void Should_execute_Instruction_when_there_is_enough_liquidity_on_the_Markets()
         {
             // Given market A: 100 @ $100, market B: 55 @ $100 
-            // When Investor wants to buy 125 stocks @ $100 Then SOR can execute at the requested price
+            // When Investor wants to buy 125 stocks @ $100 Then SOR can execute at the requested MarketPrice
             var marketA = new ApiMarketGateway("Euronext", sellQuantity: 100, sellPrice: 100M);
             var marketB = new ApiMarketGateway("LSE", sellQuantity: 55, sellPrice: 100M);
 
@@ -172,7 +167,7 @@ namespace SimpleOrderRouting.Tests
         {
             // 25 premier ; 75 % sur le second marché
             // Given market A: 100 @ $100, market B: 50 @ $100 
-            // When Investor wants to buy 75 stocks @ $100 Then SOR can execute at the requested price
+            // When Investor wants to buy 75 stocks @ $100 Then SOR can execute at the requested MarketPrice
             // And execution is: 50 stocks on MarketA and 25 stocks on MarketB
             var marketA = new ApiMarketGateway("Euronext", sellQuantity: 100, sellPrice: 100M);
             var marketB = new ApiMarketGateway("LSE", sellQuantity: 50, sellPrice: 100M);

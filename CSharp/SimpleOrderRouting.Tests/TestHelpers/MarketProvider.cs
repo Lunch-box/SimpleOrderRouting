@@ -3,10 +3,10 @@ namespace SimpleOrderRouting.Tests.TestHelpers
     using System;
     using System.Collections.Generic;
 
+    [Obsolete("Replace it with the MarketGatewayAdapter.")]
     public class MarketProvider : IProvideMarkets
     {
         private readonly IEnumerable<IMarket> markets;
-
         private readonly IEnumerable<string> marketNames;
 
         public MarketProvider(IEnumerable<string> marketNames)

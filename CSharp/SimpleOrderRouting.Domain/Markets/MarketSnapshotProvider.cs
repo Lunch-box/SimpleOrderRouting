@@ -41,9 +41,9 @@ namespace SimpleOrderRouting.Markets
             }
         }
 
-        private void InstrumentMarketDataUpdated(object sender, MarketDataUpdate marketDataUpdate)
+        private void InstrumentMarketDataUpdated(object sender, MarketDataUpdatedArgs marketDataUpdatedArgs)
         {
-            this.lastMarketUpdates[marketDataUpdate.MarketName] = new MarketInfo(marketDataUpdate.MarketName, marketDataUpdate.Quantity, marketDataUpdate.Price);
+            this.lastMarketUpdates[marketDataUpdatedArgs.MarketName] = new MarketInfo(marketDataUpdatedArgs.MarketName, marketDataUpdatedArgs.Quantity, marketDataUpdatedArgs.Price);
         }
 
         public MarketSnapshot GetSnapshot()

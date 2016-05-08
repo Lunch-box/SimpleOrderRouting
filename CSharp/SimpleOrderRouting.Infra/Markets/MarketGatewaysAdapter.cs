@@ -14,9 +14,9 @@ namespace SimpleOrderRouting.Infra
     /// <summary>
     /// Adapter between the external Markets gateways model and the SOR one.
     /// </summary>
-    public class MarketGatewaysAdapter : ICanRouteOrders, ICanReceiveMarketData, IProvideMarkets
+    public sealed class MarketGatewaysAdapter : ICanRouteOrders, ICanReceiveMarketData, IProvideMarkets
     {
-        private Dictionary<string, ApiMarketGateway> gateways;
+        private readonly Dictionary<string, ApiMarketGateway> gateways;
 
         public MarketGatewaysAdapter(ApiMarketGateway[] apiMarketGateways)
         {
@@ -25,9 +25,9 @@ namespace SimpleOrderRouting.Infra
             foreach (var marketGateway in apiMarketGateways)
             {
                 this.gateways[marketGateway.MarketName] = marketGateway;
-                marketGateway.MarketDataUpdated += MarketGatewayOnMarketDataUpdated;
-                marketGateway.OrderExecuted += MarketGatewayOnOrderExecuted;
-                marketGateway.OrderFailed += MarketGatewayOnOrderFailed;
+                marketGateway.MarketDataUpdated += this.MarketGatewayOnMarketDataUpdated;
+                marketGateway.OrderExecuted += this.MarketGatewayOnOrderExecuted;
+                marketGateway.OrderFailed += this.MarketGatewayOnOrderFailed;
             }
         }
         
@@ -35,7 +35,7 @@ namespace SimpleOrderRouting.Infra
 
         public event EventHandler<OrderFailedEventArgs> OrderFailed;
 
-        protected virtual void RaiseOrderExecuted(DealExecutedEventArgs args)
+        private void RaiseOrderExecuted(DealExecutedEventArgs args)
         {
             var orderExecuted = this.OrderExecuted;
             if (orderExecuted != null)
@@ -44,7 +44,7 @@ namespace SimpleOrderRouting.Infra
             }
         }
 
-        protected virtual void RaiseOrderFailed(OrderFailedEventArgs args)
+        private void RaiseOrderFailed(OrderFailedEventArgs args)
         {
             var orderFailed = this.OrderFailed;
             if (orderFailed != null)

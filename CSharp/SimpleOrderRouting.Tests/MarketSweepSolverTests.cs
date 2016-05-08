@@ -18,8 +18,8 @@
         [Fact]
         public void Should_Solve_with_2_markets_when_asked_quantity_is_odd()
         {
-            var marketA = new ApiMarketGateway("Euronext", sellQuantity: 50, sellPrice: 100M);
-            var rejectingMarket = new ApiMarketGateway("CME", sellQuantity: 50, sellPrice: 100M, orderPredicate: _ => false);
+            var marketA = new ApiMarketGateway("NYSE (New York)", sellQuantity: 50, sellPrice: 100M);
+            var rejectingMarket = new ApiMarketGateway("CME (Chicago)", sellQuantity: 50, sellPrice: 100M, orderPredicate: _ => false);
             var marketsInvolved = new[] { marketA, rejectingMarket };
             var marketGatewayAdapter = new MarketGatewaysAdapter(marketsInvolved);
 
@@ -35,8 +35,8 @@
         [Fact]
         public void Should_Solve_with_2_markets_when_asked_quantity_is_1()
         {
-            var marketA = new ApiMarketGateway("Euronext", sellQuantity: 50, sellPrice: 100M);
-            var rejectingMarket = new ApiMarketGateway("CME", sellQuantity: 50, sellPrice: 100M, orderPredicate: _ => false);
+            var marketA = new ApiMarketGateway("NYSE (New York)", sellQuantity: 50, sellPrice: 100M);
+            var rejectingMarket = new ApiMarketGateway("CME (Chicago)", sellQuantity: 50, sellPrice: 100M, orderPredicate: _ => false);
             var marketsInvolved = new[] { marketA, rejectingMarket };
             var marketGatewayAdapter = new MarketGatewaysAdapter(marketsInvolved);
 

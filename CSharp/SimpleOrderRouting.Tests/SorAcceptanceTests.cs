@@ -39,8 +39,8 @@ namespace SimpleOrderRouting.Tests
         {
             // Given market A: 150 @ $100, market B: 55 @ $101 
             // When Investor wants to buy 125 stocks @ $100 Then SOR can execute at the requested MarketPrice
-            var marketA = new ApiMarketGateway("Euronext", sellQuantity: 150, sellPrice: 100M);
-            var marketB = new ApiMarketGateway("LSE", sellQuantity: 55, sellPrice: 101M);
+            var marketA = new ApiMarketGateway("NYSE (New York)", sellQuantity: 150, sellPrice: 100M);
+            var marketB = new ApiMarketGateway("CME (Chicago)", sellQuantity: 55, sellPrice: 101M);
             var marketGatewaysAdapter = new MarketGatewaysAdapter(new[] { marketA, marketB });
 
             var sor = new SmartOrderRoutingEngine(marketGatewaysAdapter, marketGatewaysAdapter, marketGatewaysAdapter);
@@ -51,12 +51,14 @@ namespace SimpleOrderRouting.Tests
             sor.Subscribe(investorInstruction, (args) => { orderExecutedEventArgs = args; }, null);
             investorInstruction.Executed += (sender, args) => { orderExecutedEventArgs = args; };
             
-            // orderRequest.Route(); ?
             sor.Route(investorInstruction);
 
             // TODO :introduce autoreset event instead
             Check.That(orderExecutedEventArgs).IsNotNull();
             Check.That(orderExecutedEventArgs).HasFieldsWithSameValues(new { Way = Way.Buy, Quantity = 125, Price = 100M });
+
+            Check.That(marketA.SellQuantity).IsEqualTo(25);
+            Check.That(marketB.SellQuantity).IsEqualTo(55);
         }
 
         [Fact]
@@ -64,8 +66,8 @@ namespace SimpleOrderRouting.Tests
         {
             // Given market A: 150 @ $100, market B: 55 @ $101 
             // When Investor wants to buy 125 stocks @ $100 Then SOR can execute at the requested MarketPrice
-            var marketA = new ApiMarketGateway("Euronext", sellQuantity: 15, sellPrice: 100M);
-            var marketB = new ApiMarketGateway("LSE", sellQuantity: 55, sellPrice: 101M);
+            var marketA = new ApiMarketGateway("NYSE (New York)", sellQuantity: 15, sellPrice: 100M);
+            var marketB = new ApiMarketGateway("CME (Chicago)", sellQuantity: 55, sellPrice: 101M);
             var marketGatewaysAdapter = new MarketGatewaysAdapter(new[] { marketA, marketB });
 
             var sor = new SmartOrderRoutingEngine(marketGatewaysAdapter, marketGatewaysAdapter, marketGatewaysAdapter);
@@ -84,12 +86,15 @@ namespace SimpleOrderRouting.Tests
             // Couldn't execute because order with excessive QuantityOnTheMarket
             Check.That(failureReason).IsNotNull().And.IsEqualIgnoringCase("Excessive quantity!");
             Check.That(orderExecutedEventArgs).IsNull();
+
+            Check.That(marketA.SellQuantity).IsEqualTo(15);
+            Check.That(marketB.SellQuantity).IsEqualTo(55);
         }
 
         [Fact]
         public void Should_stop_sending_Orders_to_a_Market_after_3_rejects()
         {
-            var rejectingMarket = new ApiMarketGateway("NYSE", sellQuantity: 100, sellPrice: 100M, orderPredicate : order => false);
+            var rejectingMarket = new ApiMarketGateway("LSE (London)", sellQuantity: 100, sellPrice: 100M, orderPredicate : order => false);
             var marketGatewaysAdapter = new MarketGatewaysAdapter(new[] { rejectingMarket });
 
             var sor = new SmartOrderRoutingEngine(marketGatewaysAdapter, marketGatewaysAdapter, marketGatewaysAdapter);
@@ -98,6 +103,8 @@ namespace SimpleOrderRouting.Tests
             sor.Route(investorInstruction);
 
             Check.That(rejectingMarket.TimesSent).IsEqualTo(3);
+
+            Check.That(rejectingMarket.SellQuantity).IsEqualTo(100);
         }
 
         [Fact]
@@ -105,8 +112,8 @@ namespace SimpleOrderRouting.Tests
         {
             // Given market A: 150 @ $100, market B: 55 @ $101 
             // When Investor wants to buy 125 stocks @ $100 Then SOR can execute at the requested MarketPrice
-            var marketA = new ApiMarketGateway("Euronext", sellQuantity: 50, sellPrice: 100M);
-            var rejectingMarket = new ApiMarketGateway("CME", sellQuantity: 50, sellPrice: 100M, orderPredicate: _ => false);
+            var marketA = new ApiMarketGateway("NYSE (New York)", sellQuantity: 50, sellPrice: 100M);
+            var rejectingMarket = new ApiMarketGateway("LSE (London)", sellQuantity: 50, sellPrice: 100M, orderPredicate: _ => false);
             var marketGatewaysAdapter = new MarketGatewaysAdapter(new[] { marketA, rejectingMarket });
 
             var sor = new SmartOrderRoutingEngine(marketGatewaysAdapter, marketGatewaysAdapter, marketGatewaysAdapter);
@@ -119,11 +126,13 @@ namespace SimpleOrderRouting.Tests
             
             sor.Subscribe(investorInstruction, (args) => { orderExecutedEventArgs = args; }, (args) => { failureReason = args; });
 
-            // orderRequest.Route(); ?
             sor.Route(investorInstruction);
 
             Check.That(orderExecutedEventArgs).IsNotNull();
             Check.That(failureReason).IsNull();
+
+            Check.That(marketA.SellQuantity).IsEqualTo(0);
+            Check.That(rejectingMarket.SellQuantity).IsEqualTo(50);
         }
 
         [Fact]
@@ -131,8 +140,8 @@ namespace SimpleOrderRouting.Tests
         {
             // Given market A: 100 @ $100, market B: 55 @ $100 
             // When Investor wants to buy 125 stocks @ $100 Then SOR can execute at the requested MarketPrice
-            var marketA = new ApiMarketGateway("Euronext", sellQuantity: 100, sellPrice: 100M);
-            var marketB = new ApiMarketGateway("LSE", sellQuantity: 55, sellPrice: 100M);
+            var marketA = new ApiMarketGateway("NYSE (New York)", sellQuantity: 100, sellPrice: 100M);
+            var marketB = new ApiMarketGateway("CME (Chicago)", sellQuantity: 55, sellPrice: 100M);
             var marketGatewaysAdapter = new MarketGatewaysAdapter(new[] { marketA, marketB });
 
             var sor = new SmartOrderRoutingEngine(marketGatewaysAdapter, marketGatewaysAdapter, marketGatewaysAdapter);
@@ -142,10 +151,12 @@ namespace SimpleOrderRouting.Tests
             OrderExecutedEventArgs orderExecutedEventArgs = null;
             sor.Subscribe(investorInstruction, (args) => { orderExecutedEventArgs = args; }, null);
 
-            // orderRequest.Route(); ?
             sor.Route(investorInstruction);
 
             Check.That(orderExecutedEventArgs).HasFieldsWithSameValues(new { Way = Way.Buy, Quantity = 125, Price = 100M });
+
+            Check.That(marketA.SellQuantity).IsEqualTo(19);
+            Check.That(marketB.SellQuantity).IsEqualTo(11);
         }
 
         [Fact]
@@ -155,8 +166,8 @@ namespace SimpleOrderRouting.Tests
             // Given market A: 100 @ $100, market B: 50 @ $100 
             // When Investor wants to buy 75 stocks @ $100 Then SOR can execute at the requested MarketPrice
             // And execution is: 50 stocks on MarketA and 25 stocks on MarketB
-            var marketA = new ApiMarketGateway("Euronext", sellQuantity: 100, sellPrice: 100M);
-            var marketB = new ApiMarketGateway("LSE", sellQuantity: 50, sellPrice: 100M);
+            var marketA = new ApiMarketGateway("NYSE (New York)", sellQuantity: 100, sellPrice: 100M);
+            var marketB = new ApiMarketGateway("CME (Chicago)", sellQuantity: 50, sellPrice: 100M);
             var marketGatewaysAdapter = new MarketGatewaysAdapter(new[] { marketA, marketB });
 
             var sor = new SmartOrderRoutingEngine(marketGatewaysAdapter, marketGatewaysAdapter, marketGatewaysAdapter);
@@ -170,6 +181,7 @@ namespace SimpleOrderRouting.Tests
             sor.Route(investorInstruction);
 
             Check.That(orderExecutedEventArgs).HasFieldsWithSameValues(new { Way = Way.Buy, Quantity = 75, Price = 100M });
+            
             Check.That(marketA.SellQuantity).IsEqualTo(50);
             Check.That(marketB.SellQuantity).IsEqualTo(25);
         }

@@ -22,12 +22,9 @@
 namespace SimpleOrderRouting.Infra
 {
     using System;
-    using System.Collections.Generic;
 
     using SimpleOrderRouting.Investors;
     using SimpleOrderRouting.Markets.Orders;
-
-    //TODO: add tests for this adapter
 
     /// <summary>
     /// External API for the Smart Order Routing service. Aggregates all instruction events.
@@ -46,33 +43,19 @@ namespace SimpleOrderRouting.Infra
             this.sor = sor;
         }
 
-        public event EventHandler<InvestorInstructionUpdatedDto> InstructionUpdated;
-
-        public void Route(InvestorInstructionDto investorInstructionDto)
-        {
-            // Adapt from infra to domain
-            var investorInstruction = this.CreateInvestorInstruction(investorInstructionDto.UniqueIdentifier, null, investorInstructionDto.Way, investorInstructionDto.Quantity, investorInstructionDto.Price, investorInstructionDto.AllowPartialExecution, investorInstructionDto.GoodTill);
-            this.sor.Route(investorInstruction);
-        }
-
-        private InvestorInstruction CreateInvestorInstruction(InvestorInstructionIdentifierDto instructionIdentifierDto, InstrumentIdentifier instrumentIdentifier, Way way, int quantity, decimal price, bool allowPartialExecution = false, DateTime? goodTill = null)
-        {
-            return new InvestorInstruction(instructionIdentifierDto.Value, way, quantity, price, allowPartialExecution, goodTill);
-        }
-
         // TODO: expose some infra callbacks instead of the domain one
-        public void Subscribe(InvestorInstructionDto investorInstructionDto, Action<OrderExecutedEventArgs> executedCallback, Action<string> failureCallback)
+        public void Route(InvestorInstructionDto investorInstructionDto, Action<InstructionExecutedEventArgs> instructionExecutedCallback, Action<InstructionFailedEventArgs> instructionFailedCallback)
         {
             // Maps the DTO model to the domain one
             var investorIntruction = new InvestorInstruction(investorInstructionDto.UniqueIdentifier.Value, investorInstructionDto.Way, investorInstructionDto.Quantity, investorInstructionDto.Price, investorInstructionDto.AllowPartialExecution, investorInstructionDto.GoodTill);
 
-            //investorIntruction.Executed += investorIntruction_Executed;
-            //investorIntruction.Failed += investorIntruction_Failed;
-
-            //// TODO: regirst failure
-            var dtoCallBacks = new InvestorInstructionDtoCallBacks(executedCallback, failureCallback);
+            var dtoCallBacks = new InvestorInstructionDtoCallBacks(instructionExecutedCallback, instructionFailedCallback);
             this.sor.Subscribe(investorIntruction, dtoCallBacks.ExecutedCallback, dtoCallBacks.FailedCallbacks);
-            
+
+            var investorInstruction = new InvestorInstruction(investorInstructionDto.UniqueIdentifier.Value, investorInstructionDto.Way, investorInstructionDto.Quantity, investorInstructionDto.Price, investorInstructionDto.AllowPartialExecution, investorInstructionDto.GoodTill);
+           
+            this.sor.Route(investorInstruction);
+
             // TODO: cleanup the dtoCallback resource
         }
     }

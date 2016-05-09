@@ -39,11 +39,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Investors\InstructionExecutedEventArgs.cs" />
+    <Compile Include="Investors\InstructionFailedEventArgs.cs" />
     <Compile Include="Investors\InvestorInstructionDtoCallBacks.cs" />
     <Compile Include="Investors\InvestorInstructionsAdapter.cs" />
     <Compile Include="Investors\InvestorInstructionDto.cs" />
     <Compile Include="Investors\InvestorInstructionIdentifierDto.cs" />
     <Compile Include="Investors\InvestorInstructionUpdatedDto.cs" />
+    <Compile Include="Investors\Way.cs" />
     <Compile Include="Markets\LimitOrderAdapter.cs" />
     <Compile Include="Markets\MarketGatewaysAdapter.cs" />
     <Compile Include="Markets\MarketOrderAdapter.cs" />

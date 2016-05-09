@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LimitOrderAdapter.cs" company="LunchBox corp">
+// <copyright file="Way.cs" company="LunchBox corp">
 //     Copyright 2014 The Lunch-Box mob: 
 //           Ozgur DEVELIOGLU (@Zgurrr)
 //           Cyrille  DUPUYDAUBY (@Cyrdup)
@@ -21,24 +21,19 @@
 
 namespace SimpleOrderRouting.Infra
 {
-    using OtherTeam.StandardizedMarketGatewayAPI;
-
     /// <summary>
-    /// Adapts LimitOrder between the SOR and the external market gateway models. 
+    /// Sell or Buy way for Orders.
     /// </summary>
-    public class LimitOrderAdapter : OrderAdapter
+    public enum InvestorWay
     {
-        private readonly ApiLimitOrder apiLimitOrder;
+        /// <summary>
+        /// The Buy way.
+        /// </summary>
+        Buy,
 
-        public LimitOrderAdapter(ApiMarketGateway marketGateway, ApiLimitOrder apiLimitOrder)
-            : base(marketGateway, apiLimitOrder)
-        {
-            this.apiLimitOrder = apiLimitOrder;
-        }
-
-        public override void Send()
-        {
-            this.MarketGateway.Send(this.apiLimitOrder);
-        }
+        /// <summary>
+        /// The Sell way.
+        /// </summary>
+        Sell
     }
 }

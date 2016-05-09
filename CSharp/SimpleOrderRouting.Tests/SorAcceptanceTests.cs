@@ -25,16 +25,14 @@ namespace SimpleOrderRouting.Tests
     using NFluent;
 
     using OtherTeam.StandardizedMarketGatewayAPI;
-
     using SimpleOrderRouting.Infra;
-    using SimpleOrderRouting.Markets.Orders;
 
     public class SorAcceptanceTests
     {
         #region Public Methods and Operators
 
         /// <summary>
-        /// Acts like a composition root for the Hexagonal Architecture.
+        /// Acts like a composition root for the SOR Hexagonal Architecture.
         /// </summary>
         /// <param name="marketGateways">The list of ApiMarketGateway the SOR must interact with.</param>
         /// <returns>The adapter we must use as Investors in order to give investment instructions.</returns>
@@ -64,13 +62,12 @@ namespace SimpleOrderRouting.Tests
 
             var investorInstructionDto = new InvestorInstructionDto(Way.Buy, quantity: 125, price: 100M);
 
-            OrderExecutedEventArgs orderExecutedEventArgs = null;
+            InstructionExecutedEventArgs instructionExecuted = null;
 
-            investorInstructionAdapter.Subscribe(investorInstructionDto, args => orderExecutedEventArgs = args, s => {});
-            investorInstructionAdapter.Route(investorInstructionDto);
+            investorInstructionAdapter.Route(investorInstructionDto, args => { instructionExecuted = args; }, args => {});
 
-            Check.That(orderExecutedEventArgs).IsNotNull();
-            Check.That(orderExecutedEventArgs).HasFieldsWithSameValues(new { Way = Way.Buy, Quantity = 125, Price = 100M });
+            Check.That(instructionExecuted).IsNotNull();
+            Check.That(instructionExecuted).HasFieldsWithSameValues(new { Way = Way.Buy, Quantity = 125, Price = 100M });
 
             Check.That(marketA.SellQuantity).IsEqualTo(25);
             Check.That(marketB.SellQuantity).IsEqualTo(55);
@@ -89,16 +86,14 @@ namespace SimpleOrderRouting.Tests
             var investorInstructionDto = new InvestorInstructionDto(Way.Buy, quantity: 125, price: 100M, allowPartialExecution: false);
 
             // Subscribes to the instruction's events
-            OrderExecutedEventArgs orderExecutedEventArgs = null;
-            string failureReason = null;
+            InstructionExecutedEventArgs instructionExecuted = null;
+            InstructionFailedEventArgs instructionFailed = null;
 
-            investorInstructionAdapter.Subscribe(investorInstructionDto, (args) => { orderExecutedEventArgs = args; }, (args) => { failureReason = args; });
-
-            investorInstructionAdapter.Route(investorInstructionDto);
+            investorInstructionAdapter.Route(investorInstructionDto, (args) => { instructionExecuted = args; }, (args) => { instructionFailed = args; });
 
             // Couldn't execute because order with excessive QuantityOnTheMarket
-            Check.That(failureReason).IsNotNull().And.IsEqualIgnoringCase("Excessive quantity!");
-            Check.That(orderExecutedEventArgs).IsNull();
+            Check.That(instructionFailed.Reason).IsNotNull().And.IsEqualIgnoringCase("Excessive quantity!");
+            Check.That(instructionExecuted).IsNull();
 
             Check.That(marketA.SellQuantity).IsEqualTo(15);
             Check.That(marketB.SellQuantity).IsEqualTo(55);
@@ -113,7 +108,7 @@ namespace SimpleOrderRouting.Tests
             
             var investorInstructionDto = new InvestorInstructionDto(Way.Buy, quantity: 50, price: 100M, goodTill: DateTime.Now.AddMinutes(5));
 
-            investorInstructionAdapter.Route(investorInstructionDto);
+            investorInstructionAdapter.Route(investorInstructionDto, (args) => { }, (args) => { });
 
             Check.That(rejectingMarket.TimesSent).IsEqualTo(3);
 
@@ -133,15 +128,13 @@ namespace SimpleOrderRouting.Tests
             var investorInstructionDto = new InvestorInstructionDto(Way.Buy, quantity: 50, price: 100M, goodTill: DateTime.Now.AddMinutes(5));
 
             // Subscribes to the instruction's events
-            OrderExecutedEventArgs orderExecutedEventArgs = null;
-            string failureReason = null;
+            InstructionExecutedEventArgs instructionExecuted = null;
+            InstructionFailedEventArgs instructionFailed = null;
 
-            investorInstructionAdapter.Subscribe(investorInstructionDto, (args) => { orderExecutedEventArgs = args; }, (args) => { failureReason = args; });
+            investorInstructionAdapter.Route(investorInstructionDto, (args) => { instructionExecuted = args; }, (args) => { instructionFailed = args; });
 
-            investorInstructionAdapter.Route(investorInstructionDto);
-
-            Check.That(orderExecutedEventArgs).IsNotNull();
-            Check.That(failureReason).IsNull();
+            Check.That(instructionExecuted).IsNotNull();
+            Check.That(instructionFailed).IsNull();
 
             Check.That(marketA.SellQuantity).IsEqualTo(0);
             Check.That(rejectingMarket.SellQuantity).IsEqualTo(50);
@@ -159,12 +152,11 @@ namespace SimpleOrderRouting.Tests
 
             var investorInstructionDto = new InvestorInstructionDto(Way.Buy, quantity: 125, price: 100M);
 
-            OrderExecutedEventArgs orderExecutedEventArgs = null;
-            investorInstructionAdapter.Subscribe(investorInstructionDto, (args) => { orderExecutedEventArgs = args; }, null);
+            InstructionExecutedEventArgs instructionExecuted = null;
 
-            investorInstructionAdapter.Route(investorInstructionDto);
+            investorInstructionAdapter.Route(investorInstructionDto, (args) => { instructionExecuted = args; }, null);
 
-            Check.That(orderExecutedEventArgs).HasFieldsWithSameValues(new { Way = Way.Buy, Quantity = 125, Price = 100M });
+            Check.That(instructionExecuted).HasFieldsWithSameValues(new { Way = Way.Buy, Quantity = 125, Price = 100M });
 
             Check.That(marketA.SellQuantity).IsEqualTo(19);
             Check.That(marketB.SellQuantity).IsEqualTo(11);
@@ -184,13 +176,11 @@ namespace SimpleOrderRouting.Tests
 
             var investorInstructionDto = new InvestorInstructionDto(Way.Buy, quantity: 75, price: 100M);
 
-            OrderExecutedEventArgs orderExecutedEventArgs = null;
+            InstructionExecutedEventArgs instructionExecuted = null;
 
-            investorInstructionAdapter.Subscribe(investorInstructionDto, (args) => { orderExecutedEventArgs = args; }, null);
+            investorInstructionAdapter.Route(investorInstructionDto, (args) => { instructionExecuted = args; }, null);
 
-            investorInstructionAdapter.Route(investorInstructionDto);
-
-            Check.That(orderExecutedEventArgs).HasFieldsWithSameValues(new { Way = Way.Buy, Quantity = 75, Price = 100M });
+            Check.That(instructionExecuted).HasFieldsWithSameValues(new { Way = Way.Buy, Quantity = 75, Price = 100M });
             
             Check.That(marketA.SellQuantity).IsEqualTo(50);
             Check.That(marketB.SellQuantity).IsEqualTo(25);

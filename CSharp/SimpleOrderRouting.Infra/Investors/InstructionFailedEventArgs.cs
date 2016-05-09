@@ -1,5 +1,5 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LimitOrderAdapter.cs" company="LunchBox corp">
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="InstructionFailedEventArgs.cs" company="LunchBox corp">
 //     Copyright 2014 The Lunch-Box mob: 
 //           Ozgur DEVELIOGLU (@Zgurrr)
 //           Cyrille  DUPUYDAUBY (@Cyrdup)
@@ -21,24 +21,15 @@
 
 namespace SimpleOrderRouting.Infra
 {
-    using OtherTeam.StandardizedMarketGatewayAPI;
+    using System;
 
-    /// <summary>
-    /// Adapts LimitOrder between the SOR and the external market gateway models. 
-    /// </summary>
-    public class LimitOrderAdapter : OrderAdapter
+    public class InstructionFailedEventArgs : EventArgs
     {
-        private readonly ApiLimitOrder apiLimitOrder;
-
-        public LimitOrderAdapter(ApiMarketGateway marketGateway, ApiLimitOrder apiLimitOrder)
-            : base(marketGateway, apiLimitOrder)
+        public InstructionFailedEventArgs(string reason)
         {
-            this.apiLimitOrder = apiLimitOrder;
+            this.Reason = reason;
         }
 
-        public override void Send()
-        {
-            this.MarketGateway.Send(this.apiLimitOrder);
-        }
+        public string Reason { get; private set; }
     }
 }

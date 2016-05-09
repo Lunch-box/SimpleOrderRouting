@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LimitOrderAdapter.cs" company="LunchBox corp">
+// <copyright file="InstructionExecutedEventArgs.cs" company="LunchBox corp">
 //     Copyright 2014 The Lunch-Box mob: 
 //           Ozgur DEVELIOGLU (@Zgurrr)
 //           Cyrille  DUPUYDAUBY (@Cyrdup)
@@ -18,27 +18,26 @@
 //     limitations under the License.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace SimpleOrderRouting.Infra
 {
-    using OtherTeam.StandardizedMarketGatewayAPI;
+    using System;
 
     /// <summary>
-    /// Adapts LimitOrder between the SOR and the external market gateway models. 
+    /// Event data for InstructionExecuted
     /// </summary>
-    public class LimitOrderAdapter : OrderAdapter
+    public class InstructionExecutedEventArgs : EventArgs
     {
-        private readonly ApiLimitOrder apiLimitOrder;
-
-        public LimitOrderAdapter(ApiMarketGateway marketGateway, ApiLimitOrder apiLimitOrder)
-            : base(marketGateway, apiLimitOrder)
+        public InstructionExecutedEventArgs(InvestorWay way, decimal price, int quantity)
         {
-            this.apiLimitOrder = apiLimitOrder;
+            this.Quantity = quantity;
+            this.Price = price;
+            this.Way = way;
         }
 
-        public override void Send()
-        {
-            this.MarketGateway.Send(this.apiLimitOrder);
-        }
+        public int Quantity { get; private set; }
+
+        public decimal Price { get; private set; }
+
+        public InvestorWay Way { get; private set; }
     }
 }

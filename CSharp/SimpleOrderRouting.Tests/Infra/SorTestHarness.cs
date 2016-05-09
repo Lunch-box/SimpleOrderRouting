@@ -70,7 +70,7 @@
 //            // Subscribes to the instruction's events
 //            OrderExecutedEventArgs orderExecutedEventArgs = null;
 //            string failureReason = null;
-//            instructionsAdapter.Subscribe(this.investorInstructionDto, (args) => { orderExecutedEventArgs = args; }, (args) => { failureReason = args; });
+//            instructionsAdapter.Route(this.investorInstructionDto, (args) => { orderExecutedEventArgs = args; }, (args) => { failureReason = args; });
 //            instructionsAdapter.Route(this.investorInstructionDto);
 
 //            // wait for the exit condition

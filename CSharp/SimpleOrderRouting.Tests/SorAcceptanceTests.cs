@@ -55,7 +55,6 @@ namespace SimpleOrderRouting.Tests
             Check.That(marketA.SellQuantity).IsEqualTo(25);
             Check.That(marketB.SellQuantity).IsEqualTo(55);
         }
-
         
         [Test]
         public void Should_failed_when_Order_exceeds_all_Market_capacity_and_partial_execution_not_allowed()

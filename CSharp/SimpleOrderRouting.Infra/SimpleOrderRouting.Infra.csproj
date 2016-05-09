@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Investors\InvestorInstructionDtoCallBacks.cs" />
     <Compile Include="Investors\InvestorInstructionsAdapter.cs" />
     <Compile Include="Investors\InvestorInstructionDto.cs" />
     <Compile Include="Investors\InvestorInstructionIdentifierDto.cs" />

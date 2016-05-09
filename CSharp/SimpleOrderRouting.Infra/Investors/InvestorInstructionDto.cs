@@ -28,6 +28,11 @@ namespace SimpleOrderRouting.Infra
     /// </summary>
     public class InvestorInstructionDto
     {
+        public InvestorInstructionDto(Way way, int quantity, decimal price, bool allowPartialExecution = false, DateTime? goodTill = null) : this(new InvestorInstructionIdentifierDto(), way, quantity, price, allowPartialExecution, goodTill)
+        {
+            
+        }
+        
         public InvestorInstructionDto(InvestorInstructionIdentifierDto uniqueIdentifier, Way way, int quantity, decimal price, bool allowPartialExecution = false, DateTime? goodTill = null)
         {
             this.UniqueIdentifier = uniqueIdentifier;

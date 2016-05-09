@@ -18,7 +18,7 @@ namespace SimpleOrderRouting.Infra
     {
         private readonly Dictionary<string, ApiMarketGateway> gateways;
 
-        public MarketGatewaysAdapter(ApiMarketGateway[] apiMarketGateways)
+        public MarketGatewaysAdapter(params ApiMarketGateway[] apiMarketGateways)
         {
             this.gateways = new Dictionary<string, ApiMarketGateway>();
         

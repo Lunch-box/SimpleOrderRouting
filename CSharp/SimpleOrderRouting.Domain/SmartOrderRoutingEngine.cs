@@ -34,7 +34,7 @@ namespace SimpleOrderRouting
     /// Manages incoming InvestorInstructions and monitor their lifecycle.
     /// Is responsible for the consistency of the open positions (i.e. alive orders) that are present on every markets.
     /// </summary>
-    public class SmartOrderRoutingEngine : ISmartOrderRoutingEntryPoint
+    public class SmartOrderRoutingEngine : IHandleInvestorInstructions
     {
         private readonly ICanRouteOrders orderRouting;
         private readonly MarketSnapshotProvider marketSnapshotProvider;

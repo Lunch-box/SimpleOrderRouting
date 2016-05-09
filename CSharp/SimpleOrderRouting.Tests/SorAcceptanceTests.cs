@@ -27,12 +27,30 @@ namespace SimpleOrderRouting.Tests
     using OtherTeam.StandardizedMarketGatewayAPI;
 
     using SimpleOrderRouting.Infra;
-    using SimpleOrderRouting.Investors;
     using SimpleOrderRouting.Markets.Orders;
 
     public class SorAcceptanceTests
     {
         #region Public Methods and Operators
+
+        /// <summary>
+        /// Acts like a composition root for the Hexagonal Architecture.
+        /// </summary>
+        /// <param name="marketGateways">The list of ApiMarketGateway the SOR must interact with.</param>
+        /// <returns>The adapter we must use as Investors in order to give investment instructions.</returns>
+        private static InvestorInstructionsAdapter ComposeTheHexagon(params ApiMarketGateway[] marketGateways)
+        {
+            // Step1: instantiates the adapter(s) the (SOR) domain will need to work with through the Dependency Inversion principle.
+            var marketGatewaysAdapter = new MarketGatewaysAdapter(marketGateways);
+            
+            // Step2: instantiates the SOR domain entry point.
+            var sor = new SmartOrderRoutingEngine(marketGatewaysAdapter, marketGatewaysAdapter, marketGatewaysAdapter);
+            
+            // Step3: instantiates the adapters we will use to interact with our domain.
+            var investorInstructionAdapter = new InvestorInstructionsAdapter(sor);
+
+            return investorInstructionAdapter;
+        }
 
         [Fact]
         public void Should_execute_instruction_when_there_is_enough_liquidity_on_one_Market()
@@ -41,26 +59,23 @@ namespace SimpleOrderRouting.Tests
             // When Investor wants to buy 125 stocks @ $100 Then SOR can execute at the requested MarketPrice
             var marketA = new ApiMarketGateway("NYSE (New York)", sellQuantity: 150, sellPrice: 100M);
             var marketB = new ApiMarketGateway("CME (Chicago)", sellQuantity: 55, sellPrice: 101M);
-            var marketGatewaysAdapter = new MarketGatewaysAdapter(new[] { marketA, marketB });
+            
+            var investorInstructionAdapter = ComposeTheHexagon(marketA, marketB);
 
-            var sor = new SmartOrderRoutingEngine(marketGatewaysAdapter, marketGatewaysAdapter, marketGatewaysAdapter);
-
-            var investorInstruction = new InvestorInstruction(new InvestorInstructionIdentifierDto().Value, Way.Buy, quantity: 125, price: 100M);
+            var investorInstructionDto = new InvestorInstructionDto(Way.Buy, quantity: 125, price: 100M);
 
             OrderExecutedEventArgs orderExecutedEventArgs = null;
-            sor.Subscribe(investorInstruction, (args) => { orderExecutedEventArgs = args; }, null);
-            investorInstruction.Executed += (sender, args) => { orderExecutedEventArgs = args; };
-            
-            sor.Route(investorInstruction);
 
-            // TODO :introduce autoreset event instead
+            investorInstructionAdapter.Subscribe(investorInstructionDto, args => orderExecutedEventArgs = args, s => {});
+            investorInstructionAdapter.Route(investorInstructionDto);
+
             Check.That(orderExecutedEventArgs).IsNotNull();
             Check.That(orderExecutedEventArgs).HasFieldsWithSameValues(new { Way = Way.Buy, Quantity = 125, Price = 100M });
 
             Check.That(marketA.SellQuantity).IsEqualTo(25);
             Check.That(marketB.SellQuantity).IsEqualTo(55);
         }
-
+        
         [Fact]
         public void Should_failed_when_Order_exceeds_all_Market_capacity_and_partial_execution_not_allowed()
         {
@@ -68,20 +83,18 @@ namespace SimpleOrderRouting.Tests
             // When Investor wants to buy 125 stocks @ $100 Then SOR can execute at the requested MarketPrice
             var marketA = new ApiMarketGateway("NYSE (New York)", sellQuantity: 15, sellPrice: 100M);
             var marketB = new ApiMarketGateway("CME (Chicago)", sellQuantity: 55, sellPrice: 101M);
-            var marketGatewaysAdapter = new MarketGatewaysAdapter(new[] { marketA, marketB });
 
-            var sor = new SmartOrderRoutingEngine(marketGatewaysAdapter, marketGatewaysAdapter, marketGatewaysAdapter);
+            var investorInstructionAdapter = ComposeTheHexagon(marketA, marketB);
 
-            var investorInstruction = new InvestorInstruction(new InvestorInstructionIdentifierDto().Value, Way.Buy, quantity: 125, price: 100M, allowPartialExecution: false);
+            var investorInstructionDto = new InvestorInstructionDto(Way.Buy, quantity: 125, price: 100M, allowPartialExecution: false);
 
             // Subscribes to the instruction's events
             OrderExecutedEventArgs orderExecutedEventArgs = null;
             string failureReason = null;
 
-            sor.Subscribe(investorInstruction, (args) => { orderExecutedEventArgs = args; }, (args) => { failureReason = args; });
+            investorInstructionAdapter.Subscribe(investorInstructionDto, (args) => { orderExecutedEventArgs = args; }, (args) => { failureReason = args; });
 
-            // orderRequest.Route(); ?
-            sor.Route(investorInstruction);
+            investorInstructionAdapter.Route(investorInstructionDto);
 
             // Couldn't execute because order with excessive QuantityOnTheMarket
             Check.That(failureReason).IsNotNull().And.IsEqualIgnoringCase("Excessive quantity!");
@@ -95,12 +108,12 @@ namespace SimpleOrderRouting.Tests
         public void Should_stop_sending_Orders_to_a_Market_after_3_rejects()
         {
             var rejectingMarket = new ApiMarketGateway("LSE (London)", sellQuantity: 100, sellPrice: 100M, orderPredicate : order => false);
-            var marketGatewaysAdapter = new MarketGatewaysAdapter(new[] { rejectingMarket });
 
-            var sor = new SmartOrderRoutingEngine(marketGatewaysAdapter, marketGatewaysAdapter, marketGatewaysAdapter);
+            var investorInstructionAdapter = ComposeTheHexagon(rejectingMarket);
+            
+            var investorInstructionDto = new InvestorInstructionDto(Way.Buy, quantity: 50, price: 100M, goodTill: DateTime.Now.AddMinutes(5));
 
-            var investorInstruction = new InvestorInstruction(new InvestorInstructionIdentifierDto().Value, Way.Buy, quantity: 50, price: 100M, goodTill: DateTime.Now.AddMinutes(5));
-            sor.Route(investorInstruction);
+            investorInstructionAdapter.Route(investorInstructionDto);
 
             Check.That(rejectingMarket.TimesSent).IsEqualTo(3);
 
@@ -114,19 +127,18 @@ namespace SimpleOrderRouting.Tests
             // When Investor wants to buy 125 stocks @ $100 Then SOR can execute at the requested MarketPrice
             var marketA = new ApiMarketGateway("NYSE (New York)", sellQuantity: 50, sellPrice: 100M);
             var rejectingMarket = new ApiMarketGateway("LSE (London)", sellQuantity: 50, sellPrice: 100M, orderPredicate: _ => false);
-            var marketGatewaysAdapter = new MarketGatewaysAdapter(new[] { marketA, rejectingMarket });
 
-            var sor = new SmartOrderRoutingEngine(marketGatewaysAdapter, marketGatewaysAdapter, marketGatewaysAdapter);
-            
-            var investorInstruction = new InvestorInstruction(new InvestorInstructionIdentifierDto().Value, Way.Buy, quantity: 50, price: 100M, goodTill: DateTime.Now.AddMinutes(5));
+            var investorInstructionAdapter = ComposeTheHexagon(marketA, rejectingMarket);
+
+            var investorInstructionDto = new InvestorInstructionDto(Way.Buy, quantity: 50, price: 100M, goodTill: DateTime.Now.AddMinutes(5));
 
             // Subscribes to the instruction's events
             OrderExecutedEventArgs orderExecutedEventArgs = null;
             string failureReason = null;
-            
-            sor.Subscribe(investorInstruction, (args) => { orderExecutedEventArgs = args; }, (args) => { failureReason = args; });
 
-            sor.Route(investorInstruction);
+            investorInstructionAdapter.Subscribe(investorInstructionDto, (args) => { orderExecutedEventArgs = args; }, (args) => { failureReason = args; });
+
+            investorInstructionAdapter.Route(investorInstructionDto);
 
             Check.That(orderExecutedEventArgs).IsNotNull();
             Check.That(failureReason).IsNull();
@@ -142,16 +154,15 @@ namespace SimpleOrderRouting.Tests
             // When Investor wants to buy 125 stocks @ $100 Then SOR can execute at the requested MarketPrice
             var marketA = new ApiMarketGateway("NYSE (New York)", sellQuantity: 100, sellPrice: 100M);
             var marketB = new ApiMarketGateway("CME (Chicago)", sellQuantity: 55, sellPrice: 100M);
-            var marketGatewaysAdapter = new MarketGatewaysAdapter(new[] { marketA, marketB });
 
-            var sor = new SmartOrderRoutingEngine(marketGatewaysAdapter, marketGatewaysAdapter, marketGatewaysAdapter);
-            
-            var investorInstruction = new InvestorInstruction(new InvestorInstructionIdentifierDto().Value, /*new InstrumentIdentifier("EURUSD"),*/ Way.Buy, quantity: 125, price: 100M);
-            
+            var investorInstructionAdapter = ComposeTheHexagon(marketA, marketB);
+
+            var investorInstructionDto = new InvestorInstructionDto(Way.Buy, quantity: 125, price: 100M);
+
             OrderExecutedEventArgs orderExecutedEventArgs = null;
-            sor.Subscribe(investorInstruction, (args) => { orderExecutedEventArgs = args; }, null);
+            investorInstructionAdapter.Subscribe(investorInstructionDto, (args) => { orderExecutedEventArgs = args; }, null);
 
-            sor.Route(investorInstruction);
+            investorInstructionAdapter.Route(investorInstructionDto);
 
             Check.That(orderExecutedEventArgs).HasFieldsWithSameValues(new { Way = Way.Buy, Quantity = 125, Price = 100M });
 
@@ -168,17 +179,16 @@ namespace SimpleOrderRouting.Tests
             // And execution is: 50 stocks on MarketA and 25 stocks on MarketB
             var marketA = new ApiMarketGateway("NYSE (New York)", sellQuantity: 100, sellPrice: 100M);
             var marketB = new ApiMarketGateway("CME (Chicago)", sellQuantity: 50, sellPrice: 100M);
-            var marketGatewaysAdapter = new MarketGatewaysAdapter(new[] { marketA, marketB });
 
-            var sor = new SmartOrderRoutingEngine(marketGatewaysAdapter, marketGatewaysAdapter, marketGatewaysAdapter);
-            
-            var investorInstruction = new InvestorInstruction(new InvestorInstructionIdentifierDto().Value, Way.Buy, quantity: 75, price: 100M);
+            var investorInstructionAdapter = ComposeTheHexagon(marketA, marketB);
+
+            var investorInstructionDto = new InvestorInstructionDto(Way.Buy, quantity: 75, price: 100M);
 
             OrderExecutedEventArgs orderExecutedEventArgs = null;
 
-            sor.Subscribe(investorInstruction, (args) => { orderExecutedEventArgs = args; }, null);
+            investorInstructionAdapter.Subscribe(investorInstructionDto, (args) => { orderExecutedEventArgs = args; }, null);
 
-            sor.Route(investorInstruction);
+            investorInstructionAdapter.Route(investorInstructionDto);
 
             Check.That(orderExecutedEventArgs).HasFieldsWithSameValues(new { Way = Way.Buy, Quantity = 75, Price = 100M });
             

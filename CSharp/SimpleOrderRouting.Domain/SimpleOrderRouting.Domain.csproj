@@ -48,7 +48,7 @@
     <Compile Include="Investors\InvestorInstruction.cs" />
     <Compile Include="IOrder.cs" />
     <Compile Include="IProvideMarkets.cs" />
-    <Compile Include="ISmartOrderRoutingEntryPoint.cs" />
+    <Compile Include="IHandleInvestorInstructions.cs" />
     <Compile Include="Markets\Feeds\MarketDataUpdatedArgs.cs" />
     <Compile Include="Markets\MarketInfo.cs" />
     <Compile Include="Markets\MarketSnapshot.cs" />

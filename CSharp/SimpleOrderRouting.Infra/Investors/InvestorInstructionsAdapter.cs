@@ -22,6 +22,7 @@
 namespace SimpleOrderRouting.Infra
 {
     using System;
+    using System.Collections.Generic;
 
     using SimpleOrderRouting.Investors;
     using SimpleOrderRouting.Markets.Orders;
@@ -34,9 +35,13 @@ namespace SimpleOrderRouting.Infra
     /// </summary>
     public class InvestorInstructionsAdapter
     {
-        private readonly SmartOrderRoutingEngine sor;
+        private readonly IHandleInvestorInstructions sor;
 
-        public InvestorInstructionsAdapter(SmartOrderRoutingEngine sor)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InvestorInstructionsAdapter"/> class.
+        /// </summary>
+        /// <param name="sor">The sor.</param>
+        public InvestorInstructionsAdapter(IHandleInvestorInstructions sor)
         {
             this.sor = sor;
         }
@@ -45,7 +50,7 @@ namespace SimpleOrderRouting.Infra
 
         public void Route(InvestorInstructionDto investorInstructionDto)
         {
-            // 1. Adapt from infra to domain
+            // Adapt from infra to domain
             var investorInstruction = this.CreateInvestorInstruction(investorInstructionDto.UniqueIdentifier, null, investorInstructionDto.Way, investorInstructionDto.Quantity, investorInstructionDto.Price, investorInstructionDto.AllowPartialExecution, investorInstructionDto.GoodTill);
             this.sor.Route(investorInstruction);
         }
@@ -55,42 +60,20 @@ namespace SimpleOrderRouting.Infra
             return new InvestorInstruction(instructionIdentifierDto.Value, way, quantity, price, allowPartialExecution, goodTill);
         }
 
+        // TODO: expose some infra callbacks instead of the domain one
         public void Subscribe(InvestorInstructionDto investorInstructionDto, Action<OrderExecutedEventArgs> executedCallback, Action<string> failureCallback)
         {
             // Maps the DTO model to the domain one
             var investorIntruction = new InvestorInstruction(investorInstructionDto.UniqueIdentifier.Value, investorInstructionDto.Way, investorInstructionDto.Quantity, investorInstructionDto.Price, investorInstructionDto.AllowPartialExecution, investorInstructionDto.GoodTill);
-            
-            // TODO: thread-safe it
-            //this.sor.Subscribe(investorIntruction, );
-            //this.executionCallbacks[investorInstructionIdentifierDto] = executedCallback;
-            //this.failureCallbacks[investorInstructionIdentifierDto] = failureCallback;
+
+            //investorIntruction.Executed += investorIntruction_Executed;
+            //investorIntruction.Failed += investorIntruction_Failed;
+
             //// TODO: regirst failure
-        }
-
-        private void InternalInstruction_Failed(string e)
-        {
-            var onInstructionUpdated = this.InstructionUpdated;
-            if (onInstructionUpdated != null)
-            {
-                // TODO: retrieve investor instruction
-                InvestorInstruction instruction = null;
-
-                //var instruction = (InvestorInstruction)sender;
-                //onInstructionUpdated(this, new InvestorInstructionUpdatedDto(instruction.InvestorInstructionIdentifier, InvestorInstructionStatus.Failed));
-            }
-        }
-
-        private void InternalInstruction_Executed(OrderExecutedEventArgs e)
-        {
-            var onInstructionUpdated = this.InstructionUpdated;
-            if (onInstructionUpdated != null)
-            {
-                // TODO: retrieve investor instruction
-                InvestorInstruction instruction = null;
-
-                //var instruction = (InvestorInstruction)sender;
-                //onInstructionUpdated(this, new InvestorInstructionUpdatedDto(instruction.InvestorInstructionIdentifier, InvestorInstructionStatus.Executed));
-            }
+            var dtoCallBacks = new InvestorInstructionDtoCallBacks(executedCallback, failureCallback);
+            this.sor.Subscribe(investorIntruction, dtoCallBacks.ExecutedCallback, dtoCallBacks.FailedCallbacks);
+            
+            // TODO: cleanup the dtoCallback resource
         }
     }
 }

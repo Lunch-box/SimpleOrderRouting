@@ -8,7 +8,7 @@ namespace SimpleOrderRouting
     /// <summary>
     /// Provides an integration point for all investor side use cases.
     /// </summary>
-    public interface ISmartOrderRoutingEntryPoint
+    public interface IHandleInvestorInstructions
     {
         void Subscribe(InvestorInstruction investorInstruction, Action<OrderExecutedEventArgs> executedCallback, Action<string> failureCallback);
 

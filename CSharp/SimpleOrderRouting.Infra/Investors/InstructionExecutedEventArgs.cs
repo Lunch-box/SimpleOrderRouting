@@ -39,5 +39,10 @@ namespace SimpleOrderRouting.Infra
         public decimal Price { get; private set; }
 
         public InvestorWay Way { get; private set; }
+
+        public override string ToString()
+        {
+            return String.Format("Instruction executed: Way: {0} - Quantity: {1} - Price: {2}", this.Way, this.Quantity, this.Price);
+        }
     }
 }

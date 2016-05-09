@@ -124,5 +124,10 @@ namespace SimpleOrderRouting.Infra
         }
 
         #endregion
+
+        public override string ToString()
+        {
+            return string.Format("Investor Instruction DTO: Way: {0} - Quantity: {1} - Price: {2} - AllowPartialExecution: {3} - GoodTill: {4}.", this.Way, this.Quantity, this.Price, this.AllowPartialExecution, this.GoodTill);
+        }
     }
 }

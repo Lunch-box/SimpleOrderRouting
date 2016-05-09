@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{00DD3731-E815-4770-BE17-4F17BFEC4171}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{F20EBD6E-C774-4856-91D5-1BA43005513D}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SimpleOrderRouting.Infra</RootNamespace>
-    <AssemblyName>SimpleOrderRouting.Infra</AssemblyName>
+    <RootNamespace>SimpleOrderRouting.Console</RootNamespace>
+    <AssemblyName>SimpleOrderRouting.Console</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -39,23 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CompositionRootHelper.cs" />
-    <Compile Include="Investors\InstructionExecutedEventArgs.cs" />
-    <Compile Include="Investors\InstructionFailedEventArgs.cs" />
-    <Compile Include="Investors\InvestorInstructionDtoCallBacks.cs" />
-    <Compile Include="Investors\InvestorInstructionsAdapter.cs" />
-    <Compile Include="Investors\InvestorInstructionDto.cs" />
-    <Compile Include="Investors\InvestorInstructionIdentifierDto.cs" />
-    <Compile Include="Investors\InvestorInstructionUpdatedDto.cs" />
-    <Compile Include="Investors\Way.cs" />
-    <Compile Include="Markets\LimitOrderAdapter.cs" />
-    <Compile Include="Markets\MarketGatewaysAdapter.cs" />
-    <Compile Include="Markets\MarketOrderAdapter.cs" />
-    <Compile Include="Markets\OrderAdapter.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Settings.StyleCop" />
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OtherTeam.StandardizedMarketGatewayAPI\OtherTeam.StandardizedMarketGatewayAPI.csproj">
@@ -63,8 +53,12 @@
       <Name>OtherTeam.StandardizedMarketGatewayAPI</Name>
     </ProjectReference>
     <ProjectReference Include="..\SimpleOrderRouting.Domain\SimpleOrderRouting.Domain.csproj">
-      <Project>{4F66C7D2-8CBD-4280-9A2D-6555E276C6A7}</Project>
+      <Project>{4f66c7d2-8cbd-4280-9a2d-6555e276c6a7}</Project>
       <Name>SimpleOrderRouting.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SimpleOrderRouting.Infra\SimpleOrderRouting.Infra.csproj">
+      <Project>{00dd3731-e815-4770-be17-4f17bfec4171}</Project>
+      <Name>SimpleOrderRouting.Infra</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

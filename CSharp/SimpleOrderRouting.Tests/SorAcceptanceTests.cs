@@ -41,7 +41,7 @@ namespace SimpleOrderRouting.Tests
             var marketA = new ApiMarketGateway("NYSE (New York)", sellQuantity: 150, sellPrice: 100M);
             var marketB = new ApiMarketGateway("CME (Chicago)", sellQuantity: 55, sellPrice: 101M);
             
-            var investorInstructionAdapter = ComposeTheHexagon(marketA, marketB);
+            var investorInstructionAdapter = CompositionRootHelper.ComposeTheHexagon(marketA, marketB);
 
             var investorInstructionDto = new InvestorInstructionDto(Way.Buy, quantity: 125, price: 100M);
 
@@ -56,25 +56,7 @@ namespace SimpleOrderRouting.Tests
             Check.That(marketB.SellQuantity).IsEqualTo(55);
         }
 
-        /// <summary>
-        /// Acts like a composition root for the SOR Hexagonal Architecture.
-        /// </summary>
-        /// <param name="marketGateways">The list of ApiMarketGateway the SOR must interact with.</param>
-        /// <returns>The adapter we must use as Investors in order to give investment instructions.</returns>
-        private static InvestorInstructionsAdapter ComposeTheHexagon(params ApiMarketGateway[] marketGateways)
-        {
-            // Step1: instantiates the adapter(s) the (SOR) domain will need to work with through the Dependency Inversion principle.
-            var marketGatewaysAdapter = new MarketGatewaysAdapter(marketGateways);
-
-            // Step2: instantiates the SOR domain entry point.
-            var sor = new SmartOrderRoutingEngine(marketGatewaysAdapter, marketGatewaysAdapter, marketGatewaysAdapter);
-
-            // Step3: instantiates the adapters we will use to interact with our domain.
-            var investorInstructionAdapter = new InvestorInstructionsAdapter(sor);
-
-            return investorInstructionAdapter;
-        }
-
+        
         [Test]
         public void Should_failed_when_Order_exceeds_all_Market_capacity_and_partial_execution_not_allowed()
         {
@@ -83,7 +65,7 @@ namespace SimpleOrderRouting.Tests
             var marketA = new ApiMarketGateway("NYSE (New York)", sellQuantity: 15, sellPrice: 100M);
             var marketB = new ApiMarketGateway("CME (Chicago)", sellQuantity: 55, sellPrice: 101M);
 
-            var investorInstructionAdapter = ComposeTheHexagon(marketA, marketB);
+            var investorInstructionAdapter = CompositionRootHelper.ComposeTheHexagon(marketA, marketB);
 
             var investorInstructionDto = new InvestorInstructionDto(Way.Buy, quantity: 125, price: 100M, allowPartialExecution: false);
 
@@ -106,7 +88,7 @@ namespace SimpleOrderRouting.Tests
         {
             var rejectingMarket = new ApiMarketGateway("LSE (London)", sellQuantity: 100, sellPrice: 100M, orderPredicate : order => false);
 
-            var investorInstructionAdapter = ComposeTheHexagon(rejectingMarket);
+            var investorInstructionAdapter = CompositionRootHelper.ComposeTheHexagon(rejectingMarket);
             
             var investorInstructionDto = new InvestorInstructionDto(Way.Buy, quantity: 50, price: 100M, goodTill: DateTime.Now.AddMinutes(5));
 
@@ -125,7 +107,7 @@ namespace SimpleOrderRouting.Tests
             var marketA = new ApiMarketGateway("NYSE (New York)", sellQuantity: 50, sellPrice: 100M);
             var rejectingMarket = new ApiMarketGateway("LSE (London)", sellQuantity: 50, sellPrice: 100M, orderPredicate: _ => false);
 
-            var investorInstructionAdapter = ComposeTheHexagon(marketA, rejectingMarket);
+            var investorInstructionAdapter = CompositionRootHelper.ComposeTheHexagon(marketA, rejectingMarket);
 
             var investorInstructionDto = new InvestorInstructionDto(Way.Buy, quantity: 50, price: 100M, goodTill: DateTime.Now.AddMinutes(5));
 
@@ -150,7 +132,7 @@ namespace SimpleOrderRouting.Tests
             var marketA = new ApiMarketGateway("NYSE (New York)", sellQuantity: 100, sellPrice: 100M);
             var marketB = new ApiMarketGateway("CME (Chicago)", sellQuantity: 55, sellPrice: 100M);
 
-            var investorInstructionAdapter = ComposeTheHexagon(marketA, marketB);
+            var investorInstructionAdapter = CompositionRootHelper.ComposeTheHexagon(marketA, marketB);
 
             var investorInstructionDto = new InvestorInstructionDto(Way.Buy, quantity: 125, price: 100M);
 
@@ -174,7 +156,7 @@ namespace SimpleOrderRouting.Tests
             var marketA = new ApiMarketGateway("NYSE (New York)", sellQuantity: 100, sellPrice: 100M);
             var marketB = new ApiMarketGateway("CME (Chicago)", sellQuantity: 50, sellPrice: 100M);
 
-            var investorInstructionAdapter = ComposeTheHexagon(marketA, marketB);
+            var investorInstructionAdapter = CompositionRootHelper.ComposeTheHexagon(marketA, marketB);
 
             var investorInstructionDto = new InvestorInstructionDto(Way.Buy, quantity: 75, price: 100M);
 

@@ -36,19 +36,19 @@ namespace SimpleOrderRouting.Tests
         public void Should_rely_on_values_for_equality()
         {
             var investorInstructionIdentifier = 42;
-            const Way way = Way.Buy;
-            var quantity = 1;
+            const Way Way = Way.Buy;
+            const int quantity = 1;
             var price = 23.3M;
             var allowPartialExecution = true;
             var goodTill = DateTime.Now;
 
-            var firstInstruction = new InvestorInstruction(investorInstructionIdentifier, way, quantity, price, allowPartialExecution, goodTill);
-            var secondIdenticalInstruction = new InvestorInstruction(investorInstructionIdentifier, way, quantity, price, allowPartialExecution, goodTill);
+            var firstInstruction = new InvestorInstruction(investorInstructionIdentifier, Way, quantity, price, allowPartialExecution, goodTill);
+            var secondIdenticalInstruction = new InvestorInstruction(investorInstructionIdentifier, Way, quantity, price, allowPartialExecution, goodTill);
 
             Check.That(firstInstruction).IsEqualTo(secondIdenticalInstruction);
 
             allowPartialExecution = false;
-            var slightlyDifferentInstruction = new InvestorInstruction(investorInstructionIdentifier, way, quantity, price, allowPartialExecution, goodTill);
+            var slightlyDifferentInstruction = new InvestorInstruction(investorInstructionIdentifier, Way, quantity, price, allowPartialExecution, goodTill);
             Check.That(slightlyDifferentInstruction).IsNotEqualTo(firstInstruction);
         }
 

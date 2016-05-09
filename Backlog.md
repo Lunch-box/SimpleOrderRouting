@@ -1,8 +1,7 @@
 # SOR Backlog
 
-+ Split the MarketGatewaysAdapter into various types.
-+ Adds the investor adapter within the acceptance tests.
-+ Adds pic to explain the context/big picture.
++ Review all the type to prevent from memory leak due to open event/callback subscriptions.
++ Split the MarketGatewaysAdapter into various types
 
 ---
 

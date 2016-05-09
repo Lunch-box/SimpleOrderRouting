@@ -31,7 +31,7 @@ namespace SimpleOrderRouting.Tests.Infra
         [Test]
         public void Should_decrease_available_quantity_for_the_market_when_an_order_is_sent()
         {
-            var marketGateway = new ApiMarketGateway(marketName: "euronext", sellQuantity:50, sellPrice: 100M);
+            var marketGateway = new ApiMarketGateway(marketName: "euronext", sellQuantity: 50, sellPrice: 100M);
 
             var order = marketGateway.CreateMarketOrder(ApiMarketWay.Buy, quantity: 10);
             marketGateway.Send(order);

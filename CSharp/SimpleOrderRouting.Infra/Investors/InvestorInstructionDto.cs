@@ -30,7 +30,6 @@ namespace SimpleOrderRouting.Infra
     {
         public InvestorInstructionDto(Way way, int quantity, decimal price, bool allowPartialExecution = false, DateTime? goodTill = null) : this(new InvestorInstructionIdentifierDto(), way, quantity, price, allowPartialExecution, goodTill)
         {
-            
         }
         
         public InvestorInstructionDto(InvestorInstructionIdentifierDto uniqueIdentifier, Way way, int quantity, decimal price, bool allowPartialExecution = false, DateTime? goodTill = null)
@@ -77,7 +76,7 @@ namespace SimpleOrderRouting.Infra
 
         private bool Equals(InvestorInstructionDto other)
         {
-            return Equals(this.UniqueIdentifier, other.UniqueIdentifier) && this.Way == other.Way && this.Quantity == other.Quantity && this.Price == other.Price && this.AllowPartialExecution == other.AllowPartialExecution && this.GoodTill.Equals(other.GoodTill);
+            return object.Equals(this.UniqueIdentifier, other.UniqueIdentifier) && this.Way == other.Way && this.Quantity == other.Quantity && this.Price == other.Price && this.AllowPartialExecution == other.AllowPartialExecution && this.GoodTill.Equals(other.GoodTill);
         }
 
         public override bool Equals(object obj)
@@ -116,12 +115,12 @@ namespace SimpleOrderRouting.Infra
 
         public static bool operator ==(InvestorInstructionDto left, InvestorInstructionDto right)
         {
-            return Equals(left, right);
+            return object.Equals(left, right);
         }
 
         public static bool operator !=(InvestorInstructionDto left, InvestorInstructionDto right)
         {
-            return !Equals(left, right);
+            return !object.Equals(left, right);
         }
 
         #endregion

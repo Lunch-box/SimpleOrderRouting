@@ -62,8 +62,6 @@ namespace SimpleOrderRouting.Infra
             }
         }
 
-        public abstract void Send();
-
         public bool AllowPartialExecution
         {
             get
@@ -71,5 +69,7 @@ namespace SimpleOrderRouting.Infra
                 return false;
             }
         }
+
+        public abstract void Send();
     }
 }

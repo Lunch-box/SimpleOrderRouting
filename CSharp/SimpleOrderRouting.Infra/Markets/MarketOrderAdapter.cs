@@ -38,7 +38,7 @@ namespace SimpleOrderRouting.Infra
 
         public override void Send()
         {
-            this.MarketGateway.Send(apiMarketOrder);
+            this.MarketGateway.Send(this.apiMarketOrder);
         }
     }
 }

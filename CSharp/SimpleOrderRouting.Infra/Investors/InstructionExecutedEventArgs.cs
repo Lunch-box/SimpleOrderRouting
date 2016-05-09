@@ -23,7 +23,7 @@ namespace SimpleOrderRouting.Infra
     using System;
 
     /// <summary>
-    /// Event data for InstructionExecuted
+    /// Event data for InstructionExecuted.
     /// </summary>
     public class InstructionExecutedEventArgs : EventArgs
     {

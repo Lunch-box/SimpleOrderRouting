@@ -37,7 +37,7 @@ namespace SimpleOrderRouting.Infra
         /// <summary>
         /// Initializes a new instance of the <see cref="InvestorInstructionsAdapter"/> class.
         /// </summary>
-        /// <param name="sor">The sor.</param>
+        /// <param name="sor">The SOR entry point.</param>
         public InvestorInstructionsAdapter(IHandleInvestorInstructions sor)
         {
             this.sor = sor;

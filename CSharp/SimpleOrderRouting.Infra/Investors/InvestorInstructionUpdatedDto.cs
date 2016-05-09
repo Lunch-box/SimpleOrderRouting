@@ -26,18 +26,18 @@ namespace SimpleOrderRouting.Infra
     using SimpleOrderRouting.Investors;
 
     /// <summary>
-    /// Data transfer Object 
+    /// Data transfer Object to interact with an Investor.
     /// </summary>
     public class InvestorInstructionUpdatedDto : EventArgs
     {
-        public InvestorInstructionIdentifierDto IdentifierDto { get; set; }
-
-        public InvestorInstructionStatus Status { get; set; }
-
         public InvestorInstructionUpdatedDto(InvestorInstructionIdentifierDto identifierDto, InvestorInstructionStatus status)
         {
             this.IdentifierDto = identifierDto;
             this.Status = status;
         }
+     
+        public InvestorInstructionIdentifierDto IdentifierDto { get; set; }
+
+        public InvestorInstructionStatus Status { get; set; }
     }
 }

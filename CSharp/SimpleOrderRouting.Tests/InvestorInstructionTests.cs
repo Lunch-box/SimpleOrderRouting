@@ -24,14 +24,15 @@ namespace SimpleOrderRouting.Tests
     using System;
     using System.Collections.Generic;
     
-    using Xunit;
     using NFluent;
+
+    using NUnit.Framework;
 
     using SimpleOrderRouting.Investors;
 
     public class InvestorInstructionTests
     {
-        [Fact]
+        [Test]
         public void Should_rely_on_values_for_equality()
         {
             var investorInstructionIdentifier = 42;
@@ -51,7 +52,7 @@ namespace SimpleOrderRouting.Tests
             Check.That(slightlyDifferentInstruction).IsNotEqualTo(firstInstruction);
         }
 
-        [Fact]
+        [Test]
         public void Should_rely_on_values_for_unicity()
         {
             var goodTill = DateTime.Now;

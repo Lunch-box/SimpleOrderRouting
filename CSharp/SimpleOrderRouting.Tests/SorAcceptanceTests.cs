@@ -21,8 +21,10 @@
 namespace SimpleOrderRouting.Tests
 {
     using System;
-    using Xunit;
+
     using NFluent;
+
+    using NUnit.Framework;
 
     using OtherTeam.StandardizedMarketGatewayAPI;
     using SimpleOrderRouting.Infra;
@@ -50,7 +52,7 @@ namespace SimpleOrderRouting.Tests
             return investorInstructionAdapter;
         }
 
-        [Fact]
+        [Test]
         public void Should_execute_instruction_when_there_is_enough_liquidity_on_one_Market()
         {
             // Given market A: 150 @ $100, market B: 55 @ $101 
@@ -72,8 +74,8 @@ namespace SimpleOrderRouting.Tests
             Check.That(marketA.SellQuantity).IsEqualTo(25);
             Check.That(marketB.SellQuantity).IsEqualTo(55);
         }
-        
-        [Fact]
+
+        [Test]
         public void Should_failed_when_Order_exceeds_all_Market_capacity_and_partial_execution_not_allowed()
         {
             // Given market A: 150 @ $100, market B: 55 @ $101 
@@ -99,7 +101,7 @@ namespace SimpleOrderRouting.Tests
             Check.That(marketB.SellQuantity).IsEqualTo(55);
         }
 
-        [Fact]
+        [Test]
         public void Should_stop_sending_Orders_to_a_Market_after_3_rejects()
         {
             var rejectingMarket = new ApiMarketGateway("LSE (London)", sellQuantity: 100, sellPrice: 100M, orderPredicate : order => false);
@@ -115,7 +117,7 @@ namespace SimpleOrderRouting.Tests
             Check.That(rejectingMarket.SellQuantity).IsEqualTo(100);
         }
 
-        [Fact]
+        [Test]
         public void Should_succeeded_when_liquidity_is_available_even_if_one_Market_rejects()
         {
             // Given market A: 150 @ $100, market B: 55 @ $101 
@@ -140,7 +142,7 @@ namespace SimpleOrderRouting.Tests
             Check.That(rejectingMarket.SellQuantity).IsEqualTo(50);
         }
 
-        [Fact]
+        [Test]
         public void Should_execute_Instruction_when_there_is_enough_liquidity_on_the_Markets()
         {
             // Given market A: 100 @ $100, market B: 55 @ $100 
@@ -162,7 +164,7 @@ namespace SimpleOrderRouting.Tests
             Check.That(marketB.SellQuantity).IsEqualTo(11);
         }
 
-        [Fact]
+        [Test]
         public void Should_execute_Orders_on_weighted_average_of_available_quantities()
         {
             // 25 premier ; 75 % sur le second marché

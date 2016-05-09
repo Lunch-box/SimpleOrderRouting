@@ -22,13 +22,13 @@ namespace SimpleOrderRouting.Tests.Infra
 {
     using NFluent;
 
-    using OtherTeam.StandardizedMarketGatewayAPI;
+    using NUnit.Framework;
 
-    using Xunit;
+    using OtherTeam.StandardizedMarketGatewayAPI;
 
     public class ApiMarketGatewayTests
     {
-        [Fact]
+        [Test]
         public void Should_decrease_available_quantity_for_the_market_when_an_order_is_sent()
         {
             var marketGateway = new ApiMarketGateway(marketName: "euronext", sellQuantity:50, sellPrice: 100M);
@@ -39,7 +39,7 @@ namespace SimpleOrderRouting.Tests.Infra
             Check.That(marketGateway.SellQuantity).IsEqualTo(40);
         }
 
-        [Fact]
+        [Test]
         public void Should_failed_to_execute_order_when_quantity_is_excessive()
         {
             var marketGateway = new ApiMarketGateway(marketName: "euronext", sellQuantity: 50, sellPrice: 100M);
@@ -61,7 +61,7 @@ namespace SimpleOrderRouting.Tests.Infra
             Check.That(failureReason).IsEqualTo("Excessive quantity!");
         }
 
-        [Fact]
+        [Test]
         public void Should_Notify_MarketOrder_execution()
         {
             var marketGateway = new ApiMarketGateway(marketName: "euronext", sellQuantity: 50, sellPrice: 100M);
@@ -76,7 +76,7 @@ namespace SimpleOrderRouting.Tests.Infra
             Check.That(marketGateway.SellQuantity).IsEqualTo(40);
         }
 
-        [Fact]
+        [Test]
         public void Should_Notify_LimitOrder_execution()
         {
             var marketGateway = new ApiMarketGateway(marketName: "euronext", sellQuantity: 50, sellPrice: 100M);
@@ -91,7 +91,7 @@ namespace SimpleOrderRouting.Tests.Infra
             Check.That(marketGateway.SellQuantity).IsEqualTo(40);
         }
 
-        [Fact]
+        [Test]
         public void Should_not_execute_LimitOrder_when_price_is_too_high()
         {
             var marketGateway = new ApiMarketGateway(marketName: "euronext", sellQuantity: 50, sellPrice: 100M);
@@ -115,7 +115,7 @@ namespace SimpleOrderRouting.Tests.Infra
             Check.That(marketGateway.SellQuantity).IsEqualTo(50);
         }
 
-        [Fact]
+        [Test]
         public void Should_support_partial_execution_for_LimitOrder()
         {
             var marketGateway = new ApiMarketGateway(marketName: "euronext", sellQuantity: 50, sellPrice: 100M);

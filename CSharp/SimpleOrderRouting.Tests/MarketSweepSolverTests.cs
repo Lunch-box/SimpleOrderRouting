@@ -4,6 +4,8 @@
 
     using NFluent;
 
+    using NUnit.Framework;
+
     using OtherTeam.StandardizedMarketGatewayAPI;
 
     using SimpleOrderRouting.Infra;
@@ -11,11 +13,9 @@
     using SimpleOrderRouting.Markets;
     using SimpleOrderRouting.SolvingStrategies;
 
-    using Xunit;
-
     public class MarketSweepSolverTests
     {
-        [Fact]
+        [Test]
         public void Should_Solve_with_2_markets_when_asked_quantity_is_odd()
         {
             var marketA = new ApiMarketGateway("NYSE (New York)", sellQuantity: 50, sellPrice: 100M);
@@ -32,7 +32,7 @@
             Check.That(orderBasket.OrdersDescriptions.Extracting("Quantity")).ContainsExactly(25, 25);
         }
 
-        [Fact]
+        [Test]
         public void Should_Solve_with_2_markets_when_asked_quantity_is_1()
         {
             var marketA = new ApiMarketGateway("NYSE (New York)", sellQuantity: 50, sellPrice: 100M);

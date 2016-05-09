@@ -5,14 +5,14 @@
 
     using NFluent;
 
+    using NUnit.Framework;
+
     using SimpleOrderRouting.Infra;
     using SimpleOrderRouting.Investors;
 
-    using Xunit;
-
     public class InvestorInstructionDtoTests
     {
-        [Fact]
+        [Test]
         public void Should_rely_on_values_for_equality()
         {
             var investorInstructionIdentifier = 42;
@@ -33,7 +33,7 @@
             Check.That(slightlyDifferentInstruction).IsNotEqualTo(firstInstruction);
         }
 
-        [Fact]
+        [Test]
         public void Should_rely_on_values_for_unicity()
         {
             var goodTill = DateTime.Now;

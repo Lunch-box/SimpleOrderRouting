@@ -33,25 +33,6 @@ namespace SimpleOrderRouting.Tests
     {
         #region Public Methods and Operators
 
-        /// <summary>
-        /// Acts like a composition root for the SOR Hexagonal Architecture.
-        /// </summary>
-        /// <param name="marketGateways">The list of ApiMarketGateway the SOR must interact with.</param>
-        /// <returns>The adapter we must use as Investors in order to give investment instructions.</returns>
-        private static InvestorInstructionsAdapter ComposeTheHexagon(params ApiMarketGateway[] marketGateways)
-        {
-            // Step1: instantiates the adapter(s) the (SOR) domain will need to work with through the Dependency Inversion principle.
-            var marketGatewaysAdapter = new MarketGatewaysAdapter(marketGateways);
-            
-            // Step2: instantiates the SOR domain entry point.
-            var sor = new SmartOrderRoutingEngine(marketGatewaysAdapter, marketGatewaysAdapter, marketGatewaysAdapter);
-            
-            // Step3: instantiates the adapters we will use to interact with our domain.
-            var investorInstructionAdapter = new InvestorInstructionsAdapter(sor);
-
-            return investorInstructionAdapter;
-        }
-
         [Test]
         public void Should_execute_instruction_when_there_is_enough_liquidity_on_one_Market()
         {
@@ -73,6 +54,25 @@ namespace SimpleOrderRouting.Tests
 
             Check.That(marketA.SellQuantity).IsEqualTo(25);
             Check.That(marketB.SellQuantity).IsEqualTo(55);
+        }
+
+        /// <summary>
+        /// Acts like a composition root for the SOR Hexagonal Architecture.
+        /// </summary>
+        /// <param name="marketGateways">The list of ApiMarketGateway the SOR must interact with.</param>
+        /// <returns>The adapter we must use as Investors in order to give investment instructions.</returns>
+        private static InvestorInstructionsAdapter ComposeTheHexagon(params ApiMarketGateway[] marketGateways)
+        {
+            // Step1: instantiates the adapter(s) the (SOR) domain will need to work with through the Dependency Inversion principle.
+            var marketGatewaysAdapter = new MarketGatewaysAdapter(marketGateways);
+
+            // Step2: instantiates the SOR domain entry point.
+            var sor = new SmartOrderRoutingEngine(marketGatewaysAdapter, marketGatewaysAdapter, marketGatewaysAdapter);
+
+            // Step3: instantiates the adapters we will use to interact with our domain.
+            var investorInstructionAdapter = new InvestorInstructionsAdapter(sor);
+
+            return investorInstructionAdapter;
         }
 
         [Test]

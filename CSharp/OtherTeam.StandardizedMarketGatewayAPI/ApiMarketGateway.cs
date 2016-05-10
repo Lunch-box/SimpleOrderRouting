@@ -43,7 +43,7 @@ namespace OtherTeam.StandardizedMarketGatewayAPI
         {
             this.TimesSent++;
 
-            if (this.OrderPredicate != null && this.OrderPredicate(marketOrder) == false)
+            if (this.PredicateFailed(marketOrder))
             {
                 this.RaiseOrderFailed(marketOrder, new ApiOrderFailedEventArgs(this.MarketName, "Predicate failed."));
                 return;
@@ -52,21 +52,13 @@ namespace OtherTeam.StandardizedMarketGatewayAPI
             switch (marketOrder.Way)
             {
                 case ApiMarketWay.Buy:
-                    // TODO: restore that sh# and migrate Market tests to ApiMarketGatewatTests
-                    if (marketOrder.Quantity > this.SellQuantity)
+                    if (this.AskMoreThanAvailableQuantityAndDontSupportPartialExecution(marketOrder))
                     {
-                        if (!marketOrder.AllowPartialExecution)
-                        {
-                            this.RaiseOrderFailed(marketOrder, new ApiOrderFailedEventArgs(this.MarketName, "Excessive quantity!"));
-                            return;
-                        }
+                        this.RaiseOrderFailed(marketOrder, new ApiOrderFailedEventArgs(this.MarketName, "Excessive quantity!"));
+                        return;
                     }
 
-                    var executedQuantity = Math.Min(marketOrder.Quantity, this.SellQuantity);
-                    this.SellQuantity -= executedQuantity;
-
-                    this.RaiseMarketDataUpdated(this.SellPrice, this.SellQuantity);
-                    this.RaiseOrderExecuted(marketOrder, executedQuantity);
+                    this.ExecuteProperQuantity(marketOrder);
 
                     break;
 
@@ -76,11 +68,25 @@ namespace OtherTeam.StandardizedMarketGatewayAPI
             }
         }
 
+        private void ExecuteProperQuantity(ApiOrder marketOrder)
+        {
+            var executedQuantity = Math.Min(marketOrder.Quantity, this.SellQuantity);
+            this.SellQuantity -= executedQuantity;
+
+            this.RaiseMarketDataUpdated(this.SellPrice, this.SellQuantity);
+            this.RaiseOrderExecuted(marketOrder, executedQuantity);
+        }
+
+        private bool PredicateFailed(ApiOrder marketOrder)
+        {
+            return this.OrderPredicate != null && this.OrderPredicate(marketOrder) == false;
+        }
+
         public void Send(ApiLimitOrder limitOrder)
         {
             this.TimesSent++;
 
-            if (this.OrderPredicate != null && this.OrderPredicate(limitOrder) == false)
+            if (this.PredicateFailed(limitOrder))
             {
                 this.RaiseOrderFailed(limitOrder, new ApiOrderFailedEventArgs(this.MarketName, "Predicate failed."));
                 return;
@@ -95,20 +101,13 @@ namespace OtherTeam.StandardizedMarketGatewayAPI
                         return;
                     }
 
-                    if (limitOrder.Quantity > this.SellQuantity)
+                    if (this.AskMoreThanAvailableQuantityAndDontSupportPartialExecution(limitOrder))
                     {
-                        if (!limitOrder.AllowPartialExecution)
-                        {
-                            this.RaiseOrderFailed(limitOrder, new ApiOrderFailedEventArgs(this.MarketName, "Excessive quantity!"));
-                            return;
-                        }
+                        this.RaiseOrderFailed(limitOrder, new ApiOrderFailedEventArgs(this.MarketName, "Excessive quantity!"));
+                        return;
                     }
 
-                    var executedQuantity = Math.Min(limitOrder.Quantity, this.SellQuantity);
-                    this.SellQuantity -= executedQuantity;
-
-                    this.RaiseMarketDataUpdated(this.SellPrice, this.SellQuantity);
-                    this.RaiseOrderExecuted(limitOrder, executedQuantity);
+                    this.ExecuteProperQuantity(limitOrder);
 
                     break;
 
@@ -116,6 +115,11 @@ namespace OtherTeam.StandardizedMarketGatewayAPI
                     throw new NotImplementedException();
                     break;
             }
+        }
+
+        private bool AskMoreThanAvailableQuantityAndDontSupportPartialExecution(ApiOrder limitOrder)
+        {
+            return (limitOrder.Quantity > this.SellQuantity) && (!limitOrder.AllowPartialExecution);
         }
 
         private void RaiseMarketDataUpdated(decimal newSellPrice, int newQuantityOnTheMarket)

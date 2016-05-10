@@ -24,7 +24,6 @@ namespace SimpleOrderRouting.Infra
     using System;
 
     using SimpleOrderRouting.Investors;
-    using SimpleOrderRouting.Markets.Orders;
 
     /// <summary>
     /// External API for the Smart Order Routing service. Aggregates all instruction events.
@@ -48,13 +47,9 @@ namespace SimpleOrderRouting.Infra
         {
             // Maps the DTO model to the domain one
             var investorIntruction = new InvestorInstruction(investorInstructionDto.UniqueIdentifier.Value, investorInstructionDto.Way, investorInstructionDto.Quantity, investorInstructionDto.Price, investorInstructionDto.AllowPartialExecution, investorInstructionDto.GoodTill);
-
             var dtoCallBacks = new InvestorInstructionDtoCallBacks(instructionExecutedCallback, instructionFailedCallback);
-            this.sor.Subscribe(investorIntruction, dtoCallBacks.ExecutedCallback, dtoCallBacks.FailedCallbacks);
-
-            var investorInstruction = new InvestorInstruction(investorInstructionDto.UniqueIdentifier.Value, investorInstructionDto.Way, investorInstructionDto.Quantity, investorInstructionDto.Price, investorInstructionDto.AllowPartialExecution, investorInstructionDto.GoodTill);
-           
-            this.sor.Route(investorInstruction);
+            
+            this.sor.Route(investorIntruction, dtoCallBacks.ExecutedCallback, dtoCallBacks.FailedCallbacks);
 
             // TODO: cleanup the dtoCallback resource
         }

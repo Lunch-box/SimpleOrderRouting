@@ -10,8 +10,6 @@ namespace SimpleOrderRouting
     /// </summary>
     public interface IHandleInvestorInstructions
     {
-        void Subscribe(InvestorInstruction investorInstruction, Action<OrderExecutedEventArgs> executedCallback, Action<string> failureCallback);
-
-        void Route(InvestorInstruction investorInstruction);
+        void Route(InvestorInstruction investorInstruction, Action<OrderExecutedEventArgs> executedCallback, Action<string> failureCallback);
     }
 }

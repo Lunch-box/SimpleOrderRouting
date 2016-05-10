@@ -54,16 +54,13 @@ namespace SimpleOrderRouting
             this.marketSnapshotProvider = new MarketSnapshotProvider(availableMarkets, marketDataProvider);
         }
 
-        public void Subscribe(InvestorInstruction investorInstruction, Action<OrderExecutedEventArgs> executedCallback, Action<string> failureCallback)
+        public void Route(InvestorInstruction investorInstruction, Action<OrderExecutedEventArgs> executedCallback, Action<string> failureCallback)
         {
             // TODO: thread-safe it
             this.executionCallbacks[investorInstruction] = executedCallback;
             this.failureCallbacks[investorInstruction] = failureCallback;
             //// TODO: regirst failure
-        }
 
-        public void Route(InvestorInstruction investorInstruction)
-        {
             // Prepares to feedback the investor
             investorInstruction.Executed += this.InvestorInstruction_Executed;
             var instructionExecutionContext = new InstructionExecutionContext(investorInstruction);

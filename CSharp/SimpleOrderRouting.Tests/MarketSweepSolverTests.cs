@@ -45,7 +45,7 @@ namespace SimpleOrderRouting.Tests
             var marketGatewayAdapter = new MarketGatewaysAdapter(marketsInvolved);
 
             var investorInstruction = new InvestorInstruction(new InvestorInstructionIdentifierDto().Value, Way.Buy, quantity: 50, price: 100M, goodTill: DateTime.Now.AddMinutes(5));
-            var instructionExecutionContext = new InstructionExecutionContext(investorInstruction);
+            var instructionExecutionContext = new InstructionExecutionContext(investorInstruction, args => {});
 
             var marketSweepSolver = new MarketSweepSolver(new MarketSnapshotProvider(marketGatewayAdapter.GetAvailableMarketNames(), marketGatewayAdapter));
             var orderBasket = marketSweepSolver.Solve(instructionExecutionContext, marketGatewayAdapter);
@@ -62,7 +62,7 @@ namespace SimpleOrderRouting.Tests
             var marketGatewayAdapter = new MarketGatewaysAdapter(marketsInvolved);
 
             var investorInstruction = new InvestorInstruction(new InvestorInstructionIdentifierDto().Value, Way.Buy, quantity: 1, price: 100M, goodTill: DateTime.Now.AddMinutes(5));
-            var instructionExecutionContext = new InstructionExecutionContext(investorInstruction);
+            var instructionExecutionContext = new InstructionExecutionContext(investorInstruction, args => { });
 
             var marketSweepSolver = new MarketSweepSolver(new MarketSnapshotProvider(marketGatewayAdapter.GetAvailableMarketNames(), marketGatewayAdapter));
             var orderBasket = marketSweepSolver.Solve(instructionExecutionContext, marketGatewayAdapter);

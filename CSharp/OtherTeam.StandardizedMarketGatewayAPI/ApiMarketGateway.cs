@@ -2,6 +2,9 @@ namespace OtherTeam.StandardizedMarketGatewayAPI
 {
     using System;
 
+    /// <summary>
+    /// Gives access and mocks a Market given various initialization informations.
+    /// </summary>
     public class ApiMarketGateway
     {
         public ApiMarketGateway(string marketName, int sellQuantity, decimal sellPrice, Predicate<ApiOrder> orderPredicate = null)

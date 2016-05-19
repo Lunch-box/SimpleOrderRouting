@@ -22,18 +22,24 @@ namespace SimpleOrderRouting.Investors
 {
     using System;
 
+    using SimpleOrderRouting.Markets.Orders;
+
     /// <summary>
-    /// 1 to 1 relationship with an <see cref="SimpleOrderRouting.Infra.InvestorInstruction"/>.  Keeps the current state of the instruction execution.
+    /// 1 to 1 relationship with an <see cref="SimpleOrderRouting.Investors.InvestorInstruction"/>.  Keeps the current state of the instruction execution.
+    /// <remarks>Entity</remarks>
     /// </summary>
     public class InstructionExecutionContext
     {
         private readonly InvestorInstruction investorInstruction;
 
+        private readonly Action<OrderExecutedEventArgs> orderExecutedCallBack;
+
         private readonly int initialQuantity;
 
-        public InstructionExecutionContext(InvestorInstruction investorInstruction)
+        public InstructionExecutionContext(InvestorInstruction investorInstruction, Action<OrderExecutedEventArgs> orderExecutedCallBack)
         {
             this.investorInstruction = investorInstruction;
+            this.orderExecutedCallBack = orderExecutedCallBack;
             this.initialQuantity = investorInstruction.Quantity;
             this.RemainingQuantityToBeExecuted = investorInstruction.Quantity;
             this.Price = investorInstruction.Price;
@@ -61,7 +67,7 @@ namespace SimpleOrderRouting.Investors
             
             if (this.RemainingQuantityToBeExecuted == 0)
             {
-                this.investorInstruction.NotifyOrderExecution(this.initialQuantity, this.Price);
+                this.orderExecutedCallBack(new OrderExecutedEventArgs(this.Way, this.initialQuantity, this.Price));
             }
             else if (this.RemainingQuantityToBeExecuted < 0)
             {

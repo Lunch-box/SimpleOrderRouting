@@ -22,7 +22,6 @@ namespace SimpleOrderRouting
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
 
     using SimpleOrderRouting.Investors;
     using SimpleOrderRouting.Markets;
@@ -38,7 +37,7 @@ namespace SimpleOrderRouting
     {
         private readonly ICanRouteOrders orderRouting;
         private readonly MarketSnapshotProvider marketSnapshotProvider;
-        private readonly IDictionary<InvestorInstruction, Action<OrderExecutedEventArgs>> executionCallbacks = new Dictionary<InvestorInstruction, Action<OrderExecutedEventArgs>>();
+        //private readonly IDictionary<InvestorInstruction, Action<OrderExecutedEventArgs>> executionCallbacks = new Dictionary<InvestorInstruction, Action<OrderExecutedEventArgs>>();
         private readonly IDictionary<InvestorInstruction, Action<string>> failureCallbacks = new Dictionary<InvestorInstruction, Action<string>>();
 
         /// <summary>
@@ -57,25 +56,26 @@ namespace SimpleOrderRouting
         public void Route(InvestorInstruction investorInstruction, Action<OrderExecutedEventArgs> executedCallback, Action<string> failureCallback)
         {
             // TODO: thread-safe it
-            this.executionCallbacks[investorInstruction] = executedCallback;
+            //this.executionCallbacks[investorInstruction] = executedCallback;
             this.failureCallbacks[investorInstruction] = failureCallback;
-            //// TODO: regirst failure
+            ////// TODO: regirst failure
 
             // Prepares to feedback the investor
-            investorInstruction.Executed += this.InvestorInstruction_Executed;
-            var instructionExecutionContext = new InstructionExecutionContext(investorInstruction);
+            //investorInstruction.Executed += investorIntructionCallback.OnExecuted;
+
+            var instructionExecutionContext = new InstructionExecutionContext(investorInstruction, executedCallback);
 
             // TODO: add symetry here (i.e. always go via the InstructionExecutionContext
-            EventHandler<DealExecutedEventArgs> handler = (sender, args) => instructionExecutionContext.Executed(args.Quantity);
-            EventHandler<OrderFailedEventArgs> failHandler = (sender, failure) => this.OnOrderFailed(investorInstruction, failure, instructionExecutionContext);
+            EventHandler<DealExecutedEventArgs> oneOrderIsExecuted = (sender, args) => instructionExecutionContext.Executed(args.Quantity);
+            EventHandler<OrderFailedEventArgs> oneOrderFailed = (sender, failure) => this.OnOrderFailed(investorInstruction, failure, instructionExecutionContext);
 
-            this.orderRouting.OrderExecuted += handler;
-            this.orderRouting.OrderFailed += failHandler;
+            this.orderRouting.OrderExecuted += oneOrderIsExecuted;
+            this.orderRouting.OrderFailed += oneOrderFailed;
 
             this.RouteImpl(instructionExecutionContext);
 
-            this.orderRouting.OrderExecuted -= handler;
-            this.orderRouting.OrderFailed -= failHandler;
+            this.orderRouting.OrderExecuted -= oneOrderIsExecuted;
+            this.orderRouting.OrderFailed -= oneOrderFailed;
         }
 
         private void RouteImpl(InstructionExecutionContext instructionExecutionContext)
@@ -88,15 +88,15 @@ namespace SimpleOrderRouting
             this.orderRouting.Route(orderBasket);
         }
 
-        private void InvestorInstruction_Executed(object sender, OrderExecutedEventArgs e)
-        {
-            var investorInstruction = sender as InvestorInstruction;
-            Action<OrderExecutedEventArgs> successCallback;
-            if (this.executionCallbacks.TryGetValue(investorInstruction, out successCallback))
-            {
-                successCallback(e);
-            }
-        }
+        //private void InvestorInstruction_Executed(object sender, OrderExecutedEventArgs e)
+        //{
+        //    var investorInstruction = sender as InvestorInstruction;
+        //    Action<OrderExecutedEventArgs> successCallback;
+        //    if (this.executionCallbacks.TryGetValue(investorInstruction, out successCallback))
+        //    {
+        //        successCallback(e);
+        //    }
+        //}
 
         private void OnOrderFailed(InvestorInstruction investorInstruction, OrderFailedEventArgs reason, InstructionExecutionContext instructionExecutionContext)
         {

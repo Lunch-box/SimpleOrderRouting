@@ -25,6 +25,9 @@ namespace SimpleOrderRouting.Infra
 
     using SimpleOrderRouting.Markets.Orders;
 
+    /// <summary>
+    /// Adapts callbacks from the domain model to the InvestorInstruction infra one.
+    /// </summary>
     public class InvestorInstructionDtoCallBacks
     {
         private readonly Action<InstructionExecutedEventArgs> instructionExecutedCallback;

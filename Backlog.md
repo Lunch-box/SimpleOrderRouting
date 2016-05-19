@@ -1,5 +1,6 @@
 # SOR Backlog
 
++ Remove events from the InvestorInstruction value type
 + Review all the type to prevent from memory leak due to open event/callback subscriptions.
 + Split the MarketGatewaysAdapter into various types
 

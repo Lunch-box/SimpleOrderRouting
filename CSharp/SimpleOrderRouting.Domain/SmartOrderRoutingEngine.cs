@@ -95,16 +95,6 @@ namespace SimpleOrderRouting
             this.routeOrders.Route(orderBasket);
         }
 
-        //private void InvestorInstruction_Executed(object sender, OrderExecutedEventArgs e)
-        //{
-        //    var investorInstruction = sender as InvestorInstruction;
-        //    Action<OrderExecutedEventArgs> successCallback;
-        //    if (this.executionCallbacks.TryGetValue(investorInstruction, out successCallback))
-        //    {
-        //        successCallback(e);
-        //    }
-        //}
-
         private void OnOrderFailed(OrderFailedEventArgs reason, InstructionExecutionContext instructionExecutionContext)
         {
             if (instructionExecutionContext.InstructionHasToBeContinued())

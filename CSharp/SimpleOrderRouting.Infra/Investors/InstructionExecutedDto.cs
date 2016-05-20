@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InstructionExecutedEventArgs.cs" company="LunchBox corp">
+// <copyright file="InstructionExecutedDto.cs" company="LunchBox corp">
 //     Copyright 2014 The Lunch-Box mob: 
 //           Ozgur DEVELIOGLU (@Zgurrr)
 //           Cyrille  DUPUYDAUBY (@Cyrdup)
@@ -25,9 +25,9 @@ namespace SimpleOrderRouting.Infra
     /// <summary>
     /// Event data for InstructionExecuted.
     /// </summary>
-    public class InstructionExecutedEventArgs : EventArgs
+    public class InstructionExecutedDto
     {
-        public InstructionExecutedEventArgs(InvestorWay way, decimal price, int quantity)
+        public InstructionExecutedDto(InvestorWay way, decimal price, int quantity)
         {
             this.Quantity = quantity;
             this.Price = price;

@@ -40,8 +40,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompositionRootHelper.cs" />
-    <Compile Include="Investors\InstructionExecutedEventArgs.cs" />
-    <Compile Include="Investors\InstructionFailedEventArgs.cs" />
+    <Compile Include="Investors\InstructionExecutedDto.cs" />
+    <Compile Include="Investors\InstructionFailedDto.cs" />
     <Compile Include="Investors\InvestorInstructionDtoCallBacks.cs" />
     <Compile Include="Investors\InvestorInstructionsAdapter.cs" />
     <Compile Include="Investors\InvestorInstructionDto.cs" />

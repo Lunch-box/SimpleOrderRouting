@@ -45,7 +45,7 @@ namespace SimpleOrderRouting.Tests
 
             var investorInstructionDto = new InvestorInstructionDto(Way.Buy, quantity: 125, price: 100M);
 
-            InstructionExecutedEventArgs instructionExecuted = null;
+            InstructionExecutedDto instructionExecuted = null;
 
             investorInstructionAdapter.Route(investorInstructionDto, args => { instructionExecuted = args; }, args => {});
 
@@ -69,8 +69,8 @@ namespace SimpleOrderRouting.Tests
             var investorInstructionDto = new InvestorInstructionDto(Way.Buy, quantity: 125, price: 100M, allowPartialExecution: false);
 
             // Subscribes to the instruction's events
-            InstructionExecutedEventArgs instructionExecuted = null;
-            InstructionFailedEventArgs instructionFailed = null;
+            InstructionExecutedDto instructionExecuted = null;
+            InstructionFailedDto instructionFailed = null;
 
             investorInstructionAdapter.Route(investorInstructionDto, (args) => { instructionExecuted = args; }, (args) => { instructionFailed = args; });
 
@@ -111,8 +111,8 @@ namespace SimpleOrderRouting.Tests
             var investorInstructionDto = new InvestorInstructionDto(Way.Buy, quantity: 50, price: 100M, goodTill: DateTime.Now.AddMinutes(5));
 
             // Subscribes to the instruction's events
-            InstructionExecutedEventArgs instructionExecuted = null;
-            InstructionFailedEventArgs instructionFailed = null;
+            InstructionExecutedDto instructionExecuted = null;
+            InstructionFailedDto instructionFailed = null;
 
             investorInstructionAdapter.Route(investorInstructionDto, (args) => { instructionExecuted = args; }, (args) => { instructionFailed = args; });
 
@@ -135,7 +135,7 @@ namespace SimpleOrderRouting.Tests
 
             var investorInstructionDto = new InvestorInstructionDto(Way.Buy, quantity: 125, price: 100M);
 
-            InstructionExecutedEventArgs instructionExecuted = null;
+            InstructionExecutedDto instructionExecuted = null;
 
             investorInstructionAdapter.Route(investorInstructionDto, (args) => { instructionExecuted = args; }, null);
 
@@ -159,7 +159,7 @@ namespace SimpleOrderRouting.Tests
 
             var investorInstructionDto = new InvestorInstructionDto(Way.Buy, quantity: 75, price: 100M);
 
-            InstructionExecutedEventArgs instructionExecuted = null;
+            InstructionExecutedDto instructionExecuted = null;
 
             investorInstructionAdapter.Route(investorInstructionDto, (args) => { instructionExecuted = args; }, null);
 

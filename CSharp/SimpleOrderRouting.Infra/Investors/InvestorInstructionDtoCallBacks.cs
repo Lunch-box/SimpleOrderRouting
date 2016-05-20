@@ -30,11 +30,11 @@ namespace SimpleOrderRouting.Infra
     /// </summary>
     public class InvestorInstructionDtoCallBacks
     {
-        private readonly Action<InstructionExecutedEventArgs> instructionExecutedCallback;
+        private readonly Action<InstructionExecutedDto> instructionExecutedCallback;
 
-        private readonly Action<InstructionFailedEventArgs> instructionFailedCallback;
+        private readonly Action<InstructionFailedDto> instructionFailedCallback;
 
-        public InvestorInstructionDtoCallBacks(Action<InstructionExecutedEventArgs> instructionExecutedCallback, Action<InstructionFailedEventArgs> instructionFailedCallback)
+        public InvestorInstructionDtoCallBacks(Action<InstructionExecutedDto> instructionExecutedCallback, Action<InstructionFailedDto> instructionFailedCallback)
         {
             this.instructionExecutedCallback = instructionExecutedCallback;
             this.instructionFailedCallback = instructionFailedCallback;
@@ -44,14 +44,14 @@ namespace SimpleOrderRouting.Infra
         {
             // Adapts to the inside (domain) model to the outside one (investor)
             var investorWay = (args.Way == Way.Buy) ? InvestorWay.Buy : InvestorWay.Sell;
-            var instructionExecutedArgs = new InstructionExecutedEventArgs(investorWay, args.Price, args.Quantity);
+            var instructionExecutedArgs = new InstructionExecutedDto(investorWay, args.Price, args.Quantity);
             this.instructionExecutedCallback(instructionExecutedArgs);
         }
 
         public void FailedCallbacks(string reason)
         {
             // Adapts to the inside (domain) model to the outside one
-            var instructionFailedArgs = new InstructionFailedEventArgs(reason);
+            var instructionFailedArgs = new InstructionFailedDto(reason);
             this.instructionFailedCallback(instructionFailedArgs);
         }
     }

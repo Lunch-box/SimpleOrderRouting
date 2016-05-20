@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InstructionFailedEventArgs.cs" company="LunchBox corp">
+// <copyright file="InstructionFailedDto.cs" company="LunchBox corp">
 //     Copyright 2014 The Lunch-Box mob: 
 //           Ozgur DEVELIOGLU (@Zgurrr)
 //           Cyrille  DUPUYDAUBY (@Cyrdup)
@@ -21,11 +21,9 @@
 
 namespace SimpleOrderRouting.Infra
 {
-    using System;
-
-    public class InstructionFailedEventArgs : EventArgs
+    public class InstructionFailedDto
     {
-        public InstructionFailedEventArgs(string reason)
+        public InstructionFailedDto(string reason)
         {
             this.Reason = reason;
         }

@@ -43,7 +43,7 @@ namespace SimpleOrderRouting.Infra
         }
 
         // TODO: expose some infra callbacks instead of the domain one
-        public void Route(InvestorInstructionDto investorInstructionDto, Action<InstructionExecutedEventArgs> instructionExecutedCallback, Action<InstructionFailedEventArgs> instructionFailedCallback)
+        public void Route(InvestorInstructionDto investorInstructionDto, Action<InstructionExecutedDto> instructionExecutedCallback, Action<InstructionFailedDto> instructionFailedCallback)
         {
             // Maps the DTO model to the domain one
             var investorIntruction = new InvestorInstruction(investorInstructionDto.UniqueIdentifier.Value, investorInstructionDto.Way, investorInstructionDto.Quantity, investorInstructionDto.Price, investorInstructionDto.AllowPartialExecution, investorInstructionDto.GoodTill);

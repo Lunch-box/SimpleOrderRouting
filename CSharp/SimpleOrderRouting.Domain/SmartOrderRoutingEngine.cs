@@ -61,23 +61,28 @@ namespace SimpleOrderRouting
             // Prepares to feedback the investor
             var instructionExecutionContext = new InstructionExecutionContext(investorInstruction, executedCallback);
 
-            this.routeOrders.OrderExecuted += WhenOneOrderIsExecuted(instructionExecutionContext);
-            this.routeOrders.OrderFailed += WhenOneOrderFailed(investorInstruction, instructionExecutionContext);
+            this.routeOrders.OrderExecuted += this.WhenOneOrderIsExecuted(instructionExecutionContext);
+            this.routeOrders.OrderFailed += this.WhenOneOrderFailed(instructionExecutionContext);
 
             this.RouteImpl(instructionExecutionContext);
 
-            this.routeOrders.OrderExecuted -= WhenOneOrderIsExecuted(instructionExecutionContext);
-            this.routeOrders.OrderFailed -= WhenOneOrderFailed(investorInstruction, instructionExecutionContext);
+            this.routeOrders.OrderExecuted -= this.WhenOneOrderIsExecuted(instructionExecutionContext);
+            this.routeOrders.OrderFailed -= this.WhenOneOrderFailed(instructionExecutionContext);
         }
 
-        private EventHandler<OrderFailedEventArgs> WhenOneOrderFailed(InvestorInstruction investorInstruction, InstructionExecutionContext instructionExecutionContext)
+        private EventHandler<OrderFailedEventArgs> WhenOneOrderFailed(InstructionExecutionContext instructionExecutionContext)
         {
-            return (sender, failure) => OnOrderFailed(investorInstruction, failure, instructionExecutionContext);
+            return (sender, orderFailed) =>
+            {
+                this.marketSnapshotProvider.DeclareFailure(orderFailed.MarketName);
+
+                this.OnOrderFailed(orderFailed, instructionExecutionContext);
+            };
         }
 
         private EventHandler<DealExecutedEventArgs> WhenOneOrderIsExecuted(InstructionExecutionContext instructionExecutionContext)
         {
-            return (sender, args) => instructionExecutionContext.DeclareOrderExecution(args.Quantity);
+            return (sender, dealExecuted) => instructionExecutionContext.DeclareOrderExecution(dealExecuted.Quantity);
         }
 
         private void RouteImpl(InstructionExecutionContext instructionExecutionContext)
@@ -100,19 +105,15 @@ namespace SimpleOrderRouting
         //    }
         //}
 
-        private void OnOrderFailed(InvestorInstruction investorInstruction, OrderFailedEventArgs reason, InstructionExecutionContext instructionExecutionContext)
+        private void OnOrderFailed(OrderFailedEventArgs reason, InstructionExecutionContext instructionExecutionContext)
         {
-            this.marketSnapshotProvider.DeclareFailure(reason.MarketName);
-
-            if (investorInstruction.GoodTill != null && 
-                investorInstruction.GoodTill > DateTime.Now && 
-                instructionExecutionContext.RemainingQuantityToBeExecuted > 0)
+            if (instructionExecutionContext.InstructionHasToBeContinued())
             {
                 this.RetryInvestorInstruction(instructionExecutionContext);
             }
             else
             {
-                this.NotifyInvestorInstructionFailure(investorInstruction, reason);
+                this.NotifyInvestorInstructionFailure(instructionExecutionContext.Instruction, reason);
             }
         }
 

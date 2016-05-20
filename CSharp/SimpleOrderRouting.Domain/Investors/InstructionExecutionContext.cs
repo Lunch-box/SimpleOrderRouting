@@ -30,7 +30,7 @@ namespace SimpleOrderRouting.Investors
     /// </summary>
     public class InstructionExecutionContext
     {
-        private readonly InvestorInstruction investorInstruction;
+        public InvestorInstruction Instruction { get; private set; }
 
         private readonly Action<OrderExecutedEventArgs> orderExecutedCallBack;
 
@@ -38,7 +38,7 @@ namespace SimpleOrderRouting.Investors
 
         public InstructionExecutionContext(InvestorInstruction investorInstruction, Action<OrderExecutedEventArgs> orderExecutedCallBack)
         {
-            this.investorInstruction = investorInstruction;
+            this.Instruction = investorInstruction;
             this.orderExecutedCallBack = orderExecutedCallBack;
             this.initialQuantity = investorInstruction.Quantity;
             this.RemainingQuantityToBeExecuted = investorInstruction.Quantity;
@@ -73,6 +73,11 @@ namespace SimpleOrderRouting.Investors
             {
                 throw new ApplicationException(string.Format("Executed more than the investor instruction has requested. Previous remaining quantity to be executed: {0}, latest executed quantity: {1}. New remaining quantity to be executed: {2}.", previousRemainingQuantityToBeExecuted, quantity, this.RemainingQuantityToBeExecuted));
             }
+        }
+
+        public bool InstructionHasToBeContinued()
+        {
+            return this.Instruction.GoodTill != null && this.Instruction.GoodTill > DateTime.Now && this.RemainingQuantityToBeExecuted > 0;
         }
     }
 }

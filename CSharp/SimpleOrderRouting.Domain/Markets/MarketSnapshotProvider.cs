@@ -53,7 +53,7 @@ namespace SimpleOrderRouting.Markets
             return new MarketSnapshot(this.lastMarketUpdates.Values.ToList());
         }
 
-        public void MarketFailed(string marketName)
+        public void DeclareFailure(string marketName)
         {
             this.lastMarketUpdates.First(m => m.Key == marketName).Value.OrdersFailureCount++;
         }

@@ -56,10 +56,10 @@ namespace SimpleOrderRouting.Investors
         public bool AllowPartialExecution { get; private set; }
 
         /// <summary>
-        /// Called when an order has been executed - called by the order basket.
+        /// Called when an order has been executed.
         /// </summary>
         /// <param name="quantity">The executed quantity.</param>
-        public void Executed(int quantity)
+        public void DeclareOrderExecution(int quantity)
         {
             var previousRemainingQuantityToBeExecuted = this.RemainingQuantityToBeExecuted;
             

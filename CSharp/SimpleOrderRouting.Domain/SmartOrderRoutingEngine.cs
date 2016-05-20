@@ -35,20 +35,20 @@ namespace SimpleOrderRouting
     /// </summary>
     public class SmartOrderRoutingEngine : IHandleInvestorInstructions
     {
-        private readonly ICanRouteOrders orderRouting;
+        private readonly ICanRouteOrders routeOrders;
         private readonly MarketSnapshotProvider marketSnapshotProvider;
-        //private readonly IDictionary<InvestorInstruction, Action<OrderExecutedEventArgs>> executionCallbacks = new Dictionary<InvestorInstruction, Action<OrderExecutedEventArgs>>();
+        
         private readonly IDictionary<InvestorInstruction, Action<string>> failureCallbacks = new Dictionary<InvestorInstruction, Action<string>>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SmartOrderRoutingEngine"/> class.
         /// </summary>
         /// <param name="marketsProvider">The markets provider.</param>
-        /// <param name="orderRouting">The order routing.</param>
+        /// <param name="routeOrders">The order routing.</param>
         /// <param name="marketDataProvider">The market data provider.</param>
-        public SmartOrderRoutingEngine(IProvideMarkets marketsProvider, ICanRouteOrders orderRouting, ICanReceiveMarketData marketDataProvider)
+        public SmartOrderRoutingEngine(IProvideMarkets marketsProvider, ICanRouteOrders routeOrders, ICanReceiveMarketData marketDataProvider)
         {
-            this.orderRouting = orderRouting;
+            this.routeOrders = routeOrders;
             var availableMarkets = marketsProvider.GetAvailableMarketNames();
             this.marketSnapshotProvider = new MarketSnapshotProvider(availableMarkets, marketDataProvider);
         }
@@ -56,36 +56,38 @@ namespace SimpleOrderRouting
         public void Route(InvestorInstruction investorInstruction, Action<OrderExecutedEventArgs> executedCallback, Action<string> failureCallback)
         {
             // TODO: thread-safe it
-            //this.executionCallbacks[investorInstruction] = executedCallback;
             this.failureCallbacks[investorInstruction] = failureCallback;
-            ////// TODO: regirst failure
 
             // Prepares to feedback the investor
-            //investorInstruction.Executed += investorIntructionCallback.OnExecuted;
-
             var instructionExecutionContext = new InstructionExecutionContext(investorInstruction, executedCallback);
 
-            // TODO: add symetry here (i.e. always go via the InstructionExecutionContext
-            EventHandler<DealExecutedEventArgs> oneOrderIsExecuted = (sender, args) => instructionExecutionContext.Executed(args.Quantity);
-            EventHandler<OrderFailedEventArgs> oneOrderFailed = (sender, failure) => this.OnOrderFailed(investorInstruction, failure, instructionExecutionContext);
-
-            this.orderRouting.OrderExecuted += oneOrderIsExecuted;
-            this.orderRouting.OrderFailed += oneOrderFailed;
+            this.routeOrders.OrderExecuted += WhenOneOrderIsExecuted(instructionExecutionContext);
+            this.routeOrders.OrderFailed += WhenOneOrderFailed(investorInstruction, instructionExecutionContext);
 
             this.RouteImpl(instructionExecutionContext);
 
-            this.orderRouting.OrderExecuted -= oneOrderIsExecuted;
-            this.orderRouting.OrderFailed -= oneOrderFailed;
+            this.routeOrders.OrderExecuted -= WhenOneOrderIsExecuted(instructionExecutionContext);
+            this.routeOrders.OrderFailed -= WhenOneOrderFailed(investorInstruction, instructionExecutionContext);
+        }
+
+        private EventHandler<OrderFailedEventArgs> WhenOneOrderFailed(InvestorInstruction investorInstruction, InstructionExecutionContext instructionExecutionContext)
+        {
+            return (sender, failure) => OnOrderFailed(investorInstruction, failure, instructionExecutionContext);
+        }
+
+        private EventHandler<DealExecutedEventArgs> WhenOneOrderIsExecuted(InstructionExecutionContext instructionExecutionContext)
+        {
+            return (sender, args) => instructionExecutionContext.DeclareOrderExecution(args.Quantity);
         }
 
         private void RouteImpl(InstructionExecutionContext instructionExecutionContext)
         {
             // 1. Prepare the corresponding OrderBasket (via solver)
             var solver = new MarketSweepSolver(this.marketSnapshotProvider);
-            var orderBasket = solver.Solve(instructionExecutionContext, this.orderRouting);
+            var orderBasket = solver.Solve(instructionExecutionContext, this.routeOrders);
 
             // 2. Route the OrderBasket
-            this.orderRouting.Route(orderBasket);
+            this.routeOrders.Route(orderBasket);
         }
 
         //private void InvestorInstruction_Executed(object sender, OrderExecutedEventArgs e)
@@ -100,7 +102,7 @@ namespace SimpleOrderRouting
 
         private void OnOrderFailed(InvestorInstruction investorInstruction, OrderFailedEventArgs reason, InstructionExecutionContext instructionExecutionContext)
         {
-            this.marketSnapshotProvider.MarketFailed(reason.MarketName);
+            this.marketSnapshotProvider.DeclareFailure(reason.MarketName);
 
             if (investorInstruction.GoodTill != null && 
                 investorInstruction.GoodTill > DateTime.Now && 

@@ -22,8 +22,6 @@ namespace SimpleOrderRouting.Investors
 {
     using System;
 
-    using SimpleOrderRouting.Markets.Orders;
-
     /// <summary>
     /// Trading instruction given to the SOR on the investor-side.
     /// </summary>
@@ -97,36 +95,5 @@ namespace SimpleOrderRouting.Investors
                 return hashCode;
             }
         }
-
-        ///// <summary>
-        ///// Occurs when the <see cref="InvestorInstruction"/> is fully executed.
-        ///// </summary>
-        //public event EventHandler<OrderExecutedEventArgs> Executed;
-
-        ///// <summary>
-        ///// Just a naive implementation to make the test pass. 
-        ///// Code smell here: with the Executed event raised from outside the InvestorInstruction.
-        ///// </summary>
-        ///// <param name="executedQuantity">The executed quantity.</param>
-        ///// <param name="executedPrice">The executed Price.</param>
-        //internal virtual void NotifyOrderExecution(int executedQuantity, decimal executedPrice)
-        //{
-        //    // instruction fully executed, I notify
-        //    var onExecuted = this.Executed;
-        //    if (onExecuted != null)
-        //    {
-        //        onExecuted(this, new OrderExecutedEventArgs(this.Way, executedQuantity, executedPrice));
-        //    }
-        //}
-
-        //internal virtual void NotifyOrderFailure(string reason)
-        //{
-        //    // instruction fully executed, I notify
-        //    EventHandler<string> onFailed = this.Failed;
-        //    if (onFailed != null)
-        //    {
-        //        onFailed(this, reason);
-        //    }
-        //}
     }
 }

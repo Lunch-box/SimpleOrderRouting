@@ -32,11 +32,11 @@ namespace SimpleOrderRouting.Investors
     {
         public InvestorInstruction Instruction { get; private set; }
 
-        private readonly Action<OrderExecutedEventArgs> orderExecutedCallBack;
+        private readonly Action<InvestorInstructionExecutedEventArgs> orderExecutedCallBack;
 
         private readonly int initialQuantity;
 
-        public InstructionExecutionContext(InvestorInstruction investorInstruction, Action<OrderExecutedEventArgs> orderExecutedCallBack)
+        public InstructionExecutionContext(InvestorInstruction investorInstruction, Action<InvestorInstructionExecutedEventArgs> orderExecutedCallBack)
         {
             this.Instruction = investorInstruction;
             this.orderExecutedCallBack = orderExecutedCallBack;
@@ -67,7 +67,7 @@ namespace SimpleOrderRouting.Investors
             
             if (this.RemainingQuantityToBeExecuted == 0)
             {
-                this.orderExecutedCallBack(new OrderExecutedEventArgs(this.Way, this.initialQuantity, this.Price));
+                this.orderExecutedCallBack(new InvestorInstructionExecutedEventArgs(this.Way, this.initialQuantity, this.Price));
             }
             else if (this.RemainingQuantityToBeExecuted < 0)
             {

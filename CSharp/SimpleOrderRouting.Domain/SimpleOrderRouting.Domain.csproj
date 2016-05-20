@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="InvestorIntructionCallback.cs" />
+    <Compile Include="Investors\InvestorInstructionExecutedEventArgs.cs" />
     <Compile Include="Investors\InvestorInstructionStatus.cs" />
     <Compile Include="Markets\Orders\DealExecutedEventArgs.cs" />
     <Compile Include="ICanReceiveMarketData.cs" />

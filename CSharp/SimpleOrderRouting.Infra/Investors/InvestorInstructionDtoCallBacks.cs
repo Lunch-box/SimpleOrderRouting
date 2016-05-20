@@ -23,6 +23,7 @@ namespace SimpleOrderRouting.Infra
 {
     using System;
 
+    using SimpleOrderRouting.Investors;
     using SimpleOrderRouting.Markets.Orders;
 
     /// <summary>
@@ -40,7 +41,7 @@ namespace SimpleOrderRouting.Infra
             this.instructionFailedCallback = instructionFailedCallback;
         }
 
-        public void ExecutedCallback(OrderExecutedEventArgs args)
+        public void ExecutedCallback(InvestorInstructionExecutedEventArgs args)
         {
             // Adapts to the inside (domain) model to the outside one (investor)
             var investorWay = (args.Way == Way.Buy) ? InvestorWay.Buy : InvestorWay.Sell;

@@ -29,7 +29,7 @@ namespace SimpleOrderRouting.Infra
         public static InvestorInstructionsAdapter ComposeTheHexagon(params ApiMarketGateway[] marketGateways)
         {
             // Step1: instantiates the adapter(s) the (SOR) domain will need to work with through the Dependency Inversion principle.
-            var marketGatewaysAdapter = new MarketGatewaysAdapter(marketGateways);
+            var marketGatewaysAdapter = new MarketsAdapter(marketGateways);
 
             // Step2: instantiates the SOR domain entry point.
             var sor = new SmartOrderRoutingEngine(marketGatewaysAdapter, marketGatewaysAdapter, marketGatewaysAdapter);

@@ -42,10 +42,10 @@ namespace SimpleOrderRouting.Tests
             var marketA = new ApiMarketGateway("NYSE (New York)", sellQuantity: 50, sellPrice: 100M);
             var rejectingMarket = new ApiMarketGateway("CME (Chicago)", sellQuantity: 50, sellPrice: 100M, orderPredicate: _ => false);
             var marketsInvolved = new[] { marketA, rejectingMarket };
-            var marketGatewayAdapter = new MarketGatewaysAdapter(marketsInvolved);
+            var marketGatewayAdapter = new MarketsAdapter(marketsInvolved);
 
             var investorInstruction = new InvestorInstruction(new InvestorInstructionIdentifierDto().Value, Way.Buy, quantity: 50, price: 100M, goodTill: DateTime.Now.AddMinutes(5));
-            var instructionExecutionContext = new InstructionExecutionContext(investorInstruction, args => {});
+            var instructionExecutionContext = new InstructionExecutionContext(investorInstruction, args => {}, failure => {});
 
             var marketSweepSolver = new MarketSweepSolver(new MarketSnapshotProvider(marketGatewayAdapter.GetAvailableMarketNames(), marketGatewayAdapter));
             var orderBasket = marketSweepSolver.Solve(instructionExecutionContext, marketGatewayAdapter);
@@ -59,10 +59,10 @@ namespace SimpleOrderRouting.Tests
             var marketA = new ApiMarketGateway("NYSE (New York)", sellQuantity: 50, sellPrice: 100M);
             var rejectingMarket = new ApiMarketGateway("CME (Chicago)", sellQuantity: 50, sellPrice: 100M, orderPredicate: _ => false);
             var marketsInvolved = new[] { marketA, rejectingMarket };
-            var marketGatewayAdapter = new MarketGatewaysAdapter(marketsInvolved);
+            var marketGatewayAdapter = new MarketsAdapter(marketsInvolved);
 
             var investorInstruction = new InvestorInstruction(new InvestorInstructionIdentifierDto().Value, Way.Buy, quantity: 1, price: 100M, goodTill: DateTime.Now.AddMinutes(5));
-            var instructionExecutionContext = new InstructionExecutionContext(investorInstruction, args => { });
+            var instructionExecutionContext = new InstructionExecutionContext(investorInstruction, args => { }, failure => { });
 
             var marketSweepSolver = new MarketSweepSolver(new MarketSnapshotProvider(marketGatewayAdapter.GetAvailableMarketNames(), marketGatewayAdapter));
             var orderBasket = marketSweepSolver.Solve(instructionExecutionContext, marketGatewayAdapter);

@@ -34,6 +34,11 @@ namespace SimpleOrderRouting.Markets.Orders
 
         private readonly ICanRouteOrders canRouteOrders;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OrderBasket"/> class.
+        /// </summary>
+        /// <param name="ordersDescriptions">The orders descriptions.</param>
+        /// <param name="canRouteOrders">The can route orders.</param>
         public OrderBasket(List<OrderDescription> ordersDescriptions, ICanRouteOrders canRouteOrders)
         {
             this.OrdersDescriptions = ordersDescriptions;
@@ -69,20 +74,22 @@ namespace SimpleOrderRouting.Markets.Orders
         public void Send()
         {
             var failures = new List<OrderFailedEventArgs>(this.OrdersDescriptions.Count);
+
             foreach (var orderDescription in this.OrdersDescriptions)
             {
                 // TODO: refactor this to prevent this domain object to rely too much on ICanRouterOrders things...
                 var limitOrder = this.canRouteOrders.CreateLimitOrder(orderDescription);
-                //var limitOrder = this.canRouteOrders.CreateLimitOrder(orderDescription.OrderWay, orderDescription.OrderPrice, orderDescription.quantity, orderDescription.AllowPartialExecution);
 
-                limitOrder.OrderExecuted += (o, e) => this.OnOrderExecuted(e);
-                EventHandler<OrderFailedEventArgs> limitOrderOnOrderFailed = (sender, reason) => failures.Add(reason);
-                limitOrder.OrderFailed += limitOrderOnOrderFailed;
+                EventHandler<DealExecutedEventArgs> orderExecuted = (sender, executedEventArgs) => this.OnOrderExecuted(executedEventArgs);
+                EventHandler<OrderFailedEventArgs> orderFailed = (sender, reason) => failures.Add(reason);
+                
+                limitOrder.OrderExecuted += orderExecuted;
+                limitOrder.OrderFailed += orderFailed;
 
                 limitOrder.Send();
 
-                limitOrder.OrderExecuted -= (sender, e) => this.OnOrderExecuted(e);
-                limitOrder.OrderFailed -= limitOrderOnOrderFailed;
+                limitOrder.OrderExecuted -= orderExecuted;
+                limitOrder.OrderFailed -= orderFailed;
             }
 
             if (failures.Count > 0)

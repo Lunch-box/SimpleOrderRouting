@@ -59,7 +59,7 @@ namespace SimpleOrderRouting
             this.failureCallbacks[investorInstruction] = failureCallback;
 
             // Prepares to feedback the investor
-            var instructionExecutionContext = new InstructionExecutionContext(investorInstruction, instructionExecutedCallback);
+            var instructionExecutionContext = new InstructionExecutionContext(investorInstruction, instructionExecutedCallback, failureCallback);
 
             this.routeOrders.OrderExecuted += this.WhenOneOrderIsExecuted(instructionExecutionContext);
             this.routeOrders.OrderFailed += this.WhenOneOrderFailed(instructionExecutionContext);
@@ -68,21 +68,6 @@ namespace SimpleOrderRouting
 
             this.routeOrders.OrderExecuted -= this.WhenOneOrderIsExecuted(instructionExecutionContext);
             this.routeOrders.OrderFailed -= this.WhenOneOrderFailed(instructionExecutionContext);
-        }
-
-        private EventHandler<OrderFailedEventArgs> WhenOneOrderFailed(InstructionExecutionContext instructionExecutionContext)
-        {
-            return (sender, orderFailed) =>
-            {
-                this.marketSnapshotProvider.DeclareFailure(orderFailed.MarketName);
-
-                this.OnOrderFailed(orderFailed, instructionExecutionContext);
-            };
-        }
-
-        private EventHandler<DealExecutedEventArgs> WhenOneOrderIsExecuted(InstructionExecutionContext instructionExecutionContext)
-        {
-            return (sender, dealExecuted) => instructionExecutionContext.DeclareOrderExecution(dealExecuted.Quantity);
         }
 
         private void RouteImpl(InstructionExecutionContext instructionExecutionContext)
@@ -95,9 +80,27 @@ namespace SimpleOrderRouting
             this.routeOrders.Route(orderBasket);
         }
 
+        private EventHandler<DealExecutedEventArgs> WhenOneOrderIsExecuted(InstructionExecutionContext instructionExecutionContext)
+        {
+            // TODO: must process the message only if it's related to the proper instruction
+            return (sender, dealExecuted) => instructionExecutionContext.RecordOrderExecution(dealExecuted.Quantity);
+        }
+
+        private EventHandler<OrderFailedEventArgs> WhenOneOrderFailed(InstructionExecutionContext instructionExecutionContext)
+        {
+            // TODO: must process the message only if it's related to the proper instruction
+            return (sender, orderFailed) =>
+            {
+                // TODO: remove that code instruction (failure should be triggered from the market instead)
+                this.marketSnapshotProvider.DeclareFailure(orderFailed.MarketName);
+
+                this.OnOrderFailed(orderFailed, instructionExecutionContext);
+            };
+        }
+
         private void OnOrderFailed(OrderFailedEventArgs reason, InstructionExecutionContext instructionExecutionContext)
         {
-            if (instructionExecutionContext.InstructionHasToBeContinued())
+            if (instructionExecutionContext.ShouldTheInstructionBeContinued())
             {
                 this.RetryInvestorInstruction(instructionExecutionContext);
             }

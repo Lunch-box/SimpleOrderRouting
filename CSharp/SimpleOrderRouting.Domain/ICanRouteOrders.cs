@@ -15,8 +15,14 @@ namespace SimpleOrderRouting
 
         void Route(OrderBasket basketOrder);
 
+        /// <summary>
+        /// Occurs when one order is executed.
+        /// </summary>
         event EventHandler<DealExecutedEventArgs> OrderExecuted;
 
+        /// <summary>
+        /// Occurs when one order failed.
+        /// </summary>
         event EventHandler<OrderFailedEventArgs> OrderFailed;
     }
 }

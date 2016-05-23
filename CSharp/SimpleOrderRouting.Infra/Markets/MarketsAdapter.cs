@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MarketGatewaysAdapter.cs" company="LunchBox corp">
+// <copyright file="MarketSAdapter.cs" company="LunchBox corp">
 //     Copyright 2014 The Lunch-Box mob: 
 //           Ozgur DEVELIOGLU (@Zgurrr)
 //           Cyrille  DUPUYDAUBY (@Cyrdup)
@@ -33,11 +33,11 @@ namespace SimpleOrderRouting.Infra
     /// <summary>
     /// Adapter between the external Markets gateways model and the SOR one.
     /// </summary>
-    public sealed class MarketGatewaysAdapter : ICanRouteOrders, ICanReceiveMarketData, IProvideMarkets
+    public sealed class MarketsAdapter : ICanRouteOrders, ICanReceiveMarketData, IProvideMarkets
     {
         private readonly Dictionary<string, ApiMarketGateway> gateways;
 
-        public MarketGatewaysAdapter(params ApiMarketGateway[] apiMarketGateways)
+        public MarketsAdapter(params ApiMarketGateway[] apiMarketGateways)
         {
             this.gateways = new Dictionary<string, ApiMarketGateway>();
 
@@ -90,6 +90,7 @@ namespace SimpleOrderRouting.Infra
         {
             // Adapts the external API format to the SOR domain format
             var dealExecutedEventArgs = new OrderFailedEventArgs(apiArgs.MarketName, apiArgs.FailureCause);
+
             this.RaiseOrderFailed(dealExecutedEventArgs);
         }
 

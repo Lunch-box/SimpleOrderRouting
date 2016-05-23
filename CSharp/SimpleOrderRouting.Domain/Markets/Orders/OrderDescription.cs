@@ -20,6 +20,8 @@ namespace SimpleOrderRouting.Markets.Orders
     /// </summary>
     public struct OrderDescription
     {
+        // TODO: does OrderDescription need to expose its corresponding order type somehow (i.e. marketorder, limitorder)?
+
         public string TargetMarketName;
 
         public Way OrderWay;

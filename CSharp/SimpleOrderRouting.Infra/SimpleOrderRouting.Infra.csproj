@@ -49,7 +49,7 @@
     <Compile Include="Investors\InvestorInstructionUpdatedDto.cs" />
     <Compile Include="Investors\Way.cs" />
     <Compile Include="Markets\LimitOrderAdapter.cs" />
-    <Compile Include="Markets\MarketGatewaysAdapter.cs" />
+    <Compile Include="Markets\MarketsAdapter.cs" />
     <Compile Include="Markets\MarketOrderAdapter.cs" />
     <Compile Include="Markets\OrderAdapter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

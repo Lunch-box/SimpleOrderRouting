@@ -22,8 +22,6 @@ namespace SimpleOrderRouting.Investors
 {
     using System;
 
-    using SimpleOrderRouting.Markets.Orders;
-
     /// <summary>
     /// 1 to 1 relationship with an <see cref="SimpleOrderRouting.Investors.InvestorInstruction"/>.  Keeps the current state of the instruction execution.
     /// <remarks>Entity</remarks>
@@ -32,14 +30,17 @@ namespace SimpleOrderRouting.Investors
     {
         public InvestorInstruction Instruction { get; private set; }
 
-        private readonly Action<InvestorInstructionExecutedEventArgs> orderExecutedCallBack;
+        private readonly Action<InvestorInstructionExecutedEventArgs> instructionExecutedCallBack;
+
+        private readonly Action<string> instructionFailedCallback;
 
         private readonly int initialQuantity;
 
-        public InstructionExecutionContext(InvestorInstruction investorInstruction, Action<InvestorInstructionExecutedEventArgs> orderExecutedCallBack)
+        public InstructionExecutionContext(InvestorInstruction investorInstruction, Action<InvestorInstructionExecutedEventArgs> instructionExecutedCallBack, Action<string> instructionFailedCallback)
         {
             this.Instruction = investorInstruction;
-            this.orderExecutedCallBack = orderExecutedCallBack;
+            this.instructionExecutedCallBack = instructionExecutedCallBack;
+            this.instructionFailedCallback = instructionFailedCallback;
             this.initialQuantity = investorInstruction.Quantity;
             this.RemainingQuantityToBeExecuted = investorInstruction.Quantity;
             this.Price = investorInstruction.Price;
@@ -56,10 +57,10 @@ namespace SimpleOrderRouting.Investors
         public bool AllowPartialExecution { get; private set; }
 
         /// <summary>
-        /// Called when an order has been executed.
+        /// Records that an order has been executed and calls the instructionExecutedCallBack if the Instruction is fully executed.
         /// </summary>
         /// <param name="quantity">The executed quantity.</param>
-        public void DeclareOrderExecution(int quantity)
+        public void RecordOrderExecution(int quantity)
         {
             var previousRemainingQuantityToBeExecuted = this.RemainingQuantityToBeExecuted;
             
@@ -67,7 +68,7 @@ namespace SimpleOrderRouting.Investors
             
             if (this.RemainingQuantityToBeExecuted == 0)
             {
-                this.orderExecutedCallBack(new InvestorInstructionExecutedEventArgs(this.Way, this.initialQuantity, this.Price));
+                this.instructionExecutedCallBack(new InvestorInstructionExecutedEventArgs(this.Way, this.initialQuantity, this.Price));
             }
             else if (this.RemainingQuantityToBeExecuted < 0)
             {
@@ -75,7 +76,7 @@ namespace SimpleOrderRouting.Investors
             }
         }
 
-        public bool InstructionHasToBeContinued()
+        public bool ShouldTheInstructionBeContinued()
         {
             return this.Instruction.GoodTill != null && this.Instruction.GoodTill > DateTime.Now && this.RemainingQuantityToBeExecuted > 0;
         }

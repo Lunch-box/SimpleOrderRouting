@@ -89,13 +89,7 @@ namespace SimpleOrderRouting
         private EventHandler<OrderFailedEventArgs> WhenOneOrderFailed(InstructionExecutionContext instructionExecutionContext)
         {
             // TODO: must process the message only if it's related to the proper instruction
-            return (sender, orderFailed) =>
-            {
-                // TODO: remove that code instruction (failure should be triggered from the market instead)
-                this.marketSnapshotProvider.DeclareFailure(orderFailed.MarketName);
-
-                this.OnOrderFailed(orderFailed, instructionExecutionContext);
-            };
+            return (sender, orderFailed) => this.OnOrderFailed(orderFailed, instructionExecutionContext);
         }
 
         private void OnOrderFailed(OrderFailedEventArgs reason, InstructionExecutionContext instructionExecutionContext)

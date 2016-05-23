@@ -1,6 +1,8 @@
 # SOR Backlog
 
++ Review the stack overflow exception when events from the MarketsAdapter are raised the other way round
 + Review the responsibilities between the SOREngine and the InstructionExecutionContext
++ Check that all adapters don't have any business logic
 + Review all the type to prevent from memory leak due to open event/callback subscriptions.
 + Split the MarketGatewaysAdapter into various types
 

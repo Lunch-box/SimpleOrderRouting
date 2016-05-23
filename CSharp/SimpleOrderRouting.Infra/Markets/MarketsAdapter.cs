@@ -91,12 +91,16 @@ namespace SimpleOrderRouting.Infra
             // Adapts the external API format to the SOR domain format
             var dealExecutedEventArgs = new OrderFailedEventArgs(apiArgs.MarketName, apiArgs.FailureCause);
 
+            // TODO: Review the stack overflow exception when events from the MarketsAdapter are raised the other way round
+            this.RaiseOrderFailedOnAMarket(dealExecutedEventArgs);
             this.RaiseOrderFailed(dealExecutedEventArgs);
         }
 
         #region ICanReceiveMarketData
 
         public event EventHandler<MarketDataUpdatedArgs> InstrumentMarketDataUpdated;
+
+        public event EventHandler<OrderFailedEventArgs> OrderFailedOnAMarket;
 
         public void Subscribe(string marketName)
         {
@@ -114,6 +118,15 @@ namespace SimpleOrderRouting.Infra
             if (onInstrumentMarketDataUpdated != null)
             {
                 onInstrumentMarketDataUpdated(this, args);
+            }
+        }
+
+        private void RaiseOrderFailedOnAMarket(OrderFailedEventArgs args)
+        {
+            var onOrderFailedOnAMarket = this.OrderFailedOnAMarket;
+            if (onOrderFailedOnAMarket != null)
+            {
+                onOrderFailedOnAMarket(this, args);
             }
         }
 

@@ -35,12 +35,18 @@ namespace SimpleOrderRouting.Markets
         public MarketSnapshotProvider(IEnumerable<string> marketNames, ICanReceiveMarketData canReceiveMarketData)
         {
             canReceiveMarketData.InstrumentMarketDataUpdated += this.InstrumentMarketDataUpdated;
+            canReceiveMarketData.OrderFailedOnAMarket += this.canReceiveMarketData_OrderFailedOnAMarket;
+
             foreach (var marketName in marketNames)
             {
                 // TODO : Get rid of the hack (casting to concrete class)
-                //this.lastMarketUpdates[marketName] = new MarketInfo(marketName, );
                 canReceiveMarketData.Subscribe(marketName);
             }
+        }
+
+        void canReceiveMarketData_OrderFailedOnAMarket(object sender, Orders.OrderFailedEventArgs e)
+        {
+            this.DeclareFailure(e.MarketName);
         }
 
         private void InstrumentMarketDataUpdated(object sender, MarketDataUpdatedArgs marketDataUpdatedArgs)
@@ -53,7 +59,7 @@ namespace SimpleOrderRouting.Markets
             return new MarketSnapshot(this.lastMarketUpdates.Values.ToList());
         }
 
-        public void DeclareFailure(string marketName)
+        private void DeclareFailure(string marketName)
         {
             this.lastMarketUpdates.First(m => m.Key == marketName).Value.OrdersFailureCount++;
         }

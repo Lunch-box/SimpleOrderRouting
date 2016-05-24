@@ -37,8 +37,6 @@ namespace SimpleOrderRouting
     {
         private readonly ICanRouteOrders routeOrders;
         private readonly MarketSnapshotProvider marketSnapshotProvider;
-        
-        private readonly IDictionary<InvestorInstruction, Action<string>> failureCallbacks = new Dictionary<InvestorInstruction, Action<string>>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SmartOrderRoutingEngine"/> class.
@@ -55,9 +53,6 @@ namespace SimpleOrderRouting
 
         public void Route(InvestorInstruction investorInstruction, Action<InvestorInstructionExecutedEventArgs> instructionExecutedCallback, Action<string> failureCallback)
         {
-            // TODO: thread-safe it
-            this.failureCallbacks[investorInstruction] = failureCallback;
-
             // Prepares to feedback the investor
             var instructionExecutionContext = new InstructionExecutionContext(investorInstruction, instructionExecutedCallback, failureCallback);
 
@@ -100,16 +95,7 @@ namespace SimpleOrderRouting
             }
             else
             {
-                this.NotifyInvestorInstructionFailure(instructionExecutionContext.Instruction, reason);
-            }
-        }
-
-        private void NotifyInvestorInstructionFailure(InvestorInstruction investorInstruction, OrderFailedEventArgs reason)
-        {
-            Action<string> failureCallback;
-            if (this.failureCallbacks.TryGetValue(investorInstruction, out failureCallback))
-            {
-                failureCallback(reason.Reason);
+                instructionExecutionContext.DeclareFailure(reason);
             }
         }
 

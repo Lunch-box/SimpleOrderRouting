@@ -22,6 +22,8 @@ namespace SimpleOrderRouting.Investors
 {
     using System;
 
+    using SimpleOrderRouting.Markets.Orders;
+
     /// <summary>
     /// 1 to 1 relationship with an <see cref="SimpleOrderRouting.Investors.InvestorInstruction"/>.  Keeps the current state of the instruction execution.
     /// <remarks>Entity</remarks>
@@ -79,6 +81,11 @@ namespace SimpleOrderRouting.Investors
         public bool ShouldTheInstructionBeContinued()
         {
             return this.Instruction.GoodTill != null && this.Instruction.GoodTill > DateTime.Now && this.RemainingQuantityToBeExecuted > 0;
+        }
+
+        public void DeclareFailure(OrderFailedEventArgs orderFailedEventArgs)
+        {
+            this.instructionFailedCallback(orderFailedEventArgs.Reason);
         }
     }
 }
